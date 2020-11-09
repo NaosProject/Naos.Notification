@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Naos.Notification.Domain.Recipes.DummyFactory</id>
+    <description>A Dummy Factory for types in Naos.Notification.Domain</description>
+    <tags>dummyfactory dummy factory fakeiteasy autofixture snippet codeinclude utility shared recipe Notification</tags>
+    <dependencies>
+      <dependency id="Naos.Notification.Domain" version="$version$" />
+      <dependency id="OBeautifulCode.AutoFakeItEasy" version="1.0.129" />
+      <dependency id="Naos.CodeAnalysis.Recipes.SuppressBecause" version="1.0.126" />
+      <dependency id="Naos.Protocol.Recipes.DummyFactory" version="1.0.68" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="NotificationDummyFactory.cs" target="content\net462\.recipes\Naos.Notification\NotificationDummyFactory.cs" />
+    <file src="NotificationDummyFactory.designer.cs" target="content\net462\.recipes\Naos.Notification\NotificationDummyFactory.designer.cs" />
+  </files>
+</package>
