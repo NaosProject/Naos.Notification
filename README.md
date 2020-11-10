@@ -1,7 +1,8 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/637lo1k53q9mu4er?svg=true)](https://ci.appveyor.com/project/Naos-Project/naos-notification)
-
 # Naos.Notification
 
+[![Build status](https://ci.appveyor.com/api/projects/status/637lo1k53q9mu4er?svg=true)](https://ci.appveyor.com/project/Naos-Project/naos-notification)
+
+## Overview
 An example of how to wire up notifications inside a system.
 
 Includes:
