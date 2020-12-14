@@ -1,5 +1,4 @@
 # Naos.Notification
-==========================
 
 [![Build status](https://ci.appveyor.com/api/projects/status/637lo1k53q9mu4er?svg=true)](https://ci.appveyor.com/project/Naos-Project/naos-notification)
 
