@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Notification.Serializa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Notification.Serialization.Json", "Naos.Notification.Serialization.Json\Naos.Notification.Serialization.Json.csproj", "{84D9CEDA-4A7F-44D3-B06C-8DECBDF19472}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Notification.Protocol.Client", "Naos.Notification.Protocol.Client\Naos.Notification.Protocol.Client.csproj", "{191A8C38-FCF9-4538-99C0-172AFA481FBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Notification.Protocol.Client.Test", "Naos.Notification.Protocol.Client.Test\Naos.Notification.Protocol.Client.Test.csproj", "{216BBEAE-ABF2-432D-821E-D58665F62F02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{84D9CEDA-4A7F-44D3-B06C-8DECBDF19472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84D9CEDA-4A7F-44D3-B06C-8DECBDF19472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84D9CEDA-4A7F-44D3-B06C-8DECBDF19472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{191A8C38-FCF9-4538-99C0-172AFA481FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{191A8C38-FCF9-4538-99C0-172AFA481FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{191A8C38-FCF9-4538-99C0-172AFA481FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{191A8C38-FCF9-4538-99C0-172AFA481FBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{216BBEAE-ABF2-432D-821E-D58665F62F02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{216BBEAE-ABF2-432D-821E-D58665F62F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{216BBEAE-ABF2-432D-821E-D58665F62F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{216BBEAE-ABF2-432D-821E-D58665F62F02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
