@@ -1,0 +1,7 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <description>Shared types (models and utilities) for Notification</description>
+    <tags>models modelobject utilities Notification</tags>
+  </metadata>
+</package>
