@@ -25,30 +25,30 @@ namespace Naos.Notification.Protocol.Slack.Bot
 
         private readonly IWriteOnlyStream slackEventStream;
 
-        private readonly IBuildTagsForEvent<UploadFileToSlackRequestedEvent<long>> buildUploadFileToSlackRequestedEventTags;
+        private readonly IBuildTagsProtocol<UploadFileToSlackRequestedEvent<long>> buildUploadFileToSlackRequestedEventTagsProtocol;
 
-        private readonly IBuildTagsForEvent<UploadFileToSlackResponseEventBase<long>> buildUploadFileToSlackResponseEventTags;
+        private readonly IBuildTagsProtocol<UploadFileToSlackResponseEventBase<long>> buildUploadFileToSlackResponseEventTagsProtocol;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandleUploadFileToSlackProtocol"/> class.
         /// </summary>
         /// <param name="uploadFileToSlackProtocol">Protocol to upload a file to Slack.</param>
         /// <param name="slackEventStream">The Slack event stream.</param>
-        /// <param name="buildUploadFileToSlackRequestedEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="UploadFileToSlackRequestedEvent{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildUploadFileToSlackResponseEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="UploadFileToSlackResponseEventBase{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildUploadFileToSlackRequestedEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="UploadFileToSlackRequestedEvent{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildUploadFileToSlackResponseEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="UploadFileToSlackResponseEventBase{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         public HandleUploadFileToSlackProtocol(
             IUploadFileToSlackProtocol uploadFileToSlackProtocol,
             IWriteOnlyStream slackEventStream,
-            IBuildTagsForEvent<UploadFileToSlackRequestedEvent<long>> buildUploadFileToSlackRequestedEventTags = null,
-            IBuildTagsForEvent<UploadFileToSlackResponseEventBase<long>> buildUploadFileToSlackResponseEventTags = null)
+            IBuildTagsProtocol<UploadFileToSlackRequestedEvent<long>> buildUploadFileToSlackRequestedEventTagsProtocol = null,
+            IBuildTagsProtocol<UploadFileToSlackResponseEventBase<long>> buildUploadFileToSlackResponseEventTagsProtocol = null)
         {
             new { uploadFileToSlackProtocol }.AsArg().Must().NotBeNull();
             new { slackEventStream }.AsArg().Must().NotBeNull();
 
             this.uploadFileToSlackProtocol = uploadFileToSlackProtocol;
             this.slackEventStream = slackEventStream;
-            this.buildUploadFileToSlackRequestedEventTags = buildUploadFileToSlackRequestedEventTags;
-            this.buildUploadFileToSlackResponseEventTags = buildUploadFileToSlackResponseEventTags;
+            this.buildUploadFileToSlackRequestedEventTagsProtocol = buildUploadFileToSlackRequestedEventTagsProtocol;
+            this.buildUploadFileToSlackResponseEventTagsProtocol = buildUploadFileToSlackResponseEventTagsProtocol;
         }
 
         /// <inheritdoc />
@@ -67,7 +67,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
             // Write the request to the event stream
             var uploadFileToSlackRequestedEvent = new UploadFileToSlackRequestedEvent<long>(slackOperationTrackingCodeId, DateTime.UtcNow, uploadFileToSlackOp.UploadFileToSlackRequest);
 
-            var tags = await this.buildUploadFileToSlackRequestedEventTags.ExecuteBuildTagsForEventAsync(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, inheritableTags);
+            var tags = await this.buildUploadFileToSlackRequestedEventTagsProtocol.ExecuteBuildTagsAsync(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, inheritableTags);
 
             await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
 
@@ -86,7 +86,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
                 uploadFileToSlackResponseEvent = new FailedToUploadFileToSlackEvent<long>(slackOperationTrackingCodeId, DateTime.UtcNow, uploadFileToSlackResponse);
             }
 
-            tags = await this.buildUploadFileToSlackResponseEventTags.ExecuteBuildTagsForEventAsync(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, inheritableTags);
+            tags = await this.buildUploadFileToSlackResponseEventTagsProtocol.ExecuteBuildTagsAsync(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, inheritableTags);
 
             await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }

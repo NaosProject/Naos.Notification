@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISendNotification.cs" company="Naos Project">
+// <copyright file="ISendNotificationProtocol.cs" company="Naos Project">
 //    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace Naos.Notification.Domain
     /// <summary>
     /// Executes a <see cref="SendNotificationOp"/>.
     /// </summary>
-    public interface ISendNotification : IAsyncReturningProtocol<SendNotificationOp, NotificationTrackingCode>
+    public interface ISendNotificationProtocol : IAsyncReturningProtocol<SendNotificationOp, NotificationTrackingCode>
     {
     }
 }

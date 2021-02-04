@@ -30,27 +30,27 @@ namespace Naos.Notification.Protocol.Bot
 
         private readonly IWriteOnlyStream sagaStream;
 
-        private readonly IGetAudience getAudienceProtocol;
+        private readonly IGetAudienceProtocol getAudienceProtocol;
 
-        private readonly IGetDeliveryChannelConfigs getDeliveryChannelConfigsProtocol;
+        private readonly IGetDeliveryChannelConfigsProtocol getDeliveryChannelConfigsProtocol;
 
-        private readonly IPrepareToSendOnChannel prepareToSendOnChannelProtocol;
+        private readonly IPrepareToSendOnChannelProtocol prepareToSendOnChannelProtocol;
 
         private readonly CannotStageToSendOnChannelAction cannotStageToSendOnChannelAction;
 
         private readonly IReadOnlyDictionary<IDeliveryChannel, IWriteOnlyStream> channelToOperationStreamMap;
 
-        private readonly IBuildTagsForEvent<SendNotificationRequestedEvent> buildSendNotificationRequestedEventTags;
+        private readonly IBuildTagsProtocol<SendNotificationRequestedEvent> buildSendNotificationRequestedEventTagsProtocol;
 
-        private readonly IBuildTagsForEvent<CannotGetAudienceEvent> buildCannotGetAudienceEventTags;
+        private readonly IBuildTagsProtocol<CannotGetAudienceEvent> buildCannotGetAudienceEventTagsProtocol;
 
-        private readonly IBuildTagsForEvent<CannotGetDeliveryChannelConfigsEvent> buildCannotGetDeliveryChannelConfigsEventTags;
+        private readonly IBuildTagsProtocol<CannotGetDeliveryChannelConfigsEvent> buildCannotGetDeliveryChannelConfigsEventTagsProtocol;
 
-        private readonly IBuildTagsForEvent<NoChannelsToSendOnEvent> buildNoChannelsToSendOnEventTags;
+        private readonly IBuildTagsProtocol<NoChannelsToSendOnEvent> buildNoChannelsToSendOnEventTagsProtocol;
 
-        private readonly IBuildTagsForEvent<StagedToSendOnChannelsEvent> buildStagedToSendOnChannelEventTags;
+        private readonly IBuildTagsProtocol<StagedToSendOnChannelsEvent> buildStagedToSendOnChannelEventTagsProtocol;
 
-        private readonly IBuildTagsForEvent<ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>> buildExecuteProcessSendNotificationSagaEventTags;
+        private readonly IBuildTagsProtocol<ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>> buildExecuteProcessSendNotificationSagaEventTagsProtocol;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandleSendNotificationProtocol"/> class.
@@ -62,26 +62,26 @@ namespace Naos.Notification.Protocol.Bot
         /// <param name="prepareToSendOnChannelProtocol">Executes a <see cref="PrepareToSendOnChannelOp"/>.</param>
         /// <param name="cannotStageToSendOnChannelAction">Specifies what to do when we encounter a situation where we cannot stage to send on a channel.</param>
         /// <param name="channelToOperationStreamMap">A map of delivery channel to the channel's operation stream.</param>
-        /// <param name="buildSendNotificationRequestedEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendNotificationRequestedEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildCannotGetAudienceEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="CannotGetAudienceEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildCannotGetDeliveryChannelConfigsEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="CannotGetDeliveryChannelConfigsEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildNoChannelsToSendOnEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="NoChannelsToSendOnEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildStagedToSendOnChannelEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="StagedToSendOnChannelsEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildExecuteProcessSendNotificationSagaEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="ProcessSendNotificationSagaOp"/> into the Notification Saga Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildSendNotificationRequestedEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendNotificationRequestedEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildCannotGetAudienceEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="CannotGetAudienceEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildCannotGetDeliveryChannelConfigsEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="CannotGetDeliveryChannelConfigsEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildNoChannelsToSendOnEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="NoChannelsToSendOnEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildStagedToSendOnChannelEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="StagedToSendOnChannelsEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildExecuteProcessSendNotificationSagaEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="ProcessSendNotificationSagaOp"/> into the Notification Saga Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         protected HandleSendNotificationProtocol(
             IWriteOnlyStream eventStream,
             IWriteOnlyStream sagaStream,
-            IGetAudience getAudienceProtocol,
-            IGetDeliveryChannelConfigs getDeliveryChannelConfigsProtocol,
-            IPrepareToSendOnChannel prepareToSendOnChannelProtocol,
+            IGetAudienceProtocol getAudienceProtocol,
+            IGetDeliveryChannelConfigsProtocol getDeliveryChannelConfigsProtocol,
+            IPrepareToSendOnChannelProtocol prepareToSendOnChannelProtocol,
             CannotStageToSendOnChannelAction cannotStageToSendOnChannelAction,
             IReadOnlyDictionary<IDeliveryChannel, IWriteOnlyStream> channelToOperationStreamMap,
-            IBuildTagsForEvent<SendNotificationRequestedEvent> buildSendNotificationRequestedEventTags = null,
-            IBuildTagsForEvent<CannotGetAudienceEvent> buildCannotGetAudienceEventTags = null,
-            IBuildTagsForEvent<CannotGetDeliveryChannelConfigsEvent> buildCannotGetDeliveryChannelConfigsEventTags = null,
-            IBuildTagsForEvent<NoChannelsToSendOnEvent> buildNoChannelsToSendOnEventTags = null,
-            IBuildTagsForEvent<StagedToSendOnChannelsEvent> buildStagedToSendOnChannelEventTags = null,
-            IBuildTagsForEvent<ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>> buildExecuteProcessSendNotificationSagaEventTags = null)
+            IBuildTagsProtocol<SendNotificationRequestedEvent> buildSendNotificationRequestedEventTagsProtocol = null,
+            IBuildTagsProtocol<CannotGetAudienceEvent> buildCannotGetAudienceEventTagsProtocol = null,
+            IBuildTagsProtocol<CannotGetDeliveryChannelConfigsEvent> buildCannotGetDeliveryChannelConfigsEventTagsProtocol = null,
+            IBuildTagsProtocol<NoChannelsToSendOnEvent> buildNoChannelsToSendOnEventTagsProtocol = null,
+            IBuildTagsProtocol<StagedToSendOnChannelsEvent> buildStagedToSendOnChannelEventTagsProtocol = null,
+            IBuildTagsProtocol<ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>> buildExecuteProcessSendNotificationSagaEventTagsProtocol = null)
         {
             new { eventStream }.AsArg().Must().NotBeNull();
             new { sagaStream }.AsArg().Must().NotBeNull();
@@ -98,12 +98,12 @@ namespace Naos.Notification.Protocol.Bot
             this.prepareToSendOnChannelProtocol = prepareToSendOnChannelProtocol;
             this.cannotStageToSendOnChannelAction = cannotStageToSendOnChannelAction;
             this.channelToOperationStreamMap = channelToOperationStreamMap;
-            this.buildSendNotificationRequestedEventTags = buildSendNotificationRequestedEventTags;
-            this.buildCannotGetAudienceEventTags = buildCannotGetAudienceEventTags;
-            this.buildCannotGetDeliveryChannelConfigsEventTags = buildCannotGetDeliveryChannelConfigsEventTags;
-            this.buildNoChannelsToSendOnEventTags = buildNoChannelsToSendOnEventTags;
-            this.buildStagedToSendOnChannelEventTags = buildStagedToSendOnChannelEventTags;
-            this.buildExecuteProcessSendNotificationSagaEventTags = buildExecuteProcessSendNotificationSagaEventTags;
+            this.buildSendNotificationRequestedEventTagsProtocol = buildSendNotificationRequestedEventTagsProtocol;
+            this.buildCannotGetAudienceEventTagsProtocol = buildCannotGetAudienceEventTagsProtocol;
+            this.buildCannotGetDeliveryChannelConfigsEventTagsProtocol = buildCannotGetDeliveryChannelConfigsEventTagsProtocol;
+            this.buildNoChannelsToSendOnEventTagsProtocol = buildNoChannelsToSendOnEventTagsProtocol;
+            this.buildStagedToSendOnChannelEventTagsProtocol = buildStagedToSendOnChannelEventTagsProtocol;
+            this.buildExecuteProcessSendNotificationSagaEventTagsProtocol = buildExecuteProcessSendNotificationSagaEventTagsProtocol;
         }
 
         /// <inheritdoc />
@@ -292,7 +292,7 @@ namespace Naos.Notification.Protocol.Bot
         {
             var @event = new SendNotificationRequestedEvent(trackingCodeId, DateTime.UtcNow, sendNotificationOp);
 
-            var tags = await this.buildSendNotificationRequestedEventTags.ExecuteBuildTagsForEventAsync(trackingCodeId, @event, inheritableTags);
+            var tags = await this.buildSendNotificationRequestedEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
 
             await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }
@@ -304,7 +304,7 @@ namespace Naos.Notification.Protocol.Bot
         {
             var @event = new CannotGetAudienceEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult);
 
-            var tags = await this.buildCannotGetAudienceEventTags.ExecuteBuildTagsForEventAsync(trackingCodeId, @event, inheritableTags);
+            var tags = await this.buildCannotGetAudienceEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
 
             await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }
@@ -317,7 +317,7 @@ namespace Naos.Notification.Protocol.Bot
         {
             var @event = new CannotGetDeliveryChannelConfigsEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult);
 
-            var tags = await this.buildCannotGetDeliveryChannelConfigsEventTags.ExecuteBuildTagsForEventAsync(trackingCodeId, @event, inheritableTags);
+            var tags = await this.buildCannotGetDeliveryChannelConfigsEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
 
             await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }
@@ -331,7 +331,7 @@ namespace Naos.Notification.Protocol.Bot
         {
             var @event = new NoChannelsToSendOnEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult, channelToPrepareToSendOnChannelResultMap, this.cannotStageToSendOnChannelAction);
 
-            var tags = await this.buildNoChannelsToSendOnEventTags.ExecuteBuildTagsForEventAsync(trackingCodeId, @event, inheritableTags);
+            var tags = await this.buildNoChannelsToSendOnEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
 
             await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }
@@ -346,7 +346,7 @@ namespace Naos.Notification.Protocol.Bot
         {
             var @event = new StagedToSendOnChannelsEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult, channelToPrepareToSendOnChannelResultMap, this.cannotStageToSendOnChannelAction, channelsToSendOn);
 
-            var tags = await this.buildStagedToSendOnChannelEventTags.ExecuteBuildTagsForEventAsync(trackingCodeId, @event, inheritableTags);
+            var tags = await this.buildStagedToSendOnChannelEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
 
             await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }
@@ -364,7 +364,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var @event = new ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>(trackingCodeId, processSendNotificationSagaOp, DateTime.UtcNow);
 
-            var tags = await this.buildExecuteProcessSendNotificationSagaEventTags.ExecuteBuildTagsForEventAsync(trackingCodeId, @event, inheritableTags);
+            var tags = await this.buildExecuteProcessSendNotificationSagaEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
 
             await this.sagaStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }

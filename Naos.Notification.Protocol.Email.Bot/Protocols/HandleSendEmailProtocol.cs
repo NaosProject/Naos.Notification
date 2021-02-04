@@ -25,30 +25,30 @@ namespace Naos.Notification.Protocol.Email.Bot
 
         private readonly IWriteOnlyStream emailEventStream;
 
-        private readonly IBuildTagsForEvent<SendEmailRequestedEvent<long>> buildSendEmailRequestedEventTags;
+        private readonly IBuildTagsProtocol<SendEmailRequestedEvent<long>> buildSendEmailRequestedEventTagsProtocol;
 
-        private readonly IBuildTagsForEvent<SendEmailResponseEventBase<long>> buildSendEmailResponseEventTags;
+        private readonly IBuildTagsProtocol<SendEmailResponseEventBase<long>> buildSendEmailResponseEventTagsProtocol;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandleSendEmailProtocol"/> class.
         /// </summary>
         /// <param name="sendEmailProtocol">Protocol to send an email.</param>
         /// <param name="emailEventStream">The email event stream.</param>
-        /// <param name="buildSendEmailRequestedEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendEmailRequestedEvent{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildSendEmailResponseEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendEmailResponseEventBase{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildSendEmailRequestedEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendEmailRequestedEvent{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildSendEmailResponseEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendEmailResponseEventBase{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         public HandleSendEmailProtocol(
             ISendEmailProtocol sendEmailProtocol,
             IWriteOnlyStream emailEventStream,
-            IBuildTagsForEvent<SendEmailRequestedEvent<long>> buildSendEmailRequestedEventTags = null,
-            IBuildTagsForEvent<SendEmailResponseEventBase<long>> buildSendEmailResponseEventTags = null)
+            IBuildTagsProtocol<SendEmailRequestedEvent<long>> buildSendEmailRequestedEventTagsProtocol = null,
+            IBuildTagsProtocol<SendEmailResponseEventBase<long>> buildSendEmailResponseEventTagsProtocol = null)
         {
             new { sendEmailProtocol }.AsArg().Must().NotBeNull();
             new { emailEventStream }.AsArg().Must().NotBeNull();
 
             this.sendEmailProtocol = sendEmailProtocol;
             this.emailEventStream = emailEventStream;
-            this.buildSendEmailRequestedEventTags = buildSendEmailRequestedEventTags;
-            this.buildSendEmailResponseEventTags = buildSendEmailResponseEventTags;
+            this.buildSendEmailRequestedEventTagsProtocol = buildSendEmailRequestedEventTagsProtocol;
+            this.buildSendEmailResponseEventTagsProtocol = buildSendEmailResponseEventTagsProtocol;
         }
 
         /// <inheritdoc />
@@ -67,7 +67,7 @@ namespace Naos.Notification.Protocol.Email.Bot
             // Write the request to the event stream
             var sendEmailRequestedEvent = new SendEmailRequestedEvent<long>(emailTrackingCodeId, DateTime.UtcNow, sendEmailOp.SendEmailRequest);
 
-            var tags = await this.buildSendEmailRequestedEventTags.ExecuteBuildTagsForEventAsync(emailTrackingCodeId, sendEmailRequestedEvent, inheritableTags);
+            var tags = await this.buildSendEmailRequestedEventTagsProtocol.ExecuteBuildTagsAsync(emailTrackingCodeId, sendEmailRequestedEvent, inheritableTags);
 
             await this.emailEventStream.PutWithIdAsync(emailTrackingCodeId, sendEmailRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
 
@@ -86,7 +86,7 @@ namespace Naos.Notification.Protocol.Email.Bot
                 emailResponseEventBase = new FailedToSendEmailEvent<long>(emailTrackingCodeId, DateTime.UtcNow, emailResponse);
             }
 
-            tags = await this.buildSendEmailResponseEventTags.ExecuteBuildTagsForEventAsync(emailTrackingCodeId, emailResponseEventBase, inheritableTags);
+            tags = await this.buildSendEmailResponseEventTagsProtocol.ExecuteBuildTagsAsync(emailTrackingCodeId, emailResponseEventBase, inheritableTags);
 
             await this.emailEventStream.PutWithIdAsync(emailTrackingCodeId, emailResponseEventBase, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }

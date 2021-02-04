@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UseInheritableTagsForEventProtocol{TEvent}.cs" company="Naos Project">
+// <copyright file="UseInheritableTagsProtocol{TEvent}.cs" company="Naos Project">
 //    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -17,12 +17,12 @@ namespace Naos.Notification.Domain
     /// Extension methods on protocols.
     /// </summary>
     /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
-    public class UseInheritableTagsForEventProtocol<TEvent> : AsyncSpecificReturningProtocolBase<BuildTagsForEventOp<TEvent>, IReadOnlyDictionary<string, string>>
+    public class UseInheritableTagsProtocol<TEvent> : AsyncSpecificReturningProtocolBase<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>>, IBuildTagsProtocol<TEvent>
         where TEvent : IEvent
     {
         /// <inheritdoc />
         public override async Task<IReadOnlyDictionary<string, string>> ExecuteAsync(
-            BuildTagsForEventOp<TEvent> operation)
+            BuildTagsOp<TEvent> operation)
         {
             new { operation }.AsArg().Must().NotBeNull();
 

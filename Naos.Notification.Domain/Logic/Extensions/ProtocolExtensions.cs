@@ -17,10 +17,10 @@ namespace Naos.Notification.Domain
     public static class ProtocolExtensions
     {
         /// <summary>
-        /// Executes an <see cref="IBuildTagsForEvent{TEvent}"/> protocol.
+        /// Executes an <see cref="IBuildTagsProtocol{TEvent}"/> protocol.
         /// </summary>
         /// <remarks>
-        /// This is a convenience method to build a <see cref="BuildTagsForEventOp{TEvent}"/>
+        /// This is a convenience method to build a <see cref="BuildTagsOp{TEvent}"/>
         /// and execute it against the specified protocol.
         /// </remarks>
         /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
@@ -31,8 +31,8 @@ namespace Naos.Notification.Domain
         /// <returns>
         /// The tags to use when putting the specified event into a stream.
         /// </returns>
-        public static async Task<IReadOnlyDictionary<string, string>> ExecuteBuildTagsForEventAsync<TEvent>(
-            this IBuildTagsForEvent<TEvent> protocol,
+        public static async Task<IReadOnlyDictionary<string, string>> ExecuteBuildTagsAsync<TEvent>(
+            this IBuildTagsProtocol<TEvent> protocol,
             long trackingCodeId,
             TEvent @event,
             IReadOnlyDictionary<string, string> inheritableTags = null)
@@ -42,7 +42,7 @@ namespace Naos.Notification.Domain
 
             if (protocol != null)
             {
-                var buildTagsOperation = new BuildTagsForEventOp<TEvent>(trackingCodeId, @event, inheritableTags);
+                var buildTagsOperation = new BuildTagsOp<TEvent>(trackingCodeId, @event, inheritableTags);
 
                 result = await protocol.ExecuteAsync(buildTagsOperation);
             }

@@ -91,8 +91,7 @@
     <Compile Include=".recipes\OBeautifulCode.Type\ToStringXmlDocOptions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\TypeExtensions.cs" />
     <Compile Include="Events\Normal\AttemptedToSendNotificationEvent.cs" />
-    <Compile Include="Interfaces\ISendNotification.cs" />
-    <Compile Include="Interfaces\IProcessSendNotificationSaga.cs" />
+    <Compile Include="Interfaces\ISendNotificationProtocol.cs" />
     <Compile Include="Logic\Extensions\EventExtensions.cs" />
     <Compile Include="Logic\Extensions\ProtocolExtensions.cs" />
     <Compile Include="Models\Enums\AttemptToSendNotificationOutcome.cs" />
@@ -103,10 +102,10 @@
     <Compile Include="Events\NotificationEventBase.cs" />
     <Compile Include="Events\Stopping\CannotGetAudienceEvent.cs" />
     <Compile Include="Events\Normal\SendNotificationRequestedEvent.cs" />
-    <Compile Include="Interfaces\IPrepareToSendOnChannel.cs" />
-    <Compile Include="Interfaces\IGetDeliveryChannelConfigs.cs" />
-    <Compile Include="Interfaces\IGetAudience.cs" />
-    <Compile Include="Interfaces\IBuildTagsForEvent{TEvent}.cs" />
+    <Compile Include="Interfaces\IPrepareToSendOnChannelProtocol.cs" />
+    <Compile Include="Interfaces\IGetDeliveryChannelConfigsProtocol.cs" />
+    <Compile Include="Interfaces\IGetAudienceProtocol.cs" />
+    <Compile Include="Interfaces\IBuildTagsProtocol{TEvent}.cs" />
     <Compile Include="Models\Classes\Failure\ExceptionThrownFailure.cs" />
     <Compile Include="Models\Classes\Failure\FailureBase.cs" />
     <Compile Include="Models\Classes\OperationResult\GetDeliveryChannelConfigsResult.cs" />
@@ -129,7 +128,7 @@
     <Compile Include="Models\Interfaces\IDeliveryChannel.cs" />
     <Compile Include="Models\Interfaces\IAudience.cs" />
     <Compile Include="Models\Interfaces\INotification.cs" />
-    <Compile Include="Operations\Consumer\BuildTagsForEventOp{TEvent}.cs" />
+    <Compile Include="Operations\Consumer\BuildTagsOp{TEvent}.cs" />
     <Compile Include="Operations\Consumer\PrepareToSendOnChannelOp.cs" />
     <Compile Include="Operations\Consumer\GetDeliveryChannelConfigsOp.cs" />
     <Compile Include="Operations\Consumer\GetAudienceOp.cs" />
@@ -138,7 +137,7 @@
     <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Properties\ProjectInfo.cs" />
     <AdditionalFiles Include=".analyzers\stylecop.json" />
-    <Compile Include="Protocols\UseInheritableTagsForEventProtocol{TEvent}.cs" />
+    <Compile Include="Protocols\UseInheritableTagsProtocol{TEvent}.cs" />
     <None Include=".analyzers\release.ruleset" />
     <None Include="Naos.Notification.Domain.override-nuspec" />
     <None Include="packages.config" />

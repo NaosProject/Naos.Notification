@@ -25,30 +25,30 @@ namespace Naos.Notification.Protocol.Slack.Bot
 
         private readonly IWriteOnlyStream slackEventStream;
 
-        private readonly IBuildTagsForEvent<SendSlackMessageRequestedEvent<long>> buildSendSlackMessageRequestedEventTags;
+        private readonly IBuildTagsProtocol<SendSlackMessageRequestedEvent<long>> buildSendSlackMessageRequestedEventTagsProtocol;
 
-        private readonly IBuildTagsForEvent<SendSlackMessageResponseEventBase<long>> buildSendSlackMessageResponseEventTags;
+        private readonly IBuildTagsProtocol<SendSlackMessageResponseEventBase<long>> buildSendSlackMessageResponseEventTagsProtocol;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandleSendSlackMessageProtocol"/> class.
         /// </summary>
         /// <param name="sendSlackMessageProtocol">Protocol to send a slack message.</param>
         /// <param name="slackEventStream">The Slack event stream.</param>
-        /// <param name="buildSendSlackMessageRequestedEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendSlackMessageRequestedEvent{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildSendSlackMessageResponseEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendSlackMessageResponseEventBase{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsForEventProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildSendSlackMessageRequestedEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendSlackMessageRequestedEvent{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildSendSlackMessageResponseEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendSlackMessageResponseEventBase{TId}"/> into the Email Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         public HandleSendSlackMessageProtocol(
             ISendSlackMessageProtocol sendSlackMessageProtocol,
             IWriteOnlyStream slackEventStream,
-            IBuildTagsForEvent<SendSlackMessageRequestedEvent<long>> buildSendSlackMessageRequestedEventTags = null,
-            IBuildTagsForEvent<SendSlackMessageResponseEventBase<long>> buildSendSlackMessageResponseEventTags = null)
+            IBuildTagsProtocol<SendSlackMessageRequestedEvent<long>> buildSendSlackMessageRequestedEventTagsProtocol = null,
+            IBuildTagsProtocol<SendSlackMessageResponseEventBase<long>> buildSendSlackMessageResponseEventTagsProtocol = null)
         {
             new { sendSlackMessageProtocol }.AsArg().Must().NotBeNull();
             new { slackEventStream }.AsArg().Must().NotBeNull();
 
             this.sendSlackMessageProtocol = sendSlackMessageProtocol;
             this.slackEventStream = slackEventStream;
-            this.buildSendSlackMessageRequestedEventTags = buildSendSlackMessageRequestedEventTags;
-            this.buildSendSlackMessageResponseEventTags = buildSendSlackMessageResponseEventTags;
+            this.buildSendSlackMessageRequestedEventTagsProtocol = buildSendSlackMessageRequestedEventTagsProtocol;
+            this.buildSendSlackMessageResponseEventTagsProtocol = buildSendSlackMessageResponseEventTagsProtocol;
         }
 
         /// <inheritdoc />
@@ -67,7 +67,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
             // Write the request to the event stream
             var sendSlackMessageRequestedEvent = new SendSlackMessageRequestedEvent<long>(slackOperationTrackingCodeId, DateTime.UtcNow, sendSlackMessageOp.SendSlackMessageRequest);
 
-            var tags = await this.buildSendSlackMessageRequestedEventTags.ExecuteBuildTagsForEventAsync(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, inheritableTags);
+            var tags = await this.buildSendSlackMessageRequestedEventTagsProtocol.ExecuteBuildTagsAsync(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, inheritableTags);
 
             await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
 
@@ -86,7 +86,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
                 sendSlackMessageResponseEvent = new FailedToSendSlackMessageEvent<long>(slackOperationTrackingCodeId, DateTime.UtcNow, sendSlackMessageResponse);
             }
 
-            tags = await this.buildSendSlackMessageResponseEventTags.ExecuteBuildTagsForEventAsync(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, inheritableTags);
+            tags = await this.buildSendSlackMessageResponseEventTagsProtocol.ExecuteBuildTagsAsync(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, inheritableTags);
 
             await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }
