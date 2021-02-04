@@ -94,6 +94,7 @@
     <Compile Include="Interfaces\ISendNotificationProtocol.cs" />
     <Compile Include="Logic\Extensions\EventExtensions.cs" />
     <Compile Include="Logic\Extensions\ProtocolExtensions.cs" />
+    <Compile Include="Models\Classes\Notification\AudienceSpecifiedNotificationBase.cs" />
     <Compile Include="Models\Enums\AttemptToSendNotificationOutcome.cs" />
     <Compile Include="Operations\Provided\ProcessSendNotificationSagaOp.cs" />
     <Compile Include="Events\Normal\StagedToSendOnChannelsEvent.cs" />
@@ -118,7 +119,7 @@
     <Compile Include="Models\Classes\AudienceBase.cs" />
     <Compile Include="Models\Classes\EventRelated\OperationOutcomeSpec.cs" />
     <Compile Include="Models\Classes\ChannelOperationInstruction.cs" />
-    <Compile Include="Models\Classes\NotificationBase.cs" />
+    <Compile Include="Models\Classes\Notification\NotificationBase.cs" />
     <Compile Include="Models\Classes\EventRelated\NotificationTrackingCode.cs" />
     <Compile Include="Models\Enums\CannotStageToSendOnChannelAction.cs" />
     <Compile Include="Models\Enums\PrepareToSendOnChannelFailureAction.cs" />
@@ -149,7 +150,9 @@
   <ItemGroup>
     <Content Include=".analyzers\dictionary.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Interfaces\Protocol\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets" Condition="Exists('..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
