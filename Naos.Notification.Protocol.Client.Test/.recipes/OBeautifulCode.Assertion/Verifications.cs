@@ -24,8 +24,8 @@ namespace OBeautifulCode.Assertion.Recipes
     /// Contains all verifications that can be applied to an <see cref="AssertionTracker"/>.
     /// </summary>
 #if !OBeautifulCodeAssertionSolution
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    [System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Assertion.Recipes", "See package version number")]
+    [global::System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [global::System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Assertion.Recipes", "See package version number")]
     internal
 #else
     public
@@ -116,7 +116,7 @@ namespace OBeautifulCode.Assertion.Recipes
                 ApplyBecause = applyBecause,
                 Handler = BeTrueInternal,
                 Name = nameof(BeTrue),
-                TypeValidations = MustBeBooleanTypeValidations,
+                TypeValidations = MustBeBooleanOrNullableBooleanTypeValidations,
                 Data = data,
             };
 
@@ -147,7 +147,7 @@ namespace OBeautifulCode.Assertion.Recipes
                 ApplyBecause = applyBecause,
                 Handler = NotBeTrueInternal,
                 Name = nameof(NotBeTrue),
-                TypeValidations = MustBeBooleanTypeValidations,
+                TypeValidations = MustBeBooleanOrNullableBooleanTypeValidations,
                 Data = data,
             };
 
@@ -178,7 +178,7 @@ namespace OBeautifulCode.Assertion.Recipes
                 ApplyBecause = applyBecause,
                 Handler = BeFalseInternal,
                 Name = nameof(BeFalse),
-                TypeValidations = MustBeBooleanTypeValidations,
+                TypeValidations = MustBeBooleanOrNullableBooleanTypeValidations,
                 Data = data,
             };
 
@@ -209,7 +209,7 @@ namespace OBeautifulCode.Assertion.Recipes
                 ApplyBecause = applyBecause,
                 Handler = NotBeFalseInternal,
                 Name = nameof(NotBeFalse),
-                TypeValidations = MustBeBooleanTypeValidations,
+                TypeValidations = MustBeBooleanOrNullableBooleanTypeValidations,
                 Data = data,
             };
 
@@ -302,7 +302,7 @@ namespace OBeautifulCode.Assertion.Recipes
                 ApplyBecause = applyBecause,
                 Handler = BeEmptyGuidInternal,
                 Name = nameof(BeEmptyGuid),
-                TypeValidations = MustBeGuidTypeValidations,
+                TypeValidations = MustBeGuidOrNullableGuidTypeValidations,
                 Data = data,
             };
 
@@ -333,7 +333,7 @@ namespace OBeautifulCode.Assertion.Recipes
                 ApplyBecause = applyBecause,
                 Handler = NotBeEmptyGuidInternal,
                 Name = nameof(NotBeEmptyGuid),
-                TypeValidations = MustBeGuidTypeValidations,
+                TypeValidations = MustBeGuidOrNullableGuidTypeValidations,
                 Data = data,
             };
 
@@ -591,6 +591,38 @@ namespace OBeautifulCode.Assertion.Recipes
         }
 
         /// <summary>
+        /// Verifies that the IEnumerable subject does not contain any null elements, when not null.
+        /// If null, no exception is thrown.
+        /// </summary>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker NotContainAnyNullElementsWhenNotNull(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = NotContainAnyNullElementsWhenNotNullInternal,
+                Name = nameof(NotContainAnyNullElementsWhenNotNull),
+                TypeValidations = MustBeEnumerableWhoseElementTypeCanBeAssignedToNullValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
         /// Verifies that the IDictionary, IDictionary{TKey,TValue}, or IReadOnlyDictionary{TKey,TValue} subject contains at least one null value.
         /// </summary>
         /// <param name="assertionTracker">The assertion tracker.</param>
@@ -644,6 +676,208 @@ namespace OBeautifulCode.Assertion.Recipes
                 Handler = NotContainAnyKeyValuePairsWithNullValueInternal,
                 Name = nameof(NotContainAnyKeyValuePairsWithNullValue),
                 TypeValidations = MustBeDictionaryWhoseValueTypeCanBeAssignedToNullValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the IDictionary, IDictionary{TKey,TValue}, or IReadOnlyDictionary{TKey,TValue} subject contains a specified key.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparison value.</typeparam>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="keyToSearchFor">The key to search for.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker ContainKey<T>(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            T keyToSearchFor,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            if (keyToSearchFor == null)
+            {
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, VerificationParameterIsNullErrorMessage, nameof(ContainKey), nameof(keyToSearchFor));
+
+                WorkflowExtensions.ThrowImproperUseOfFramework(errorMessage);
+            }
+
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = ContainKeyInternal,
+                Name = nameof(ContainKey),
+                VerificationParameters = new[]
+                {
+                    new VerificationParameter
+                    {
+                        Name = nameof(keyToSearchFor),
+                        Value = keyToSearchFor,
+                        ParameterType = typeof(T),
+                    },
+                },
+                TypeValidations = DictionaryKeyContainmentTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the IDictionary, IDictionary{TKey,TValue}, or IReadOnlyDictionary{TKey,TValue} subject does not contain a specified key.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparison value.</typeparam>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="keyToSearchFor">The key to search for.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker NotContainKey<T>(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            T keyToSearchFor,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            if (keyToSearchFor == null)
+            {
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, VerificationParameterIsNullErrorMessage, nameof(NotContainKey), nameof(keyToSearchFor));
+
+                WorkflowExtensions.ThrowImproperUseOfFramework(errorMessage);
+            }
+
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = NotContainKeyInternal,
+                Name = nameof(NotContainKey),
+                VerificationParameters = new[]
+                {
+                    new VerificationParameter
+                    {
+                        Name = nameof(keyToSearchFor),
+                        Value = keyToSearchFor,
+                        ParameterType = typeof(T),
+                    },
+                },
+                TypeValidations = DictionaryKeyContainmentTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the IDictionary, IDictionary{TKey,TValue}, or IReadOnlyDictionary{TKey,TValue} subject contains a specified key, when not null.
+        /// If null, no exception is thrown.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparison value.</typeparam>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="keyToSearchFor">The key to search for.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker ContainKeyWhenNotNull<T>(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            T keyToSearchFor,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            if (keyToSearchFor == null)
+            {
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, VerificationParameterIsNullErrorMessage, nameof(ContainKeyWhenNotNull), nameof(keyToSearchFor));
+
+                WorkflowExtensions.ThrowImproperUseOfFramework(errorMessage);
+            }
+
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = ContainKeyWhenNotNullInternal,
+                Name = nameof(ContainKeyWhenNotNull),
+                VerificationParameters = new[]
+                {
+                    new VerificationParameter
+                    {
+                        Name = nameof(keyToSearchFor),
+                        Value = keyToSearchFor,
+                        ParameterType = typeof(T),
+                    },
+                },
+                TypeValidations = DictionaryKeyContainmentTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the IDictionary, IDictionary{TKey,TValue}, or IReadOnlyDictionary{TKey,TValue} subject does not contain a specified key, when not null.
+        /// If null, no exception is thrown.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparison value.</typeparam>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="keyToSearchFor">The key to search for.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker NotContainKeyWhenNotNull<T>(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            T keyToSearchFor,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            if (keyToSearchFor == null)
+            {
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, VerificationParameterIsNullErrorMessage, nameof(NotContainKeyWhenNotNull), nameof(keyToSearchFor));
+
+                WorkflowExtensions.ThrowImproperUseOfFramework(errorMessage);
+            }
+
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = NotContainKeyWhenNotNullInternal,
+                Name = nameof(NotContainKeyWhenNotNull),
+                VerificationParameters = new[]
+                {
+                    new VerificationParameter
+                    {
+                        Name = nameof(keyToSearchFor),
+                        Value = keyToSearchFor,
+                        ParameterType = typeof(T),
+                    },
+                },
+                TypeValidations = DictionaryKeyContainmentTypeValidations,
                 Data = data,
             };
 
@@ -2877,6 +3111,69 @@ namespace OBeautifulCode.Assertion.Recipes
                 Handler = NotBeValidEmailAddressInternal,
                 Name = nameof(NotBeValidEmailAddress),
                 TypeValidations = MustBeStringTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the DateTime or DateTime? subject has <see cref="DateTimeKind.Utc"/>.
+        /// </summary>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker BeUtcDateTime(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = BeUtcDateTimeInternal,
+                Name = nameof(BeUtcDateTime),
+                TypeValidations = MustBeDateTimeOrNullableDateTimeTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the DateTime? subject has <see cref="DateTimeKind.Utc"/>, when not null.
+        /// If null, no exception is thrown.
+        /// </summary>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker BeUtcDateTimeWhenNotNull(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = BeUtcDateTimeWhenNotNullInternal,
+                Name = nameof(BeUtcDateTimeWhenNotNull),
+                TypeValidations = MustBeNullableDateTimeTypeValidations,
                 Data = data,
             };
 

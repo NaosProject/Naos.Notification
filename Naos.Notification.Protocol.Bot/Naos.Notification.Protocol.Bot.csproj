@@ -37,11 +37,20 @@
     <DocumentationFile>bin\Release\Naos.Notification.Protocol.Bot.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Naos.Database.Domain, Version=1.1.292.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Database.Domain.1.1.292\lib\net462\Naos.Database.Domain.dll</HintPath>
+    </Reference>
     <Reference Include="Naos.Protocol.Domain, Version=1.0.91.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Naos.Protocol.Domain.1.0.91\lib\net462\Naos.Protocol.Domain.dll</HintPath>
     </Reference>
+    <Reference Include="OBeautifulCode.Compression, Version=1.0.19.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.Compression.1.0.19\lib\net462\OBeautifulCode.Compression.dll</HintPath>
+    </Reference>
     <Reference Include="OBeautifulCode.Representation.System, Version=1.0.55.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OBeautifulCode.Representation.System.1.0.55\lib\net462\OBeautifulCode.Representation.System.dll</HintPath>
+    </Reference>
+    <Reference Include="OBeautifulCode.Serialization, Version=1.0.90.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.Serialization.1.0.90\lib\net462\OBeautifulCode.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="OBeautifulCode.Type, Version=1.0.76.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OBeautifulCode.Type.1.0.76\lib\net462\OBeautifulCode.Type.dll</HintPath>
@@ -75,6 +84,7 @@
     <Compile Include=".recipes\OBeautifulCode.Assertion\WorkflowExtensions.cs" />
     <Compile Include=".recipes\OBeautifulCode.CodeAnalysis\ObcSuppressBecause.cs" />
     <Compile Include=".recipes\OBeautifulCode.Collection\EnumerableExtensions.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Enum\EnumExtensions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Equality\DateTimeEqualityComparer.cs" />
     <Compile Include=".recipes\OBeautifulCode.Equality\DictionaryEqualityComparer.cs" />
     <Compile Include=".recipes\OBeautifulCode.Equality\EnumerableEqualityComparer.cs" />
@@ -83,6 +93,24 @@
     <Compile Include=".recipes\OBeautifulCode.Equality\EqualityExtensions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Equality\HashCodeHelper.cs" />
     <Compile Include=".recipes\OBeautifulCode.Equality\ReadOnlyDictionaryEqualityComparer.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\AccessModifier.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\BindingFlagsFor.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ConstructorsMatchedToPropertiesStrategy.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\MemberAccessModifiers.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\MemberAttributes.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\MemberKinds.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\MemberMutability.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\MemberOwners.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\MemberRelationships.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\OrderMembersBy.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ReflectionHelper.Attribute.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ReflectionHelper.Constructor.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ReflectionHelper.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ReflectionHelper.Enum.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ReflectionHelper.Field.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ReflectionHelper.MemberInfo.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ReflectionHelper.Method.cs" />
+    <Compile Include=".recipes\OBeautifulCode.Reflection\ReflectionHelper.Property.cs" />
     <Compile Include=".recipes\OBeautifulCode.String\StringExtensions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\ArrayKind.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\DeepCloneExtensions.cs" />
@@ -93,6 +121,8 @@
     <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Properties\ProjectInfo.cs" />
     <AdditionalFiles Include=".analyzers\stylecop.json" />
+    <Compile Include="Protocols\HandleProcessSendNotificationSagaProtocol.cs" />
+    <Compile Include="Protocols\HandleSendNotificationProtocol.cs" />
     <None Include=".analyzers\release.ruleset" />
     <None Include="Naos.Notification.Protocol.Bot.override-nuspec" />
     <None Include="packages.config" />
@@ -110,6 +140,7 @@
   <ItemGroup>
     <Content Include=".analyzers\dictionary.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Naos.Build.Analyzers.1.55.48\build\Naos.Build.Analyzers.targets" Condition="Exists('..\packages\Naos.Build.Analyzers.1.55.48\build\Naos.Build.Analyzers.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -90,10 +90,54 @@
     <Compile Include=".recipes\OBeautifulCode.Type\ToStringReadableOptions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\ToStringXmlDocOptions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\TypeExtensions.cs" />
+    <Compile Include="Events\Normal\AttemptedToSendNotificationEvent.cs" />
+    <Compile Include="Interfaces\ISendNotification.cs" />
+    <Compile Include="Interfaces\IProcessSendNotificationSaga.cs" />
+    <Compile Include="Logic\Extensions\ProtocolExtensions.cs" />
+    <Compile Include="Models\Enums\AttemptToSendNotificationOutcome.cs" />
+    <Compile Include="Operations\Provided\ProcessSendNotificationSagaOp.cs" />
+    <Compile Include="Events\Normal\StagedToSendOnChannelsEvent.cs" />
+    <Compile Include="Events\Stopping\NoChannelsToSendOnEvent.cs" />
+    <Compile Include="Events\Stopping\CannotGetDeliveryChannelConfigsEvent.cs" />
+    <Compile Include="Events\NotificationEventBase.cs" />
+    <Compile Include="Events\Stopping\CannotGetAudienceEvent.cs" />
+    <Compile Include="Events\Normal\SendNotificationRequestedEvent.cs" />
+    <Compile Include="Interfaces\IPrepareToSendOnChannel.cs" />
+    <Compile Include="Interfaces\IGetDeliveryChannelConfigs.cs" />
+    <Compile Include="Interfaces\IGetAudience.cs" />
+    <Compile Include="Interfaces\IBuildTagsForEvent{TEvent}.cs" />
+    <Compile Include="Models\Classes\Failure\ExceptionThrownFailure.cs" />
+    <Compile Include="Models\Classes\Failure\FailureBase.cs" />
+    <Compile Include="Models\Classes\OperationResult\GetDeliveryChannelConfigsResult.cs" />
+    <Compile Include="Models\Classes\OperationResult\GetAudienceResult.cs" />
+    <Compile Include="Models\Classes\OperationResult\PrepareToSendOnChannelResult.cs" />
+    <Compile Include="Models\Classes\Delivery\DeliveryChannelConfig.cs" />
+    <Compile Include="Models\Classes\Delivery\SlackDeliveryChannel.cs" />
+    <Compile Include="Models\Classes\Delivery\EmailDeliveryChannel.cs" />
+    <Compile Include="Models\Classes\Delivery\DeliveryChannelBase.cs" />
+    <Compile Include="Models\Classes\AudienceBase.cs" />
+    <Compile Include="Models\Classes\EventRelated\OperationOutcomeSpec.cs" />
+    <Compile Include="Models\Classes\ChannelOperationInstruction.cs" />
+    <Compile Include="Models\Classes\NotificationBase.cs" />
+    <Compile Include="Models\Classes\EventRelated\NotificationTrackingCode.cs" />
+    <Compile Include="Models\Enums\CannotStageToSendOnChannelAction.cs" />
+    <Compile Include="Models\Enums\PrepareToSendOnChannelFailureAction.cs" />
+    <Compile Include="Models\Enums\FailureAction.cs" />
+    <Compile Include="Models\Enums\DeliveryChannelAction.cs" />
+    <Compile Include="Models\Interfaces\IFailure.cs" />
+    <Compile Include="Models\Interfaces\IDeliveryChannel.cs" />
+    <Compile Include="Models\Interfaces\IAudience.cs" />
+    <Compile Include="Models\Interfaces\INotification.cs" />
+    <Compile Include="Operations\Consumer\BuildTagsForEventOp{TEvent}.cs" />
+    <Compile Include="Operations\Consumer\PrepareToSendOnChannelOp.cs" />
+    <Compile Include="Operations\Consumer\GetDeliveryChannelConfigsOp.cs" />
+    <Compile Include="Operations\Consumer\GetAudienceOp.cs" />
+    <Compile Include="Operations\Provided\SendNotificationOp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Properties\ProjectInfo.cs" />
     <AdditionalFiles Include=".analyzers\stylecop.json" />
+    <Compile Include="Protocols\UseInheritableTagsForEventProtocol{TEvent}.cs" />
     <None Include=".analyzers\release.ruleset" />
     <None Include="Naos.Notification.Domain.override-nuspec" />
     <None Include="packages.config" />
@@ -105,6 +149,7 @@
   <ItemGroup>
     <Content Include=".analyzers\dictionary.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets" Condition="Exists('..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
