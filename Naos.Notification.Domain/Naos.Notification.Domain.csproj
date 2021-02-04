@@ -93,6 +93,7 @@
     <Compile Include="Events\Normal\AttemptedToSendNotificationEvent.cs" />
     <Compile Include="Interfaces\ISendNotification.cs" />
     <Compile Include="Interfaces\IProcessSendNotificationSaga.cs" />
+    <Compile Include="Logic\Extensions\EventExtensions.cs" />
     <Compile Include="Logic\Extensions\ProtocolExtensions.cs" />
     <Compile Include="Models\Enums\AttemptToSendNotificationOutcome.cs" />
     <Compile Include="Operations\Provided\ProcessSendNotificationSagaOp.cs" />
