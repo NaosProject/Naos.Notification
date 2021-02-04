@@ -91,6 +91,7 @@
     <Compile Include=".recipes\OBeautifulCode.Type\ToStringXmlDocOptions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\TypeExtensions.cs" />
     <Compile Include="Events\Normal\AttemptedToSendNotificationEvent.cs" />
+    <Compile Include="Interfaces\Property\IDeclareAudience.cs" />
     <Compile Include="Interfaces\Protocol\ISendNotificationProtocol.cs" />
     <Compile Include="Logic\Extensions\EventExtensions.cs" />
     <Compile Include="Logic\Extensions\ProtocolExtensions.cs" />
@@ -125,10 +126,10 @@
     <Compile Include="Models\Enums\PrepareToSendOnChannelFailureAction.cs" />
     <Compile Include="Models\Enums\FailureAction.cs" />
     <Compile Include="Models\Enums\DeliveryChannelAction.cs" />
-    <Compile Include="Models\Interfaces\IFailure.cs" />
-    <Compile Include="Models\Interfaces\IDeliveryChannel.cs" />
-    <Compile Include="Models\Interfaces\IAudience.cs" />
-    <Compile Include="Models\Interfaces\INotification.cs" />
+    <Compile Include="Interfaces\Model\IFailure.cs" />
+    <Compile Include="Interfaces\Model\IDeliveryChannel.cs" />
+    <Compile Include="Interfaces\Model\IAudience.cs" />
+    <Compile Include="Interfaces\Model\INotification.cs" />
     <Compile Include="Operations\Consumer\BuildTagsOp{TEvent}.cs" />
     <Compile Include="Operations\Consumer\PrepareToSendOnChannelOp.cs" />
     <Compile Include="Operations\Consumer\GetDeliveryChannelConfigsOp.cs" />

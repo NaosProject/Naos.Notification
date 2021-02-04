@@ -13,7 +13,7 @@ namespace Naos.Notification.Domain
     /// Base class for notification to use when the system cannot determine the audience from the notification itself.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
-    public abstract partial class AudienceSpecifiedNotificationBase : NotificationBase, IModelViaCodeGen
+    public abstract partial class AudienceSpecifiedNotificationBase : NotificationBase, IDeclareAudience, IModelViaCodeGen
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AudienceSpecifiedNotificationBase"/> class.
