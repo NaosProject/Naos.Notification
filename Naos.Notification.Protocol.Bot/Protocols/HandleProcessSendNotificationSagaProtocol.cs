@@ -127,38 +127,6 @@ namespace Naos.Notification.Protocol.Bot
             await this.notificationEventStream.PutWithIdAsync(notificationTrackingCodeId, attemptedToSendNotificationEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
-        private static AttemptToSendNotificationOutcome GetAttemptToSendNotificationOutcome(
-            IReadOnlyCollection<IDeliveryChannel> succeededChannels,
-            IReadOnlyCollection<IDeliveryChannel> failedChannels)
-        {
-            AttemptToSendNotificationOutcome result;
-
-            if (failedChannels.Any())
-            {
-                if (succeededChannels.Any())
-                {
-                    if (failedChannels.Intersect(succeededChannels).Any())
-                    {
-                        result = AttemptToSendNotificationOutcome.MixedWithPartialChannelSends;
-                    }
-                    else
-                    {
-                        result = AttemptToSendNotificationOutcome.MixedWithFullChannelSends;
-                    }
-                }
-                else
-                {
-                    result = AttemptToSendNotificationOutcome.FailedOnAllChannels;
-                }
-            }
-            else
-            {
-                result = AttemptToSendNotificationOutcome.SucceededOnAllChannels;
-            }
-
-            return result;
-        }
-
         private static void AddMissingTags(
             Dictionary<string, string> tagsToAddTo,
             IReadOnlyDictionary<string, string> tagsToMergeIn)
