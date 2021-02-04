@@ -91,7 +91,7 @@
     <Compile Include=".recipes\OBeautifulCode.Type\ToStringXmlDocOptions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\TypeExtensions.cs" />
     <Compile Include="Events\Normal\AttemptedToSendNotificationEvent.cs" />
-    <Compile Include="Interfaces\ISendNotificationProtocol.cs" />
+    <Compile Include="Interfaces\Protocol\ISendNotificationProtocol.cs" />
     <Compile Include="Logic\Extensions\EventExtensions.cs" />
     <Compile Include="Logic\Extensions\ProtocolExtensions.cs" />
     <Compile Include="Models\Classes\Notification\AudienceSpecifiedNotificationBase.cs" />
@@ -103,10 +103,10 @@
     <Compile Include="Events\NotificationEventBase.cs" />
     <Compile Include="Events\Stopping\CannotGetAudienceEvent.cs" />
     <Compile Include="Events\Normal\SendNotificationRequestedEvent.cs" />
-    <Compile Include="Interfaces\IPrepareToSendOnChannelProtocol.cs" />
-    <Compile Include="Interfaces\IGetDeliveryChannelConfigsProtocol.cs" />
-    <Compile Include="Interfaces\IGetAudienceProtocol.cs" />
-    <Compile Include="Interfaces\IBuildTagsProtocol{TEvent}.cs" />
+    <Compile Include="Interfaces\Protocol\IPrepareToSendOnChannelProtocol.cs" />
+    <Compile Include="Interfaces\Protocol\IGetDeliveryChannelConfigsProtocol.cs" />
+    <Compile Include="Interfaces\Protocol\IGetAudienceProtocol.cs" />
+    <Compile Include="Interfaces\Protocol\IBuildTagsProtocol{TEvent}.cs" />
     <Compile Include="Models\Classes\Failure\ExceptionThrownFailure.cs" />
     <Compile Include="Models\Classes\Failure\FailureBase.cs" />
     <Compile Include="Models\Classes\OperationResult\GetDeliveryChannelConfigsResult.cs" />
@@ -150,9 +150,7 @@
   <ItemGroup>
     <Content Include=".analyzers\dictionary.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\Protocol\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets" Condition="Exists('..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
