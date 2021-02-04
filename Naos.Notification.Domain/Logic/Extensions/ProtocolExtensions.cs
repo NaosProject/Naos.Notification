@@ -25,7 +25,7 @@ namespace Naos.Notification.Domain
         /// </remarks>
         /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
         /// <param name="protocol">The protocol to execute.</param>
-        /// <param name="trackingCodeId">The notification tracking code identifier.</param>
+        /// <param name="trackingCodeId">The tracking code identifier (in-context of the protocol putting the event).</param>
         /// <param name="event">The event that will be put.</param>
         /// <param name="inheritableTags">OPTIONAL tags that can be inherited from a prior step in the workflow.  DEFAULT is null, indicating that there was no prior step or that no tags have been established in the workflow.</param>
         /// <returns>

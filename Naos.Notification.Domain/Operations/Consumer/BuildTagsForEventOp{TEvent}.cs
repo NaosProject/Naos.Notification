@@ -24,7 +24,7 @@ namespace Naos.Notification.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildTagsForEventOp{TEvent}"/> class.
         /// </summary>
-        /// <param name="trackingCodeId">The notification tracking code identifier.</param>
+        /// <param name="trackingCodeId">The tracking code identifier (in-context of the protocol putting the event).</param>
         /// <param name="event">The event that will be put.</param>
         /// <param name="inheritableTags">OPTIONAL tags that can be inherited from a prior step in the workflow.  DEFAULT is null, indicating that there was no prior step or that no tags have been established in the workflow.</param>
         public BuildTagsForEventOp(
@@ -40,7 +40,7 @@ namespace Naos.Notification.Domain
         }
 
         /// <summary>
-        /// Gets the notification tracking code identifier.
+        /// Gets the tracking code identifier (in-context of the protocol putting the event).
         /// </summary>
         public long TrackingCodeId { get; private set; }
 
