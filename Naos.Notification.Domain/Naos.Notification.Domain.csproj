@@ -127,10 +127,10 @@
     <Compile Include="Models\Classes\ChannelOperationInstruction.cs" />
     <Compile Include="Models\Classes\Notification\NotificationBase.cs" />
     <Compile Include="Models\Classes\EventRelated\NotificationTrackingCode.cs" />
-    <Compile Include="Models\Enums\CannotPrepareToSendOnChannelAction.cs" />
-    <Compile Include="Models\Enums\PrepareToSendOnChannelFailureAction.cs" />
-    <Compile Include="Models\Enums\FailureAction.cs" />
-    <Compile Include="Models\Enums\DeliveryChannelAction.cs" />
+    <Compile Include="Models\Enums\Action\CannotPrepareToSendOnChannelAction.cs" />
+    <Compile Include="Models\Enums\Action\PrepareToSendOnChannelFailureAction.cs" />
+    <Compile Include="Models\Enums\Action\FailureAction.cs" />
+    <Compile Include="Models\Enums\Action\DeliveryChannelAction.cs" />
     <Compile Include="Interfaces\Model\IFailure.cs" />
     <Compile Include="Interfaces\Model\IDeliveryChannel.cs" />
     <Compile Include="Interfaces\Model\IAudience.cs" />
