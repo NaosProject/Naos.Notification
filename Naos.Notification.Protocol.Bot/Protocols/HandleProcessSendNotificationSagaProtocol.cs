@@ -79,7 +79,7 @@ namespace Naos.Notification.Protocol.Bot
                 foreach (var operationOutcomeSpec in operationOutcomeSpecs)
                 {
                     var failureEventMetadata = await eventStream.GetLatestRecordMetadataByIdAsync(
-                        operationOutcomeSpec.EventId,
+                        operationOutcomeSpec.ChannelTrackingCodeId,
                         operationOutcomeSpec.FailedEventType,
                         existingRecordNotEncounteredStrategy: ExistingRecordNotEncounteredStrategy.ReturnDefault);
 
@@ -93,7 +93,7 @@ namespace Naos.Notification.Protocol.Bot
                     else
                     {
                         var successEventMetadata = await eventStream.GetLatestRecordMetadataByIdAsync(
-                            operationOutcomeSpec.EventId,
+                            operationOutcomeSpec.ChannelTrackingCodeId,
                             operationOutcomeSpec.SucceededEventType,
                             existingRecordNotEncounteredStrategy: ExistingRecordNotEncounteredStrategy.ReturnDefault);
 

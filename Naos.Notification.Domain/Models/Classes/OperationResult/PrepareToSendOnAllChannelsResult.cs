@@ -7,6 +7,7 @@
 namespace Naos.Notification.Domain
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using OBeautifulCode.Assertion.Recipes;
     using OBeautifulCode.Type;
@@ -21,15 +22,19 @@ namespace Naos.Notification.Domain
         /// </summary>
         /// <param name="channelToPrepareToSendOnChannelResultMap">A map of channel to the result of executing a <see cref="PrepareToSendOnChannelOp"/>.</param>
         /// <param name="cannotPrepareToSendOnChannelAction">The action taken when the system could not prepare a notification to be sent on a channel.</param>
-        /// <param name="channelsToSendOn">The channels that the notification will be sent on.</param>
+        /// <param name="channelsToSendOn">The channels that the notification is prepared to be sent on.</param>
         public PrepareToSendOnAllChannelsResult(
             IReadOnlyDictionary<IDeliveryChannel, PrepareToSendOnChannelResult> channelToPrepareToSendOnChannelResultMap,
             CannotPrepareToSendOnChannelAction cannotPrepareToSendOnChannelAction,
             IReadOnlyCollection<IDeliveryChannel> channelsToSendOn)
         {
             new { channelToPrepareToSendOnChannelResultMap }.AsArg().Must().NotBeNull().And().NotContainAnyKeyValuePairsWithNullValue();
+            var prepareToSendOnChannelResult = channelToPrepareToSendOnChannelResultMap?.Values.ToList();
+            new { prepareToSendOnChannelResult }.AsArg().Must().ContainOnlyDistinctElementsWhenNotNull();
+            var operations = channelToPrepareToSendOnChannelResultMap?.Values.SelectMany(_ => _.ChannelOperationInstructions.Select(c => c.Operation)).ToList();
+            new { operations }.AsArg().Must().ContainOnlyDistinctElementsWhenNotNull();
             new { cannotPrepareToSendOnChannelAction }.AsArg().Must().NotBeEqualTo(CannotPrepareToSendOnChannelAction.Unknown);
-            new { channelsToSendOn }.AsArg().Must().NotBeNull().And().NotContainAnyNullElements();
+            new { channelsToSendOn }.AsArg().Must().NotBeNull().And().NotContainAnyNullElements().And().ContainOnlyDistinctElements();
 
             foreach (var channelToSendOn in channelsToSendOn)
             {
@@ -52,7 +57,7 @@ namespace Naos.Notification.Domain
         public CannotPrepareToSendOnChannelAction CannotPrepareToSendOnChannelAction { get; private set; }
 
         /// <summary>
-        /// Gets the channels that the notification will be sent on.
+        /// Gets the channels that the notification is prepared to be sent on.
         /// </summary>
         public IReadOnlyCollection<IDeliveryChannel> ChannelsToSendOn { get; private set; }
     }

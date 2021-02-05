@@ -29,8 +29,10 @@ namespace Naos.Notification.Domain
             PrepareToSendOnChannelFailureAction failureAction)
         {
             new { channelOperationInstructions }.AsArg().Must().NotContainAnyNullElementsWhenNotNull();
-            var trackingCodeIds = channelOperationInstructions?.Select(_ => _.TrackingCodeId).ToArray() ?? new long[0];
-            new { trackingCodeIds }.AsArg().Must().ContainOnlyDistinctElements();
+            var channelTrackingCodeIds = channelOperationInstructions?.Select(_ => _.OutcomeSpec.ChannelTrackingCodeId).ToArray();
+            new { channelTrackingCodeIds }.AsArg().Must().ContainOnlyDistinctElementsWhenNotNull();
+            var channelOperations = channelOperationInstructions?.Select(_ => _.Operation).ToList();
+            new { channelOperations }.AsArg().Must().ContainOnlyDistinctElementsWhenNotNull();
             new { failures }.AsArg().Must().NotContainAnyNullElementsWhenNotNull();
             new { failureAction }.AsArg().Must().NotBeEqualTo(PrepareToSendOnChannelFailureAction.Unknown);
 

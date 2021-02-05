@@ -34,7 +34,7 @@ namespace Naos.Notification.Domain
         {
             new { channelToOperationOutcomeSpecsMap }.AsArg().Must().NotBeNullNorEmptyDictionaryNorContainAnyNullValues();
             new { channelToOperationOutcomeSpecsMap.Values }.AsArg(Invariant($"{nameof(channelToOperationOutcomeSpecsMap)}.Values")).Must().Each().NotBeNullNorEmptyEnumerableNorContainAnyNulls();
-            var channelEventIds = channelToOperationOutcomeSpecsMap.Select(_ => _.Value.Select(o => o.EventId).ToList()).ToList();
+            var channelEventIds = channelToOperationOutcomeSpecsMap.Select(_ => _.Value.Select(o => o.ChannelTrackingCodeId).ToList()).ToList();
             new { channelEventIds }.AsArg().Must().Each().ContainOnlyDistinctElements();
 
             this.NotificationTrackingCodeId = notificationTrackingCodeId;

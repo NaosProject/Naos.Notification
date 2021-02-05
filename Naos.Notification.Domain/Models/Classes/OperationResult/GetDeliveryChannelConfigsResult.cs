@@ -29,7 +29,7 @@ namespace Naos.Notification.Domain
             FailureAction failureAction)
         {
             new { configs }.AsArg().Must().NotContainAnyNullElementsWhenNotNull();
-            var deliveryChannels = configs.Select(_ => _.Channel).ToList();
+            var deliveryChannels = configs?.Select(_ => _.Channel).ToList();
             new { deliveryChannels }.AsArg().Must().ContainOnlyDistinctElementsWhenNotNull();
             new { failures }.AsArg().Must().NotContainAnyNullElementsWhenNotNull();
             new { failureAction }.AsArg().Must().NotBeEqualTo(FailureAction.Unknown);
