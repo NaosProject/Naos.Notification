@@ -308,7 +308,7 @@ namespace Naos.Notification.Protocol.Bot
         {
             var channelToOperationOutcomeSpecsMap = channelToOperationInstructionsMap.ToDictionary(
                 _ => _.Key,
-                _ => (IReadOnlyList<OperationOutcomeSpec>)_.Value.Select(c => new OperationOutcomeSpec(c.TrackingCodeId, c.SucceededEventType, c.FailedEventType)).ToList());
+                _ => (IReadOnlyList<ChannelOperationOutcomeSpec>)_.Value.Select(c => c.OutcomeSpec).ToList());
 
             var processSendNotificationSagaOp = new ProcessSendNotificationSagaOp(trackingCodeId, channelToOperationOutcomeSpecsMap);
 
@@ -333,9 +333,11 @@ namespace Naos.Notification.Protocol.Bot
                 // ExecuteOpRequestedEvent<long, IOperation> cannot be handled by the client operation handlers.
                 var executeOpRequestedEventType = typeof(ExecuteOpRequestedEvent<,>).MakeGenericType(typeof(long), operation.GetType());
 
-                var executeOpRequestedEvent = executeOpRequestedEventType.Construct(channelOperationInstruction.TrackingCodeId, operation, DateTime.UtcNow, null);
+                var channelTrackingCodeId = channelOperationInstruction.OutcomeSpec.ChannelTrackingCodeId;
 
-                await channelOperationStream.PutWithIdAsync(channelOperationInstruction.TrackingCodeId, executeOpRequestedEvent, channelOperationInstruction.Tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+                var executeOpRequestedEvent = executeOpRequestedEventType.Construct(channelTrackingCodeId, operation, DateTime.UtcNow, null);
+
+                await channelOperationStream.PutWithIdAsync(channelTrackingCodeId, executeOpRequestedEvent, channelOperationInstruction.Tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
             }
         }
 

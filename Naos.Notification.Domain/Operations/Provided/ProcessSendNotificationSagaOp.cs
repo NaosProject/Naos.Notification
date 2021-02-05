@@ -30,7 +30,7 @@ namespace Naos.Notification.Domain
         /// <param name="channelToOperationOutcomeSpecsMap">A a map of <see cref="IDeliveryChannel"/> to the objects that specify whether the operations on that channel succeeded or failed.</param>
         public ProcessSendNotificationSagaOp(
             long notificationTrackingCodeId,
-            IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<OperationOutcomeSpec>> channelToOperationOutcomeSpecsMap)
+            IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationOutcomeSpec>> channelToOperationOutcomeSpecsMap)
         {
             new { channelToOperationOutcomeSpecsMap }.AsArg().Must().NotBeNullNorEmptyDictionaryNorContainAnyNullValues();
             new { channelToOperationOutcomeSpecsMap.Values }.AsArg(Invariant($"{nameof(channelToOperationOutcomeSpecsMap)}.Values")).Must().Each().NotBeNullNorEmptyEnumerableNorContainAnyNulls();
@@ -49,6 +49,6 @@ namespace Naos.Notification.Domain
         /// <summary>
         /// Gets a map of <see cref="IDeliveryChannel"/> to the objects that specify whether the operations on that channel succeeded or failed.
         /// </summary>
-        public IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<OperationOutcomeSpec>> ChannelToOperationOutcomeSpecsMap { get; private set; }
+        public IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationOutcomeSpec>> ChannelToOperationOutcomeSpecsMap { get; private set; }
     }
 }

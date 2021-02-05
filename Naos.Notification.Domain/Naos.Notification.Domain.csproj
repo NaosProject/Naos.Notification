@@ -123,10 +123,10 @@
     <Compile Include="Models\Classes\Delivery\EmailDeliveryChannel.cs" />
     <Compile Include="Models\Classes\Delivery\DeliveryChannelBase.cs" />
     <Compile Include="Models\Classes\AudienceBase.cs" />
-    <Compile Include="Models\Classes\EventRelated\OperationOutcomeSpec.cs" />
-    <Compile Include="Models\Classes\ChannelOperationInstruction.cs" />
+    <Compile Include="Models\Classes\Saga\ChannelOperationOutcomeSpec.cs" />
+    <Compile Include="Models\Classes\Saga\ChannelOperationInstruction.cs" />
     <Compile Include="Models\Classes\Notification\NotificationBase.cs" />
-    <Compile Include="Models\Classes\EventRelated\NotificationTrackingCode.cs" />
+    <Compile Include="Models\Classes\Notification\NotificationTrackingCode.cs" />
     <Compile Include="Models\Enums\Action\CannotPrepareToSendOnChannelAction.cs" />
     <Compile Include="Models\Enums\Action\PrepareToSendOnChannelFailureAction.cs" />
     <Compile Include="Models\Enums\Action\FailureAction.cs" />

@@ -10,8 +10,11 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// Base class for notification to use when the system cannot determine the audience from the notification itself.
+    /// Base class for a notification that specifies it's audience.
     /// </summary>
+    /// <remarks>
+    /// Use this class when the system cannot determine the audience from the notification itself.
+    /// </remarks>
     // ReSharper disable once RedundantExtendsListEntry
     public abstract partial class AudienceSpecifiedNotificationBase : NotificationBase, IDeclareAudience, IModelViaCodeGen
     {
