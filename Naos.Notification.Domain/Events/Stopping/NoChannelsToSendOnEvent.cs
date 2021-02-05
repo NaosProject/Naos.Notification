@@ -34,10 +34,16 @@ namespace Naos.Notification.Domain
             : base(id, timestampUtc)
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
-            new { getAudienceResult.Audience }.AsArg().Must().NotBeNull();
+            var getAudienceOutcome = getAudienceResult.GetOutcome();
+            new { getAudienceOutcome }.AsArg().Must().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithNoFailuresReported).And().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored);
+
             new { getDeliveryChannelConfigsResult }.AsArg().Must().NotBeNull();
-            new { getDeliveryChannelConfigsResult.Configs }.AsArg().Must().NotBeNullNorEmptyEnumerableNorContainAnyNulls();
-            new { prepareToSendOnAllChannelsResult }.AsArg().Must().NotBeNull().And().NotContainAnyKeyValuePairsWithNullValue();
+            var getDeliveryChannelConfigsOutcome = getDeliveryChannelConfigsResult.GetOutcome();
+            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported).And().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored);
+
+            new { prepareToSendOnAllChannelsResult }.AsArg().Must().NotBeNull();
+            var prepareToSendOnAllChannelsOutcome = prepareToSendOnAllChannelsResult.GetOutcome();
+            new { prepareToSendOnAllChannelsOutcome }.AsArg().Must().NotBeEqualTo(PrepareToSendOnAllChannelsOutcome.AllChannelsWerePreparedToSendOn).And().NotBeEqualTo(PrepareToSendOnAllChannelsOutcome.SomeChannelsWerePreparedToSendOn);
 
             this.GetAudienceResult = getAudienceResult;
             this.GetDeliveryChannelConfigsResult = getDeliveryChannelConfigsResult;

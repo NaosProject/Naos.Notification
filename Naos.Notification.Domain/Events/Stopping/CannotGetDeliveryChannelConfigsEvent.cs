@@ -32,8 +32,12 @@ namespace Naos.Notification.Domain
             : base(id, timestampUtc)
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
-            new { getAudienceResult.Audience }.AsArg().Must().NotBeNull();
+            var getAudienceOutcome = getAudienceResult.GetOutcome();
+            new { getAudienceOutcome }.AsArg().Must().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithNoFailuresReported).And().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored);
+
             new { getDeliveryChannelConfigsResult }.AsArg().Must().NotBeNull();
+            var getDeliveryChannelConfigsOutcome = getDeliveryChannelConfigsResult.GetOutcome();
+            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported).And().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored);
 
             this.GetAudienceResult = getAudienceResult;
             this.GetDeliveryChannelConfigsResult = getDeliveryChannelConfigsResult;

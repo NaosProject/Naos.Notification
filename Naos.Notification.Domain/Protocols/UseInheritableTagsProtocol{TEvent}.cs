@@ -14,8 +14,11 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Assertion.Recipes;
 
     /// <summary>
-    /// Extension methods on protocols.
+    /// Executes a <see cref="BuildTagsOp{TEvent}" /> and returns the <see cref="BuildTagsOp{TEvent}.InheritableTags"/>.
     /// </summary>
+    /// <remarks>
+    /// This is useful when you an event to be tagged with the inheritable tags and do not want to augment that set.
+    /// </remarks>
     /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
     public class UseInheritableTagsProtocol<TEvent> : AsyncSpecificReturningProtocolBase<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>>, IBuildTagsProtocol<TEvent>
         where TEvent : IEvent

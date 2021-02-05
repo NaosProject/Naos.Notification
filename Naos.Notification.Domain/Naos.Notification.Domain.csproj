@@ -103,7 +103,7 @@
     <Compile Include="Models\Enums\Outcome\GetDeliveryChannelConfigsOutcome.cs" />
     <Compile Include="Models\Enums\Outcome\GetAudienceOutcome.cs" />
     <Compile Include="Operations\Framework\ProcessSendNotificationSagaOp.cs" />
-    <Compile Include="Events\Normal\PreparedToSendOnChannelsEvent.cs" />
+    <Compile Include="Events\Normal\PreparedToSendNotificationEvent.cs" />
     <Compile Include="Events\Stopping\NoChannelsToSendOnEvent.cs" />
     <Compile Include="Events\Stopping\CannotGetDeliveryChannelConfigsEvent.cs" />
     <Compile Include="Events\NotificationEventBase.cs" />

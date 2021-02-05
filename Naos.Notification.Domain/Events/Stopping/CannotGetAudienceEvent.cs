@@ -30,6 +30,8 @@ namespace Naos.Notification.Domain
             : base(id, timestampUtc)
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
+            var getAudienceOutcome = getAudienceResult.GetOutcome();
+            new { getAudienceOutcome }.AsArg().Must().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithNoFailuresReported).And().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored);
 
             this.GetAudienceResult = getAudienceResult;
         }

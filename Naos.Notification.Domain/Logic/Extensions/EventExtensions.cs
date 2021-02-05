@@ -175,7 +175,7 @@ namespace Naos.Notification.Domain
         /// <summary>
         /// Summarize a <see cref="PrepareToSendOnAllChannelsResult"/> as a <see cref="PrepareToSendOnAllChannelsOutcome" />.
         /// </summary>
-        /// <param name="prepareToSendOnAllChannelsResult">The result of executing a <see cref="GetAudienceOp"/>.</param>
+        /// <param name="prepareToSendOnAllChannelsResult">The result of preparing to send the notification on all configured channels.</param>
         /// <returns>
         /// A <see cref="PrepareToSendOnAllChannelsResult"/> summarized as <see cref="PrepareToSendOnAllChannelsOutcome"/>.
         /// </returns>
