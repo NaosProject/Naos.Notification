@@ -12,7 +12,7 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// Gets the delivery channel configs for the specified notification and audience.
+    /// Gets the configured delivery channels for the specified notification and audience.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
     public partial class GetDeliveryChannelConfigsOp : ReturningOperationBase<GetDeliveryChannelConfigsResult>, IModelViaCodeGen

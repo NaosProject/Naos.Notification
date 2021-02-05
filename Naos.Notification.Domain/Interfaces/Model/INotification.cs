@@ -11,7 +11,7 @@ namespace Naos.Notification.Domain
     using Naos.CodeAnalysis.Recipes;
 
     /// <summary>
-    /// A notice with information to be delivered to some party or parties.
+    /// A notice with information to be delivered.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces", Justification = NaosSuppressBecause.CA1040_AvoidEmptyInterfaces_NeedToIdentifyGroupOfTypesAndPreferInterfaceOverAttribute)]
     public interface INotification

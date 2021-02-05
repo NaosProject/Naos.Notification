@@ -21,7 +21,7 @@ namespace Naos.Notification.Domain
         /// Stop. If the notification cannot be prepared to send
         /// on a single channel then do not send on any channel.
         /// </summary>
-        StopAndNotDoNotSendOnAnyChannels,
+        StopAndNotDoNotSendOnAnyChannel,
 
         /// <summary>
         /// Continue and attempt preparing to send on the next channel.

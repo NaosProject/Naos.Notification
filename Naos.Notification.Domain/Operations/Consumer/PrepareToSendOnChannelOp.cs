@@ -25,17 +25,16 @@ namespace Naos.Notification.Domain
         /// <param name="notification">The notification to send.</param>
         /// <param name="audience">The audience for the notification.</param>
         /// <param name="deliveryChannel">The channel on which to deliver the notification.</param>
-        /// <param name="inheritableTags">The tags that may be inherited.</param>
+        /// <param name="inheritableTags">OPTIONAL tags that can be inherited from a prior step in the workflow.  DEFAULT is null, indicating that there was no prior step or that no tags have been established in the workflow.</param>
         public PrepareToSendOnChannelOp(
             INotification notification,
             IAudience audience,
             IDeliveryChannel deliveryChannel,
-            IReadOnlyDictionary<string, string> inheritableTags)
+            IReadOnlyDictionary<string, string> inheritableTags = null)
         {
             new { notification }.AsArg().Must().NotBeNull();
             new { audience }.AsArg().Must().NotBeNull();
             new { deliveryChannel }.AsArg().Must().NotBeNull();
-            new { inheritableTags }.AsArg().Must().NotBeNull();
 
             this.Notification = notification;
             this.Audience = audience;
@@ -59,7 +58,7 @@ namespace Naos.Notification.Domain
         public IDeliveryChannel DeliveryChannel { get; private set; }
 
         /// <summary>
-        /// Gets the tags that may be inherited.
+        /// Gets the tags that can be inherited from a prior step in the workflow.
         /// </summary>
         public IReadOnlyDictionary<string, string> InheritableTags { get; private set; }
     }

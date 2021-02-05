@@ -17,8 +17,8 @@ namespace Naos.Notification.Domain
     using static System.FormattableString;
 
     /// <summary>
-    /// Processes a saga that waits for <see cref="IDeliveryChannel"/>-specific Operations
-    /// to complete and writes to the Notification Event Stream based on the outcome of those Operations.
+    /// Processes a saga that waits for channel-specific operations to complete
+    /// and writes to the Notification Event Stream based on the outcome of those operations.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
     public partial class ProcessSendNotificationSagaOp : VoidOperationBase, IModelViaCodeGen
@@ -34,8 +34,8 @@ namespace Naos.Notification.Domain
         {
             new { channelToOperationOutcomeSpecsMap }.AsArg().Must().NotBeNullNorEmptyDictionaryNorContainAnyNullValues();
             new { channelToOperationOutcomeSpecsMap.Values }.AsArg(Invariant($"{nameof(channelToOperationOutcomeSpecsMap)}.Values")).Must().Each().NotBeNullNorEmptyEnumerableNorContainAnyNulls();
-            var channelEventIds = channelToOperationOutcomeSpecsMap.Select(_ => _.Value.Select(o => o.ChannelTrackingCodeId).ToList()).ToList();
-            new { channelEventIds }.AsArg().Must().Each().ContainOnlyDistinctElements();
+            var channelTrackingCodeIds = channelToOperationOutcomeSpecsMap.Values.Select(_ => _.Select(c => c.ChannelTrackingCodeId).ToList()).ToList();
+            new { channelTrackingCodeIds }.AsArg().Must().Each().ContainOnlyDistinctElementsWhenNotNull();
 
             this.NotificationTrackingCodeId = notificationTrackingCodeId;
             this.ChannelToOperationOutcomeSpecsMap = channelToOperationOutcomeSpecsMap;

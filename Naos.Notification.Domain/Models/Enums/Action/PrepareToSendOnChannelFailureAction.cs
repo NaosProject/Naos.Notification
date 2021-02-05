@@ -21,11 +21,10 @@ namespace Naos.Notification.Domain
         /// (i.e. the result object contains one or more <see cref="ChannelOperationInstruction"/>).
         /// If not possible, then do not send on the channel.
         /// </summary>
-        IgnoreAndTreatChannelAsPreparedToSendOnIfPossible,
+        IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel,
 
         /// <summary>
-        /// Do NOT send on the channel,
-        /// regardless of whether it is possible to do so
+        /// Do NOT send on the channel, regardless of whether it is possible to do so
         /// (i.e. the result object contains one or more <see cref="ChannelOperationInstruction"/>).
         /// </summary>
         DoNotSendOnChannel,

@@ -197,7 +197,7 @@ namespace Naos.Notification.Protocol.Bot
                     {
                         // no-op
                     }
-                    else if (this.cannotPrepareToSendOnChannelAction == CannotPrepareToSendOnChannelAction.StopAndNotDoNotSendOnAnyChannels)
+                    else if (this.cannotPrepareToSendOnChannelAction == CannotPrepareToSendOnChannelAction.StopAndNotDoNotSendOnAnyChannel)
                     {
                         prepareToSendOnAllChannelsResult = new PrepareToSendOnAllChannelsResult(channelToPrepareToSendOnChannelResultMap, this.cannotPrepareToSendOnChannelAction, new IDeliveryChannel[0]);
 

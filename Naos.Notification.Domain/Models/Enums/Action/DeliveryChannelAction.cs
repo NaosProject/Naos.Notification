@@ -17,7 +17,7 @@ namespace Naos.Notification.Domain
         Unknown,
 
         /// <summary>
-        /// Send notification on the channel.
+        /// Send a notification on the channel.
         /// </summary>
         SendOnChannel,
 

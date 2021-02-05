@@ -14,7 +14,7 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// Builds the tags to use when putting an Event in to a Stream.
+    /// Builds the tags to use when putting an event in to a stream.
     /// </summary>
     /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
     // ReSharper disable once RedundantExtendsListEntry

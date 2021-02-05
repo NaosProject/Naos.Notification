@@ -21,7 +21,7 @@ namespace Naos.Notification.Domain
         /// (i.e. the result object contains the necessary information to proceed).
         /// If not possible, then stop.
         /// </summary>
-        IgnoreAndProceedIfPossible,
+        IgnoreAndProceedIfPossibleOtherwiseStop,
 
         /// <summary>
         /// Stop if there are any failures,

@@ -56,7 +56,7 @@ namespace Naos.Notification.Domain
                     {
                         result = GetAudienceOutcome.DespiteGettingAudienceFailuresPreventUsingIt;
                     }
-                    else if (getAudienceResult.FailureAction == FailureAction.IgnoreAndProceedIfPossible)
+                    else if (getAudienceResult.FailureAction == FailureAction.IgnoreAndProceedIfPossibleOtherwiseStop)
                     {
                         result = GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored;
                     }
@@ -107,7 +107,7 @@ namespace Naos.Notification.Domain
                     {
                         result = GetDeliveryChannelConfigsOutcome.DespiteGettingDeliveryChannelConfigsFailuresPreventUsingThem;
                     }
-                    else if (getDeliveryChannelConfigsResult.FailureAction == FailureAction.IgnoreAndProceedIfPossible)
+                    else if (getDeliveryChannelConfigsResult.FailureAction == FailureAction.IgnoreAndProceedIfPossibleOtherwiseStop)
                     {
                         result = GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored;
                     }
@@ -158,7 +158,7 @@ namespace Naos.Notification.Domain
                     {
                         result = PrepareToSendOnChannelOutcome.DespitePreparingToSendOnChannelFailuresPreventUsingIt;
                     }
-                    else if (prepareToSendOnChannelResult.FailureAction == PrepareToSendOnChannelFailureAction.IgnoreAndTreatChannelAsPreparedToSendOnIfPossible)
+                    else if (prepareToSendOnChannelResult.FailureAction == PrepareToSendOnChannelFailureAction.IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel)
                     {
                         result = PrepareToSendOnChannelOutcome.PreparedToSendOnChannelWithReportedFailuresIgnored;
                     }
@@ -202,7 +202,7 @@ namespace Naos.Notification.Domain
             {
                 result = PrepareToSendOnAllChannelsOutcome.SomeChannelsWerePreparedToSendOn;
             }
-            else if (cannotPrepareToSendOnChannelAction == CannotPrepareToSendOnChannelAction.StopAndNotDoNotSendOnAnyChannels)
+            else if (cannotPrepareToSendOnChannelAction == CannotPrepareToSendOnChannelAction.StopAndNotDoNotSendOnAnyChannel)
             {
                 result = PrepareToSendOnAllChannelsOutcome.UnableToPrepareOneChannelToSendOnWhichPreventedSendingOnAnyChannel;
             }
