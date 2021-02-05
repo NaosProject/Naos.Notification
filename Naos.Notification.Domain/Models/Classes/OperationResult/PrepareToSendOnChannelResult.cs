@@ -10,11 +10,12 @@ namespace Naos.Notification.Domain
     using System.Linq;
 
     using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Type;
 
     /// <summary>
     /// The result of executing a <see cref="PrepareToSendOnChannelOp"/>.
     /// </summary>
-    public class PrepareToSendOnChannelResult
+    public partial class PrepareToSendOnChannelResult : IModelViaCodeGen
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PrepareToSendOnChannelResult"/> class.

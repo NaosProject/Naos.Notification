@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NoChannelsToSendOnEvent.cs" company="Naos Project">
+// <copyright file="PreparedToSendOnChannelsEvent.cs" company="Naos Project">
 //    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -12,20 +12,20 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// There are no channels on which to send the notification.
+    /// The notification has been prepared to be sent on one or more channels.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
-    public partial class NoChannelsToSendOnEvent : NotificationEventBase, IModelViaCodeGen
+    public partial class PreparedToSendOnChannelsEvent : NotificationEventBase, IModelViaCodeGen
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoChannelsToSendOnEvent"/> class.
+        /// Initializes a new instance of the <see cref="PreparedToSendOnChannelsEvent"/> class.
         /// </summary>
         /// <param name="id">The notification tracking code identifier.</param>
         /// <param name="timestampUtc">The timestamp in UTC.</param>
         /// <param name="getAudienceResult">The result of executing a <see cref="GetAudienceOp"/>.</param>
         /// <param name="getDeliveryChannelConfigsResult">The result of executing a <see cref="GetDeliveryChannelConfigsOp"/>.</param>
         /// <param name="prepareToSendOnAllChannelsResult">The result of preparing to send the notification on all configured channels.</param>
-        public NoChannelsToSendOnEvent(
+        public PreparedToSendOnChannelsEvent(
             long id,
             DateTime timestampUtc,
             GetAudienceResult getAudienceResult,
@@ -34,10 +34,8 @@ namespace Naos.Notification.Domain
             : base(id, timestampUtc)
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
-            new { getAudienceResult.Audience }.AsArg().Must().NotBeNull();
             new { getDeliveryChannelConfigsResult }.AsArg().Must().NotBeNull();
-            new { getDeliveryChannelConfigsResult.Configs }.AsArg().Must().NotBeNullNorEmptyEnumerableNorContainAnyNulls();
-            new { prepareToSendOnAllChannelsResult }.AsArg().Must().NotBeNull().And().NotContainAnyKeyValuePairsWithNullValue();
+            new { prepareToSendOnAllChannelsResult }.AsArg().Must().NotBeNull();
 
             this.GetAudienceResult = getAudienceResult;
             this.GetDeliveryChannelConfigsResult = getDeliveryChannelConfigsResult;

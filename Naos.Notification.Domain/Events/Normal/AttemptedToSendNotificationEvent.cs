@@ -13,7 +13,7 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// The system attempted to send the notification on all channels that were staged to send on.
+    /// The system attempted to send the notification on all channels that were prepared to send on.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
     public partial class AttemptedToSendNotificationEvent : NotificationEventBase, IModelViaCodeGen

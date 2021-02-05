@@ -35,7 +35,7 @@ namespace Naos.Notification.Domain
         }
 
         /// <summary>
-        /// Gets the operation.
+        /// Gets the operation to send a notification.
         /// </summary>
         public SendNotificationOp SendNotificationOp { get; private set; }
     }

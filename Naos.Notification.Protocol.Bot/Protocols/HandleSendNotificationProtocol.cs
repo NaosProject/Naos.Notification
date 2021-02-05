@@ -36,7 +36,7 @@ namespace Naos.Notification.Protocol.Bot
 
         private readonly IPrepareToSendOnChannelProtocol prepareToSendOnChannelProtocol;
 
-        private readonly CannotStageToSendOnChannelAction cannotStageToSendOnChannelAction;
+        private readonly CannotPrepareToSendOnChannelAction cannotPrepareToSendOnChannelAction;
 
         private readonly IReadOnlyDictionary<IDeliveryChannel, IWriteOnlyStream> channelToOperationStreamMap;
 
@@ -48,7 +48,7 @@ namespace Naos.Notification.Protocol.Bot
 
         private readonly IBuildTagsProtocol<NoChannelsToSendOnEvent> buildNoChannelsToSendOnEventTagsProtocol;
 
-        private readonly IBuildTagsProtocol<StagedToSendOnChannelsEvent> buildStagedToSendOnChannelEventTagsProtocol;
+        private readonly IBuildTagsProtocol<PreparedToSendOnChannelsEvent> buildPreparedToSendOnChannelEventTagsProtocol;
 
         private readonly IBuildTagsProtocol<ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>> buildExecuteProcessSendNotificationSagaEventTagsProtocol;
 
@@ -60,13 +60,13 @@ namespace Naos.Notification.Protocol.Bot
         /// <param name="getAudienceProtocol">Executes a <see cref="GetAudienceOp"/>.</param>
         /// <param name="getDeliveryChannelConfigsProtocol">Executes a <see cref="GetDeliveryChannelConfigsOp"/>.</param>
         /// <param name="prepareToSendOnChannelProtocol">Executes a <see cref="PrepareToSendOnChannelOp"/>.</param>
-        /// <param name="cannotStageToSendOnChannelAction">Specifies what to do when we encounter a situation where we cannot stage to send on a channel.</param>
+        /// <param name="cannotPrepareToSendOnChannelAction">Specifies what to do when we encounter a situation where we cannot prepare to send on a channel.</param>
         /// <param name="channelToOperationStreamMap">A map of delivery channel to the channel's operation stream.</param>
         /// <param name="buildSendNotificationRequestedEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="SendNotificationRequestedEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         /// <param name="buildCannotGetAudienceEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="CannotGetAudienceEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         /// <param name="buildCannotGetDeliveryChannelConfigsEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="CannotGetDeliveryChannelConfigsEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         /// <param name="buildNoChannelsToSendOnEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="NoChannelsToSendOnEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        /// <param name="buildStagedToSendOnChannelEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="StagedToSendOnChannelsEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildPreparedToSendOnChannelEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="PreparedToSendOnChannelsEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         /// <param name="buildExecuteProcessSendNotificationSagaEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="ProcessSendNotificationSagaOp"/> into the Notification Saga Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         protected HandleSendNotificationProtocol(
             IWriteOnlyStream eventStream,
@@ -74,13 +74,13 @@ namespace Naos.Notification.Protocol.Bot
             IGetAudienceProtocol getAudienceProtocol,
             IGetDeliveryChannelConfigsProtocol getDeliveryChannelConfigsProtocol,
             IPrepareToSendOnChannelProtocol prepareToSendOnChannelProtocol,
-            CannotStageToSendOnChannelAction cannotStageToSendOnChannelAction,
+            CannotPrepareToSendOnChannelAction cannotPrepareToSendOnChannelAction,
             IReadOnlyDictionary<IDeliveryChannel, IWriteOnlyStream> channelToOperationStreamMap,
             IBuildTagsProtocol<SendNotificationRequestedEvent> buildSendNotificationRequestedEventTagsProtocol = null,
             IBuildTagsProtocol<CannotGetAudienceEvent> buildCannotGetAudienceEventTagsProtocol = null,
             IBuildTagsProtocol<CannotGetDeliveryChannelConfigsEvent> buildCannotGetDeliveryChannelConfigsEventTagsProtocol = null,
             IBuildTagsProtocol<NoChannelsToSendOnEvent> buildNoChannelsToSendOnEventTagsProtocol = null,
-            IBuildTagsProtocol<StagedToSendOnChannelsEvent> buildStagedToSendOnChannelEventTagsProtocol = null,
+            IBuildTagsProtocol<PreparedToSendOnChannelsEvent> buildPreparedToSendOnChannelEventTagsProtocol = null,
             IBuildTagsProtocol<ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>> buildExecuteProcessSendNotificationSagaEventTagsProtocol = null)
         {
             new { eventStream }.AsArg().Must().NotBeNull();
@@ -88,7 +88,7 @@ namespace Naos.Notification.Protocol.Bot
             new { getAudienceProtocol }.AsArg().Must().NotBeNull();
             new { getDeliveryChannelConfigsProtocol }.AsArg().Must().NotBeNull();
             new { prepareToSendOnChannelProtocol }.AsArg().Must().NotBeNull();
-            new { cannotStageToSendOnChannelAction }.AsArg().Must().NotBeEqualTo(CannotStageToSendOnChannelAction.Unknown);
+            new { cannotPrepareToSendOnChannelAction }.AsArg().Must().NotBeEqualTo(CannotPrepareToSendOnChannelAction.Unknown);
             new { channelToOperationStreamMap }.AsArg().Must().NotBeNullNorEmptyDictionaryNorContainAnyNullValues();
 
             this.eventStream = eventStream;
@@ -96,13 +96,13 @@ namespace Naos.Notification.Protocol.Bot
             this.getAudienceProtocol = getAudienceProtocol;
             this.getDeliveryChannelConfigsProtocol = getDeliveryChannelConfigsProtocol;
             this.prepareToSendOnChannelProtocol = prepareToSendOnChannelProtocol;
-            this.cannotStageToSendOnChannelAction = cannotStageToSendOnChannelAction;
+            this.cannotPrepareToSendOnChannelAction = cannotPrepareToSendOnChannelAction;
             this.channelToOperationStreamMap = channelToOperationStreamMap;
             this.buildSendNotificationRequestedEventTagsProtocol = buildSendNotificationRequestedEventTagsProtocol;
             this.buildCannotGetAudienceEventTagsProtocol = buildCannotGetAudienceEventTagsProtocol;
             this.buildCannotGetDeliveryChannelConfigsEventTagsProtocol = buildCannotGetDeliveryChannelConfigsEventTagsProtocol;
             this.buildNoChannelsToSendOnEventTagsProtocol = buildNoChannelsToSendOnEventTagsProtocol;
-            this.buildStagedToSendOnChannelEventTagsProtocol = buildStagedToSendOnChannelEventTagsProtocol;
+            this.buildPreparedToSendOnChannelEventTagsProtocol = buildPreparedToSendOnChannelEventTagsProtocol;
             this.buildExecuteProcessSendNotificationSagaEventTagsProtocol = buildExecuteProcessSendNotificationSagaEventTagsProtocol;
         }
 
@@ -125,7 +125,10 @@ namespace Naos.Notification.Protocol.Bot
             // to the Event Stream if there is none of if we should stop on failures.
             var getAudienceResult = await this.GetAudienceAsync(notification);
 
-            if (ShouldStop(getAudienceResult))
+            var getAudienceOutcome = getAudienceResult.GetOutcome();
+
+            if ((getAudienceOutcome != GetAudienceOutcome.GotAudienceWithNoFailuresReported) &&
+                (getAudienceOutcome != GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored))
             {
                 await this.PutCannotGetAudienceEventAsync(getAudienceResult, trackingCodeId, tags);
 
@@ -138,35 +141,51 @@ namespace Naos.Notification.Protocol.Bot
 
             var getDeliveryChannelConfigsResult = await this.GetDeliveryChannelConfigsAsync(notification, getAudienceResult.Audience);
 
-            if (ShouldStop(getDeliveryChannelConfigsResult))
+            var getDeliveryChannelConfigsOutcome = getDeliveryChannelConfigsResult.GetOutcome();
+
+            if ((getDeliveryChannelConfigsOutcome != GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported) &&
+                (getDeliveryChannelConfigsOutcome != GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored))
             {
                 await this.PutCannotGetDeliveryChannelConfigsEventAsync(getAudienceResult, getDeliveryChannelConfigsResult, trackingCodeId, tags);
 
                 return;
             }
 
-            // Prepare to send on each channel and stage for sending.
-            // Write NoChannelsToSendOnEventAsync if none of the channels can be staged.
+            // Prepare to send on each channel.
+            // Write NoChannelsToSendOnEventAsync if none of the channels can be prepared.
             var channelConfigs = getDeliveryChannelConfigsResult.Configs;
 
             var channelToPrepareToSendOnChannelResultMap = new Dictionary<IDeliveryChannel, PrepareToSendOnChannelResult>();
 
             var channelToOperationInstructionsMap = new Dictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationInstruction>>();
 
+            PrepareToSendOnAllChannelsResult prepareToSendOnAllChannelsResult;
+
             foreach (var channelConfig in channelConfigs)
             {
-                if (channelConfig.Action != DeliveryChannelAction.SendOnChannel)
+                if (channelConfig.Action == DeliveryChannelAction.AudienceOptedOut)
                 {
                     continue;
+                }
+                else if (channelConfig.Action == DeliveryChannelAction.SendOnChannel)
+                {
+                    // no-op
+                }
+                else
+                {
+                    throw new NotSupportedException(Invariant($"This {nameof(DeliveryChannelAction)} is not supported: {channelConfig.Action}."));
                 }
 
                 var channel = channelConfig.Channel;
 
                 var prepareToSendOnChannelResult = await this.PrepareToSendOnChannelAsync(notification, audience, channel, tags);
 
+                var prepareToSendOnChannelOutcome = prepareToSendOnChannelResult.GetOutcome();
+
                 channelToPrepareToSendOnChannelResultMap.Add(channel, prepareToSendOnChannelResult);
 
-                if (ShouldStage(prepareToSendOnChannelResult))
+                if ((prepareToSendOnChannelOutcome == PrepareToSendOnChannelOutcome.PreparedToSendOnChannelWithNoFailuresReported) ||
+                    (prepareToSendOnChannelOutcome == PrepareToSendOnChannelOutcome.PreparedToSendOnChannelWithReportedFailuresIgnored))
                 {
                     new { this.channelToOperationStreamMap }.AsOp().Must().ContainKey(channel, Invariant($"Staging to send on channel {channel.GetType().ToStringReadable()} but there is no operation stream associated with that channel."));
 
@@ -174,32 +193,36 @@ namespace Naos.Notification.Protocol.Bot
                 }
                 else
                 {
-                    if (this.cannotStageToSendOnChannelAction == CannotStageToSendOnChannelAction.ContinueAndAttemptStagingToSendOnNextChannel)
+                    if (this.cannotPrepareToSendOnChannelAction == CannotPrepareToSendOnChannelAction.ContinueAndAttemptPreparingToSendOnNextChannel)
                     {
                         // no-op
                     }
-                    else if (this.cannotStageToSendOnChannelAction == CannotStageToSendOnChannelAction.StopAndNotDoNotSendOnAnyChannels)
+                    else if (this.cannotPrepareToSendOnChannelAction == CannotPrepareToSendOnChannelAction.StopAndNotDoNotSendOnAnyChannels)
                     {
-                        await this.PutNoChannelsToSendOnEventAsync(getAudienceResult, getDeliveryChannelConfigsResult, channelToPrepareToSendOnChannelResultMap, trackingCodeId, tags);
+                        prepareToSendOnAllChannelsResult = new PrepareToSendOnAllChannelsResult(channelToPrepareToSendOnChannelResultMap, this.cannotPrepareToSendOnChannelAction, new IDeliveryChannel[0]);
+
+                        await this.PutNoChannelsToSendOnEventAsync(getAudienceResult, getDeliveryChannelConfigsResult, prepareToSendOnAllChannelsResult, trackingCodeId, tags);
 
                         return;
                     }
                     else
                     {
-                        throw new NotSupportedException(Invariant($"This {nameof(CannotStageToSendOnChannelAction)} is not supported: {this.cannotStageToSendOnChannelAction}."));
+                        throw new NotSupportedException(Invariant($"This {nameof(CannotPrepareToSendOnChannelAction)} is not supported: {this.cannotPrepareToSendOnChannelAction}."));
                     }
                 }
             }
 
+            prepareToSendOnAllChannelsResult = new PrepareToSendOnAllChannelsResult(channelToPrepareToSendOnChannelResultMap, this.cannotPrepareToSendOnChannelAction, channelToOperationInstructionsMap.Keys.ToList());
+
             if (!channelToOperationInstructionsMap.Any())
             {
-                await this.PutNoChannelsToSendOnEventAsync(getAudienceResult, getDeliveryChannelConfigsResult, channelToPrepareToSendOnChannelResultMap, trackingCodeId, tags);
+                await this.PutNoChannelsToSendOnEventAsync(getAudienceResult, getDeliveryChannelConfigsResult, prepareToSendOnAllChannelsResult, trackingCodeId, tags);
 
                 return;
             }
 
-            // Channels are staged for sending, write StagedToSendOnChannelsEventAsync.
-            await this.PutStagedToSendOnChannelsEventAsync(getAudienceResult, getDeliveryChannelConfigsResult, channelToPrepareToSendOnChannelResultMap, channelToOperationInstructionsMap.Keys.ToList(), trackingCodeId, tags);
+            // Channels are prepared for sending, write PreparedToSendOnChannelsEventAsync.
+            await this.PutPreparedToSendOnChannelsEventAsync(getAudienceResult, getDeliveryChannelConfigsResult, prepareToSendOnAllChannelsResult, trackingCodeId, tags);
 
             // Create a Saga to track channel operations.
             await this.PutSagaAsync(trackingCodeId, channelToOperationInstructionsMap, tags);
@@ -211,78 +234,6 @@ namespace Naos.Notification.Protocol.Bot
 
                 await this.PutChannelOperationsAsync(channel, channelOperationInstructions);
             }
-        }
-
-        private static bool ShouldStop(
-            GetAudienceResult getAudienceResult)
-        {
-            bool result;
-
-            if (getAudienceResult.Audience == null)
-            {
-                result = true;
-            }
-            else
-            {
-                if ((getAudienceResult.Failures == null) || (!getAudienceResult.Failures.Any()))
-                {
-                    result = false;
-                }
-                else
-                {
-                    result = getAudienceResult.FailureAction == FailureAction.Stop;
-                }
-            }
-
-            return result;
-        }
-
-        private static bool ShouldStop(
-            GetDeliveryChannelConfigsResult getDeliveryChannelConfigsResult)
-        {
-            bool result;
-
-            if ((getDeliveryChannelConfigsResult.Configs == null) || (!getDeliveryChannelConfigsResult.Configs.Any()))
-            {
-                result = true;
-            }
-            else
-            {
-                if ((getDeliveryChannelConfigsResult.Failures == null) || (!getDeliveryChannelConfigsResult.Failures.Any()))
-                {
-                    result = false;
-                }
-                else
-                {
-                    result = getDeliveryChannelConfigsResult.FailureAction == FailureAction.Stop;
-                }
-            }
-
-            return result;
-        }
-
-        private static bool ShouldStage(
-            PrepareToSendOnChannelResult prepareToSendOnChannelResult)
-        {
-            bool result;
-
-            if ((prepareToSendOnChannelResult.ChannelOperationInstructions == null) || (!prepareToSendOnChannelResult.ChannelOperationInstructions.Any()))
-            {
-                result = false;
-            }
-            else
-            {
-                if ((prepareToSendOnChannelResult.Failures == null) || (!prepareToSendOnChannelResult.Failures.Any()))
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = prepareToSendOnChannelResult.FailureAction == PrepareToSendOnChannelFailureAction.IgnoreAndStageForSendingOnChannel;
-                }
-            }
-
-            return result;
         }
 
         private async Task PutSendNotificationRequestedEventAsync(
@@ -325,28 +276,27 @@ namespace Naos.Notification.Protocol.Bot
         private async Task PutNoChannelsToSendOnEventAsync(
             GetAudienceResult getAudienceResult,
             GetDeliveryChannelConfigsResult getDeliveryChannelConfigsResult,
-            IReadOnlyDictionary<IDeliveryChannel, PrepareToSendOnChannelResult> channelToPrepareToSendOnChannelResultMap,
+            PrepareToSendOnAllChannelsResult prepareToSendOnAllChannelsResult,
             long trackingCodeId,
             IReadOnlyDictionary<string, string> inheritableTags)
         {
-            var @event = new NoChannelsToSendOnEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult, channelToPrepareToSendOnChannelResultMap, this.cannotStageToSendOnChannelAction);
+            var @event = new NoChannelsToSendOnEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult, prepareToSendOnAllChannelsResult);
 
             var tags = await this.buildNoChannelsToSendOnEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
 
             await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }
 
-        private async Task PutStagedToSendOnChannelsEventAsync(
+        private async Task PutPreparedToSendOnChannelsEventAsync(
             GetAudienceResult getAudienceResult,
             GetDeliveryChannelConfigsResult getDeliveryChannelConfigsResult,
-            IReadOnlyDictionary<IDeliveryChannel, PrepareToSendOnChannelResult> channelToPrepareToSendOnChannelResultMap,
-            IReadOnlyCollection<IDeliveryChannel> channelsToSendOn,
+            PrepareToSendOnAllChannelsResult prepareToSendOnAllChannelsResult,
             long trackingCodeId,
             IReadOnlyDictionary<string, string> inheritableTags)
         {
-            var @event = new StagedToSendOnChannelsEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult, channelToPrepareToSendOnChannelResultMap, this.cannotStageToSendOnChannelAction, channelsToSendOn);
+            var @event = new PreparedToSendOnChannelsEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult, prepareToSendOnAllChannelsResult);
 
-            var tags = await this.buildStagedToSendOnChannelEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
+            var tags = await this.buildPreparedToSendOnChannelEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
 
             await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }
@@ -450,7 +400,7 @@ namespace Naos.Notification.Protocol.Bot
             }
             catch (Exception ex)
             {
-                result = new PrepareToSendOnChannelResult(null, new[] { new ExceptionThrownFailure(ex.ToString()) }, PrepareToSendOnChannelFailureAction.DoNotStageForSendingOnChannel);
+                result = new PrepareToSendOnChannelResult(null, new[] { new ExceptionThrownFailure(ex.ToString()) }, PrepareToSendOnChannelFailureAction.DoNotSendOnChannel);
             }
 
             return result;

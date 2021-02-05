@@ -17,17 +17,17 @@ namespace Naos.Notification.Domain
         Unknown,
 
         /// <summary>
-        /// Ignore all failures and stage the notification for sending on the channel if possible
+        /// Ignore all failures and treat the channel as prepared to sending on, if possible
         /// (i.e. the result object contains one or more <see cref="ChannelOperationInstruction"/>).
-        /// If not possible, then do not stage the notification for sending on the channel.
+        /// If not possible, then do not send on the channel.
         /// </summary>
-        IgnoreAndStageForSendingOnChannel,
+        IgnoreAndTreatChannelAsPreparedToSendOnIfPossible,
 
         /// <summary>
-        /// Do not stage the notification for sending on the channel,
+        /// Do NOT send on the channel,
         /// regardless of whether it is possible to do so
         /// (i.e. the result object contains one or more <see cref="ChannelOperationInstruction"/>).
         /// </summary>
-        DoNotStageForSendingOnChannel,
+        DoNotSendOnChannel,
     }
 }
