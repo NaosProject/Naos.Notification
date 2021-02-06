@@ -108,9 +108,9 @@
     <Compile Include="Operations\Framework\ProcessSendNotificationSagaOp.cs" />
     <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnAllChannelsEvent.cs" />
     <Compile Include="Events\PrepareToSendNotification\CouldNotPrepareToSendOnAnyChannelEvent.cs" />
-    <Compile Include="Events\Stopping\CouldNotGetOrUseDeliveryChannelConfigsEvent.cs" />
+    <Compile Include="Events\CouldNotGetOrUse\CouldNotGetOrUseDeliveryChannelConfigsEvent.cs" />
     <Compile Include="Events\NotificationEventBase.cs" />
-    <Compile Include="Events\Stopping\CouldNotGetOrUseAudienceEvent.cs" />
+    <Compile Include="Events\CouldNotGetOrUse\CouldNotGetOrUseAudienceEvent.cs" />
     <Compile Include="Events\SendNotificationRequestedEvent.cs" />
     <Compile Include="Interfaces\Protocol\IPrepareToSendOnChannelProtocol.cs" />
     <Compile Include="Interfaces\Protocol\IGetDeliveryChannelConfigsProtocol.cs" />
