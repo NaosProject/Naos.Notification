@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NoChannelsToSendOnEvent.cs" company="Naos Project">
+// <copyright file="PrepareToSendNotificationEventBase.cs" company="Naos Project">
 //    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -12,25 +12,25 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// There are no channels on which to send the notification.
+    /// Base class for events that categorize a <see cref="PrepareToSendNotificationResult"/> by <see cref="PrepareToSendNotificationOutcome"/>.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
-    public partial class NoChannelsToSendOnEvent : NotificationEventBase, IModelViaCodeGen
+    public abstract partial class PrepareToSendNotificationEventBase : NotificationEventBase, IModelViaCodeGen
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoChannelsToSendOnEvent"/> class.
+        /// Initializes a new instance of the <see cref="PrepareToSendNotificationEventBase"/> class.
         /// </summary>
         /// <param name="id">The notification tracking code identifier.</param>
         /// <param name="timestampUtc">The timestamp in UTC.</param>
         /// <param name="getAudienceResult">The result of executing a <see cref="GetAudienceOp"/>.</param>
         /// <param name="getDeliveryChannelConfigsResult">The result of executing a <see cref="GetDeliveryChannelConfigsOp"/>.</param>
-        /// <param name="prepareToSendOnAllChannelsResult">The result of preparing to send the notification on all configured channels.</param>
-        public NoChannelsToSendOnEvent(
+        /// <param name="prepareToSendNotificationResult">The result of preparing to send the notification on all configured channels.</param>
+        protected PrepareToSendNotificationEventBase(
             long id,
             DateTime timestampUtc,
             GetAudienceResult getAudienceResult,
             GetDeliveryChannelConfigsResult getDeliveryChannelConfigsResult,
-            PrepareToSendOnAllChannelsResult prepareToSendOnAllChannelsResult)
+            PrepareToSendNotificationResult prepareToSendNotificationResult)
             : base(id, timestampUtc)
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
@@ -41,13 +41,11 @@ namespace Naos.Notification.Domain
             var getDeliveryChannelConfigsOutcome = getDeliveryChannelConfigsResult.GetOutcome();
             new { getDeliveryChannelConfigsOutcome }.AsArg().Must().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported).And().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored);
 
-            new { prepareToSendOnAllChannelsResult }.AsArg().Must().NotBeNull();
-            var prepareToSendOnAllChannelsOutcome = prepareToSendOnAllChannelsResult.GetOutcome();
-            new { prepareToSendOnAllChannelsOutcome }.AsArg().Must().NotBeEqualTo(PrepareToSendOnAllChannelsOutcome.AllChannelsWerePreparedToSendOn).And().NotBeEqualTo(PrepareToSendOnAllChannelsOutcome.SomeChannelsWerePreparedToSendOn);
+            new { prepareToSendNotificationResult }.AsArg().Must().NotBeNull();
 
             this.GetAudienceResult = getAudienceResult;
             this.GetDeliveryChannelConfigsResult = getDeliveryChannelConfigsResult;
-            this.PrepareToSendOnAllChannelsResult = prepareToSendOnAllChannelsResult;
+            this.PrepareToSendNotificationResult = prepareToSendNotificationResult;
         }
 
         /// <summary>
@@ -63,6 +61,6 @@ namespace Naos.Notification.Domain
         /// <summary>
         /// Gets the result of preparing to send the notification on all configured channels.
         /// </summary>
-        public PrepareToSendOnAllChannelsResult PrepareToSendOnAllChannelsResult { get; private set; }
+        public PrepareToSendNotificationResult PrepareToSendNotificationResult { get; private set; }
     }
 }

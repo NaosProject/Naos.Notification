@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CannotGetAudienceEvent.cs" company="Naos Project">
+// <copyright file="CouldNotGetOrUseDeliveryChannelConfigsEvent.cs" company="Naos Project">
 //    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -12,33 +12,45 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// Cannot get the audience for a notification.
+    /// Cannot get the delivery channels for the notification and audience or failures prevented the delivery channels from being used.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
-    public partial class CannotGetAudienceEvent : NotificationEventBase, IModelViaCodeGen
+    public partial class CouldNotGetOrUseDeliveryChannelConfigsEvent : NotificationEventBase, IModelViaCodeGen
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CannotGetAudienceEvent"/> class.
+        /// Initializes a new instance of the <see cref="CouldNotGetOrUseDeliveryChannelConfigsEvent"/> class.
         /// </summary>
         /// <param name="id">The notification tracking code identifier.</param>
         /// <param name="timestampUtc">The timestamp in UTC.</param>
         /// <param name="getAudienceResult">The result of executing a <see cref="GetAudienceOp"/>.</param>
-        public CannotGetAudienceEvent(
+        /// <param name="getDeliveryChannelConfigsResult">The result of executing a <see cref="GetDeliveryChannelConfigsOp"/>.</param>
+        public CouldNotGetOrUseDeliveryChannelConfigsEvent(
             long id,
             DateTime timestampUtc,
-            GetAudienceResult getAudienceResult)
+            GetAudienceResult getAudienceResult,
+            GetDeliveryChannelConfigsResult getDeliveryChannelConfigsResult)
             : base(id, timestampUtc)
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
             var getAudienceOutcome = getAudienceResult.GetOutcome();
             new { getAudienceOutcome }.AsArg().Must().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithNoFailuresReported).And().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored);
 
+            new { getDeliveryChannelConfigsResult }.AsArg().Must().NotBeNull();
+            var getDeliveryChannelConfigsOutcome = getDeliveryChannelConfigsResult.GetOutcome();
+            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported).And().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored);
+
             this.GetAudienceResult = getAudienceResult;
+            this.GetDeliveryChannelConfigsResult = getDeliveryChannelConfigsResult;
         }
 
         /// <summary>
         /// Gets the result of executing a <see cref="GetAudienceOp"/>.
         /// </summary>
         public GetAudienceResult GetAudienceResult { get; private set; }
+
+        /// <summary>
+        /// Gets the result of executing a <see cref="GetDeliveryChannelConfigsOp"/>.
+        /// </summary>
+        public GetDeliveryChannelConfigsResult GetDeliveryChannelConfigsResult { get; private set; }
     }
 }

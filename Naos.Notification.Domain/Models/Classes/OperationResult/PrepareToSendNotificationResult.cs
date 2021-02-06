@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PrepareToSendOnAllChannelsResult.cs" company="Naos Project">
+// <copyright file="PrepareToSendNotificationResult.cs" company="Naos Project">
 //    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -13,17 +13,17 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// The result of preparing to send the notification on all configured channels.
+    /// The result of preparing to send a notification on all configured channels.
     /// </summary>
-    public partial class PrepareToSendOnAllChannelsResult : IModelViaCodeGen
+    public partial class PrepareToSendNotificationResult : IModelViaCodeGen
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PrepareToSendOnAllChannelsResult"/> class.
+        /// Initializes a new instance of the <see cref="PrepareToSendNotificationResult"/> class.
         /// </summary>
         /// <param name="channelToPrepareToSendOnChannelResultMap">A map of channel to the result of executing a <see cref="PrepareToSendOnChannelOp"/>.</param>
-        /// <param name="cannotPrepareToSendOnChannelAction">The action taken when the system could not prepare a notification to be sent on a channel.</param>
+        /// <param name="cannotPrepareToSendOnChannelAction">The action taken when the system could not prepare the notification to be sent on a channel.</param>
         /// <param name="channelsToSendOn">The channels that the notification is prepared to be sent on.</param>
-        public PrepareToSendOnAllChannelsResult(
+        public PrepareToSendNotificationResult(
             IReadOnlyDictionary<IDeliveryChannel, PrepareToSendOnChannelResult> channelToPrepareToSendOnChannelResultMap,
             CannotPrepareToSendOnChannelAction cannotPrepareToSendOnChannelAction,
             IReadOnlyCollection<IDeliveryChannel> channelsToSendOn)
@@ -52,7 +52,7 @@ namespace Naos.Notification.Domain
         public IReadOnlyDictionary<IDeliveryChannel, PrepareToSendOnChannelResult> ChannelToPrepareToSendOnChannelResultMap { get; private set; }
 
         /// <summary>
-        /// Gets the action taken when the system could not prepare a notification to be sent on a channel.
+        /// Gets the action taken when the system could not prepare the notification to be sent on a channel.
         /// </summary>
         public CannotPrepareToSendOnChannelAction CannotPrepareToSendOnChannelAction { get; private set; }
 

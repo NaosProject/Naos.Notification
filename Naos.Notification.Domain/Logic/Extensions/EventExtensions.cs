@@ -173,42 +173,42 @@ namespace Naos.Notification.Domain
         }
 
         /// <summary>
-        /// Summarize a <see cref="PrepareToSendOnAllChannelsResult"/> as a <see cref="PrepareToSendOnAllChannelsOutcome" />.
+        /// Summarize a <see cref="PrepareToSendNotificationResult"/> as a <see cref="PrepareToSendNotificationOutcome" />.
         /// </summary>
-        /// <param name="prepareToSendOnAllChannelsResult">The result of preparing to send the notification on all configured channels.</param>
+        /// <param name="prepareToSendNotificationResult">The result of preparing to send a notification on all configured channels.</param>
         /// <returns>
-        /// A <see cref="PrepareToSendOnAllChannelsResult"/> summarized as <see cref="PrepareToSendOnAllChannelsOutcome"/>.
+        /// A <see cref="PrepareToSendNotificationResult"/> summarized as <see cref="PrepareToSendNotificationOutcome"/>.
         /// </returns>
-        public static PrepareToSendOnAllChannelsOutcome GetOutcome(
-            this PrepareToSendOnAllChannelsResult prepareToSendOnAllChannelsResult)
+        public static PrepareToSendNotificationOutcome GetOutcome(
+            this PrepareToSendNotificationResult prepareToSendNotificationResult)
         {
-            new { prepareToSendOnAllChannelsResult }.AsArg().Must().NotBeNull();
+            new { prepareToSendNotificationResult }.AsArg().Must().NotBeNull();
 
-            PrepareToSendOnAllChannelsOutcome result;
+            PrepareToSendNotificationOutcome result;
 
-            var channelToPrepareToSendOnChannelResultMap = prepareToSendOnAllChannelsResult.ChannelToPrepareToSendOnChannelResultMap;
-            var channelsToSendOn = prepareToSendOnAllChannelsResult.ChannelsToSendOn;
-            var cannotPrepareToSendOnChannelAction = prepareToSendOnAllChannelsResult.CannotPrepareToSendOnChannelAction;
+            var channelToPrepareToSendOnChannelResultMap = prepareToSendNotificationResult.ChannelToPrepareToSendOnChannelResultMap;
+            var channelsToSendOn = prepareToSendNotificationResult.ChannelsToSendOn;
+            var cannotPrepareToSendOnChannelAction = prepareToSendNotificationResult.CannotPrepareToSendOnChannelAction;
 
             if (!channelToPrepareToSendOnChannelResultMap.Any())
             {
-                result = PrepareToSendOnAllChannelsOutcome.AudienceOptedOutOfDeliveryOnAllChannels;
+                result = PrepareToSendNotificationOutcome.AudienceOptedOutOfAllChannels;
             }
             else if (!channelToPrepareToSendOnChannelResultMap.Keys.SymmetricDifference(channelsToSendOn).Any())
             {
-                result = PrepareToSendOnAllChannelsOutcome.AllChannelsWerePreparedToSendOn;
+                result = PrepareToSendNotificationOutcome.PreparedToSendOnAllChannels;
             }
             else if (channelsToSendOn.Any())
             {
-                result = PrepareToSendOnAllChannelsOutcome.SomeChannelsWerePreparedToSendOn;
+                result = PrepareToSendNotificationOutcome.PreparedToSendOnSomeChannels;
             }
             else if (cannotPrepareToSendOnChannelAction == CannotPrepareToSendOnChannelAction.StopAndNotDoNotSendOnAnyChannel)
             {
-                result = PrepareToSendOnAllChannelsOutcome.UnableToPrepareOneChannelToSendOnWhichPreventedSendingOnAnyChannel;
+                result = PrepareToSendNotificationOutcome.CouldNotPrepareToSendOnAnyChannelBecauseOneForcedAllToBeDiscarded;
             }
             else if (cannotPrepareToSendOnChannelAction == CannotPrepareToSendOnChannelAction.ContinueAndAttemptPreparingToSendOnNextChannel)
             {
-                result = PrepareToSendOnAllChannelsOutcome.UnableToPrepareAnyChannelToSendOn;
+                result = PrepareToSendNotificationOutcome.CouldNotPrepareToSendOnAnyChannelDespiteAttemptingAll;
             }
             else
             {

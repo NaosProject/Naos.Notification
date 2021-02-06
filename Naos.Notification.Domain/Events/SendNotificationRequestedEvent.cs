@@ -22,7 +22,7 @@ namespace Naos.Notification.Domain
         /// </summary>
         /// <param name="id">The notification tracking code identifier.</param>
         /// <param name="timestampUtc">The timestamp in UTC.</param>
-        /// <param name="sendNotificationOp">The operation to send a notification.</param>
+        /// <param name="sendNotificationOp">The operation to send the notification.</param>
         public SendNotificationRequestedEvent(
             long id,
             DateTime timestampUtc,
@@ -35,7 +35,7 @@ namespace Naos.Notification.Domain
         }
 
         /// <summary>
-        /// Gets the operation to send a notification.
+        /// Gets the operation to send the notification.
         /// </summary>
         public SendNotificationOp SendNotificationOp { get; private set; }
     }

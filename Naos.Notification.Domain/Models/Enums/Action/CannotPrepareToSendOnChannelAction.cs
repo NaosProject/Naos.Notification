@@ -24,7 +24,7 @@ namespace Naos.Notification.Domain
         StopAndNotDoNotSendOnAnyChannel,
 
         /// <summary>
-        /// Continue and attempt preparing to send on the next channel.
+        /// Continue and attempt preparing to send on the next channel (if there is one).
         /// </summary>
         ContinueAndAttemptPreparingToSendOnNextChannel,
     }
