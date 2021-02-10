@@ -131,7 +131,7 @@
     <Compile Include="Models\Classes\Delivery\SlackDeliveryChannel.cs" />
     <Compile Include="Models\Classes\Delivery\EmailDeliveryChannel.cs" />
     <Compile Include="Models\Classes\Delivery\DeliveryChannelBase.cs" />
-    <Compile Include="Models\Classes\AudienceBase.cs" />
+    <Compile Include="Models\Classes\Audience\AudienceBase.cs" />
     <Compile Include="Models\Classes\Saga\ChannelOperationMonitoringInfo.cs" />
     <Compile Include="Models\Classes\Saga\ChannelOperationInstruction.cs" />
     <Compile Include="Models\Classes\Notification\NotificationBase.cs" />
