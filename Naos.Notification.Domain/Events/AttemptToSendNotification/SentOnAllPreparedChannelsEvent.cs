@@ -15,7 +15,7 @@ namespace Naos.Notification.Domain
     /// The notification was sent on all channels that it was prepared to be sent on.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
-    public partial class SentOnAllPreparedChannelsEvent : AttemptToSendNotificationBaseEvent, IModelViaCodeGen
+    public partial class SentOnAllPreparedChannelsEvent : AttemptToSendNotificationEventBase, IModelViaCodeGen
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SentOnAllPreparedChannelsEvent"/> class.

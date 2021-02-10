@@ -219,11 +219,11 @@ namespace Naos.Notification.Domain
         }
 
         /// <summary>
-        /// Summarize a <see cref="AttemptToSendNotificationBaseEvent"/> as a <see cref="AttemptToSendNotificationOutcome" />.
+        /// Summarize a <see cref="AttemptToSendNotificationEventBase"/> as a <see cref="AttemptToSendNotificationOutcome" />.
         /// </summary>
         /// <param name="attemptToSendNotificationResult">The event.</param>
         /// <returns>
-        /// A <see cref="AttemptToSendNotificationBaseEvent"/> summarized in a <see cref="AttemptToSendNotificationOutcome"/>.
+        /// A <see cref="AttemptToSendNotificationEventBase"/> summarized in a <see cref="AttemptToSendNotificationOutcome"/>.
         /// </returns>
         public static AttemptToSendNotificationOutcome GetOutcome(
             this AttemptToSendNotificationResult attemptToSendNotificationResult)

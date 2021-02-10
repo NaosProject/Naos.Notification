@@ -15,7 +15,7 @@ namespace Naos.Notification.Domain
     /// The notification failed to be sent on any channel it was prepared to be sent on.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
-    public partial class CouldNotSendOnAnyPreparedChannelEvent : AttemptToSendNotificationBaseEvent, IModelViaCodeGen
+    public partial class CouldNotSendOnAnyPreparedChannelEvent : AttemptToSendNotificationEventBase, IModelViaCodeGen
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CouldNotSendOnAnyPreparedChannelEvent"/> class.

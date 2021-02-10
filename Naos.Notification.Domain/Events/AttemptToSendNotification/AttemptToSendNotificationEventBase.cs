@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AttemptToSendNotificationBaseEvent.cs" company="Naos Project">
+// <copyright file="AttemptToSendNotificationEventBase.cs" company="Naos Project">
 //    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -15,15 +15,15 @@ namespace Naos.Notification.Domain
     /// The system attempted to send a notification on all channels that were prepared to send on.
     /// </summary>
     // ReSharper disable once RedundantExtendsListEntry
-    public abstract partial class AttemptToSendNotificationBaseEvent : NotificationEventBase, IModelViaCodeGen
+    public abstract partial class AttemptToSendNotificationEventBase : NotificationEventBase, IModelViaCodeGen
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AttemptToSendNotificationBaseEvent"/> class.
+        /// Initializes a new instance of the <see cref="AttemptToSendNotificationEventBase"/> class.
         /// </summary>
         /// <param name="id">The notification tracking code identifier.</param>
         /// <param name="timestampUtc">The timestamp in UTC.</param>
         /// <param name="attemptToSendNotificationResult">The result of attempting to send the notification.</param>
-        protected AttemptToSendNotificationBaseEvent(
+        protected AttemptToSendNotificationEventBase(
             long id,
             DateTime timestampUtc,
             AttemptToSendNotificationResult attemptToSendNotificationResult)

@@ -96,7 +96,7 @@
     <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnSomeChannelsEvent.cs" />
     <Compile Include="Events\PrepareToSendNotification\AudienceOptedOutOfAllChannelsEvent.cs" />
     <Compile Include="Events\PrepareToSendNotification\PrepareToSendNotificationEventBase.cs" />
-    <Compile Include="Events\AttemptToSendNotification\AttemptToSendNotificationBaseEvent.cs" />
+    <Compile Include="Events\AttemptToSendNotification\AttemptToSendNotificationEventBase.cs" />
     <Compile Include="Interfaces\Property\IDeclareAudience.cs" />
     <Compile Include="Interfaces\Protocol\ISendNotificationProtocol.cs" />
     <Compile Include="Logic\Extensions\ResultExtensions.cs" />

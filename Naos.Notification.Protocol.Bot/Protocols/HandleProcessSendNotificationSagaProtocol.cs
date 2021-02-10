@@ -29,18 +29,18 @@ namespace Naos.Notification.Protocol.Bot
 
         private readonly IReadOnlyDictionary<IDeliveryChannel, IReadOnlyStream> channelToEventStreamMap;
 
-        private readonly IBuildTagsProtocol<AttemptToSendNotificationBaseEvent> buildAttemptToSendNotificationEventTags;
+        private readonly IBuildTagsProtocol<AttemptToSendNotificationEventBase> buildAttemptToSendNotificationEventTags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandleProcessSendNotificationSagaProtocol"/> class.
         /// </summary>
         /// <param name="notificationEventStream">The event stream.</param>
         /// <param name="channelToEventStreamMap">A map of delivery channel to the channel's event stream.</param>
-        /// <param name="buildAttemptToSendNotificationEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="AttemptToSendNotificationBaseEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildAttemptToSendNotificationEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="AttemptToSendNotificationEventBase"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         public HandleProcessSendNotificationSagaProtocol(
             IWriteOnlyStream notificationEventStream,
             IReadOnlyDictionary<IDeliveryChannel, IReadOnlyStream> channelToEventStreamMap,
-            IBuildTagsProtocol<AttemptToSendNotificationBaseEvent> buildAttemptToSendNotificationEventTags = null)
+            IBuildTagsProtocol<AttemptToSendNotificationEventBase> buildAttemptToSendNotificationEventTags = null)
         {
             new { notificationEventStream }.AsArg().Must().NotBeNull();
             new { channelToEventStreamMap }.AsArg().Must().NotBeNullNorEmptyDictionaryNorContainAnyNullValues();
@@ -119,14 +119,14 @@ namespace Naos.Notification.Protocol.Bot
                 }
             }
 
-            // Write the AttemptToSendNotificationBaseEvent to the Event Stream.
+            // Write the AttemptToSendNotificationEventBase to the Event Stream.
             var notificationTrackingCodeId = processSendNotificationSagaOp.NotificationTrackingCodeId;
 
             var attemptToSendNotificationResult = new AttemptToSendNotificationResult(channelToOperationsOutcomeInfoMap);
 
             var attemptToSendNotificationOutcome = attemptToSendNotificationResult.GetOutcome();
 
-            AttemptToSendNotificationBaseEvent attemptToSendNotificationEvent;
+            AttemptToSendNotificationEventBase attemptToSendNotificationEvent;
 
             switch (attemptToSendNotificationOutcome)
             {
