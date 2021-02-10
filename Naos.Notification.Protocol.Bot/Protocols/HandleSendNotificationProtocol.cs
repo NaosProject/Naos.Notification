@@ -304,11 +304,11 @@ namespace Naos.Notification.Protocol.Bot
             IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationInstruction>> channelToOperationInstructionsMap,
             IReadOnlyDictionary<string, string> inheritableTags)
         {
-            var channelToOperationOutcomeSpecsMap = channelToOperationInstructionsMap.ToDictionary(
+            var channelToOperationsMonitoringInfoMap = channelToOperationInstructionsMap.ToDictionary(
                 _ => _.Key,
-                _ => (IReadOnlyList<ChannelOperationOutcomeSpec>)_.Value.Select(c => c.OutcomeSpec).ToList());
+                _ => (IReadOnlyList<ChannelOperationMonitoringInfo>)_.Value.Select(c => c.MonitoringInfo).ToList());
 
-            var processSendNotificationSagaOp = new ProcessSendNotificationSagaOp(trackingCodeId, channelToOperationOutcomeSpecsMap);
+            var processSendNotificationSagaOp = new ProcessSendNotificationSagaOp(trackingCodeId, channelToOperationsMonitoringInfoMap);
 
             var @event = new ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>(trackingCodeId, processSendNotificationSagaOp, DateTime.UtcNow);
 
@@ -331,11 +331,11 @@ namespace Naos.Notification.Protocol.Bot
                 // ExecuteOpRequestedEvent<long, IOperation> cannot be handled by the client operation handlers.
                 var executeOpRequestedEventType = typeof(ExecuteOpRequestedEvent<,>).MakeGenericType(typeof(long), operation.GetType());
 
-                var channelTrackingCodeId = channelOperationInstruction.OutcomeSpec.ChannelTrackingCodeId;
+                var channelOperationTrackingCodeId = channelOperationInstruction.MonitoringInfo.ChannelOperationTrackingCodeId;
 
-                var executeOpRequestedEvent = executeOpRequestedEventType.Construct(channelTrackingCodeId, operation, DateTime.UtcNow, null);
+                var executeOpRequestedEvent = executeOpRequestedEventType.Construct(channelOperationTrackingCodeId, operation, DateTime.UtcNow, null);
 
-                await channelOperationStream.PutWithIdAsync(channelTrackingCodeId, executeOpRequestedEvent, channelOperationInstruction.Tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+                await channelOperationStream.PutWithIdAsync(channelOperationTrackingCodeId, executeOpRequestedEvent, channelOperationInstruction.Tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
             }
         }
 

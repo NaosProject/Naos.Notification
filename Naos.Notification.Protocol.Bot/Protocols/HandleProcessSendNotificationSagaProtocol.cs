@@ -29,25 +29,25 @@ namespace Naos.Notification.Protocol.Bot
 
         private readonly IReadOnlyDictionary<IDeliveryChannel, IReadOnlyStream> channelToEventStreamMap;
 
-        private readonly IBuildTagsProtocol<AttemptedToSendNotificationEvent> buildAttemptedToSendNotificationEventTags;
+        private readonly IBuildTagsProtocol<AttemptToSendNotificationBaseEvent> buildAttemptToSendNotificationEventTags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HandleProcessSendNotificationSagaProtocol"/> class.
         /// </summary>
         /// <param name="notificationEventStream">The event stream.</param>
         /// <param name="channelToEventStreamMap">A map of delivery channel to the channel's event stream.</param>
-        /// <param name="buildAttemptedToSendNotificationEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="AttemptedToSendNotificationEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
+        /// <param name="buildAttemptToSendNotificationEventTags">OPTIONAL protocol to builds the tags to use when putting the <see cref="AttemptToSendNotificationBaseEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         public HandleProcessSendNotificationSagaProtocol(
             IWriteOnlyStream notificationEventStream,
             IReadOnlyDictionary<IDeliveryChannel, IReadOnlyStream> channelToEventStreamMap,
-            IBuildTagsProtocol<AttemptedToSendNotificationEvent> buildAttemptedToSendNotificationEventTags = null)
+            IBuildTagsProtocol<AttemptToSendNotificationBaseEvent> buildAttemptToSendNotificationEventTags = null)
         {
             new { notificationEventStream }.AsArg().Must().NotBeNull();
             new { channelToEventStreamMap }.AsArg().Must().NotBeNullNorEmptyDictionaryNorContainAnyNullValues();
 
             this.notificationEventStream = notificationEventStream;
             this.channelToEventStreamMap = channelToEventStreamMap;
-            this.buildAttemptedToSendNotificationEventTags = buildAttemptedToSendNotificationEventTags;
+            this.buildAttemptToSendNotificationEventTags = buildAttemptToSendNotificationEventTags;
         }
 
         /// <inheritdoc />
@@ -62,11 +62,9 @@ namespace Naos.Notification.Protocol.Bot
             var inheritableTags = operation.RecordToHandle.Metadata.Tags?.ToDictionary(_ => _.Key, _ => _.Value);
 
             // Poll for failure event
-            var channels = processSendNotificationSagaOp.ChannelToOperationOutcomeSpecsMap.Keys;
+            var channels = processSendNotificationSagaOp.ChannelToOperationsMonitoringInfoMap.Keys;
 
-            var succeededChannels = new List<IDeliveryChannel>();
-
-            var failedChannels = new List<IDeliveryChannel>();
+            var channelToOperationsOutcomeInfoMap = new Dictionary<IDeliveryChannel, IReadOnlyCollection<ChannelOperationOutcomeInfo>>();
 
             foreach (var channel in channels)
             {
@@ -74,13 +72,19 @@ namespace Naos.Notification.Protocol.Bot
 
                 var eventStream = this.channelToEventStreamMap[channel];
 
-                var operationOutcomeSpecs = processSendNotificationSagaOp.ChannelToOperationOutcomeSpecsMap[channel];
+                var operationsMonitoringInfo = processSendNotificationSagaOp.ChannelToOperationsMonitoringInfoMap[channel];
 
-                foreach (var operationOutcomeSpec in operationOutcomeSpecs)
+                var operationsOutcomeInfo = new List<ChannelOperationOutcomeInfo>();
+
+                channelToOperationsOutcomeInfoMap.Add(channel, operationsOutcomeInfo);
+
+                foreach (var operationMonitoringInfo in operationsMonitoringInfo)
                 {
+                    ChannelOperationOutcomeInfo operationOutcomeInfo;
+
                     var failureEventMetadata = await eventStream.GetLatestRecordMetadataByIdAsync(
-                        operationOutcomeSpec.ChannelTrackingCodeId,
-                        operationOutcomeSpec.FailedEventType,
+                        operationMonitoringInfo.ChannelOperationTrackingCodeId,
+                        operationMonitoringInfo.FailedEventType,
                         existingRecordNotEncounteredStrategy: ExistingRecordNotEncounteredStrategy.ReturnDefault);
 
                     if (failureEventMetadata != null)
@@ -88,13 +92,13 @@ namespace Naos.Notification.Protocol.Bot
                         // Merge-in the tags on the failure event.
                         AddMissingTags(inheritableTags, failureEventMetadata.Tags);
 
-                        failedChannels.Add(channel);
+                        operationOutcomeInfo = new ChannelOperationOutcomeInfo(operationMonitoringInfo.ChannelOperationTrackingCodeId, operationMonitoringInfo.FailedEventType, ChannelOperationOutcome.Failed);
                     }
                     else
                     {
                         var successEventMetadata = await eventStream.GetLatestRecordMetadataByIdAsync(
-                            operationOutcomeSpec.ChannelTrackingCodeId,
-                            operationOutcomeSpec.SucceededEventType,
+                            operationMonitoringInfo.ChannelOperationTrackingCodeId,
+                            operationMonitoringInfo.SucceededEventType,
                             existingRecordNotEncounteredStrategy: ExistingRecordNotEncounteredStrategy.ReturnDefault);
 
                         if (successEventMetadata != null)
@@ -102,7 +106,7 @@ namespace Naos.Notification.Protocol.Bot
                             // Merge-in the tags on the success event.
                             AddMissingTags(inheritableTags, successEventMetadata.Tags);
 
-                            succeededChannels.Add(channel);
+                            operationOutcomeInfo = new ChannelOperationOutcomeInfo(operationMonitoringInfo.ChannelOperationTrackingCodeId, operationMonitoringInfo.SucceededEventType, ChannelOperationOutcome.Succeeded);
                         }
                         else
                         {
@@ -110,21 +114,38 @@ namespace Naos.Notification.Protocol.Bot
                             throw new SelfCancelRunningExecutionException(Invariant($"Neither the success nor failure event exists for the {channel} channel."));
                         }
                     }
+
+                    operationsOutcomeInfo.Add(operationOutcomeInfo);
                 }
             }
 
-            succeededChannels = succeededChannels.Distinct().ToList();
-
-            failedChannels = failedChannels.Distinct().ToList();
-
-            // Write the outcome to the Notification Event Stream.
+            // Write the AttemptToSendNotificationBaseEvent to the Event Stream.
             var notificationTrackingCodeId = processSendNotificationSagaOp.NotificationTrackingCodeId;
 
-            var attemptedToSendNotificationEvent = new AttemptedToSendNotificationEvent(notificationTrackingCodeId, DateTime.UtcNow, succeededChannels, failedChannels);
+            var attemptToSendNotificationResult = new AttemptToSendNotificationResult(channelToOperationsOutcomeInfoMap);
 
-            var tags = await this.buildAttemptedToSendNotificationEventTags.ExecuteBuildTagsAsync(notificationTrackingCodeId, attemptedToSendNotificationEvent, inheritableTags);
+            var attemptToSendNotificationOutcome = attemptToSendNotificationResult.GetOutcome();
 
-            await this.notificationEventStream.PutWithIdAsync(notificationTrackingCodeId, attemptedToSendNotificationEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
+            AttemptToSendNotificationBaseEvent attemptToSendNotificationEvent;
+
+            switch (attemptToSendNotificationOutcome)
+            {
+                case AttemptToSendNotificationOutcome.SentOnAllPreparedChannels:
+                    attemptToSendNotificationEvent = new SentOnAllPreparedChannelsEvent(notificationTrackingCodeId, DateTime.UtcNow, attemptToSendNotificationResult);
+                    break;
+                case AttemptToSendNotificationOutcome.SentOnSomePreparedChannels:
+                    attemptToSendNotificationEvent = new SentOnSomePreparedChannelsEvent(notificationTrackingCodeId, DateTime.UtcNow, attemptToSendNotificationResult);
+                    break;
+                case AttemptToSendNotificationOutcome.CouldNotSendOnAnyPreparedChannel:
+                    attemptToSendNotificationEvent = new CouldNotSendOnAnyPreparedChannelEvent(notificationTrackingCodeId, DateTime.UtcNow, attemptToSendNotificationResult);
+                    break;
+                default:
+                    throw new NotSupportedException(Invariant($"This {nameof(AttemptToSendNotificationOutcome)} is not supported: {attemptToSendNotificationOutcome}."));
+            }
+
+            var tags = await this.buildAttemptToSendNotificationEventTags.ExecuteBuildTagsAsync(notificationTrackingCodeId, attemptToSendNotificationEvent, inheritableTags);
+
+            await this.notificationEventStream.PutWithIdAsync(notificationTrackingCodeId, attemptToSendNotificationEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
         private static void AddMissingTags(

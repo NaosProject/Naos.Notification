@@ -7,12 +7,13 @@
 namespace Naos.Notification.Domain
 {
     /// <summary>
-    /// The outcome of an attempt to send a notification on all prepared channels.
+    /// The outcome of attempting to send a notification on all prepared channels.
     /// </summary>
     /// <remarks>
-    /// The notification could have failed to be prepared for some channels.
+    /// The notification could have failed to be prepared to send on some channels.
     /// Further, the recipient might have opted-out of some channels.
-    /// This outcome is scoped to the channels that the notification was successfully prepared for.
+    /// This outcome is scoped to the channels that the notification was successfully prepared to send on.
+    /// Further, the notification is considered sent on a channel if ALL channel-operations succeeded.
     /// </remarks>
     public enum AttemptToSendNotificationOutcome
     {
@@ -22,25 +23,19 @@ namespace Naos.Notification.Domain
         Unknown,
 
         /// <summary>
-        /// The notification was successfully sent on all channels.
+        /// The notification was sent on all channels that it was prepared to be sent on.
         /// </summary>
-        SucceededOnAllChannels,
+        SentOnAllPreparedChannels,
 
         /// <summary>
-        /// The notification failed to be sent on some channels and was successfully sent on some channels
-        /// Within all channels, all operations either failed or succeeded (no partial sends on any channels).
+        /// The notification failed to be sent on some channels that it was prepared to be sent on
+        /// and was successfully sent on the other channels it was prepared to be sent on.
         /// </summary>
-        MixedWithFullChannelSends,
+        SentOnSomePreparedChannels,
 
         /// <summary>
-        /// The notification failed to be sent on some channels and was successfully sent on some channels.
-        /// Within at least one channel there were operations that failed and succeeded (partial sends on one or more channels).
+        /// The notification failed to be sent on any channel it was prepared to be sent on.
         /// </summary>
-        MixedWithPartialChannelSends,
-
-        /// <summary>
-        /// The notification failed to be sent on all channels.
-        /// </summary>
-        FailedOnAllChannels,
+        CouldNotSendOnAnyPreparedChannel,
     }
 }

@@ -14,8 +14,6 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Assertion.Recipes;
     using OBeautifulCode.Type;
 
-    using static System.FormattableString;
-
     /// <summary>
     /// Processes a saga that waits for channel-specific operations to complete
     /// and writes to the Notification Event Stream based on the outcome of those operations.
@@ -27,18 +25,19 @@ namespace Naos.Notification.Domain
         /// Initializes a new instance of the <see cref="ProcessSendNotificationSagaOp"/> class.
         /// </summary>
         /// <param name="notificationTrackingCodeId">The notification tracking code id.</param>
-        /// <param name="channelToOperationOutcomeSpecsMap">A a map of <see cref="IDeliveryChannel"/> to the objects that specify whether the operations on that channel succeeded or failed.</param>
+        /// <param name="channelToOperationsMonitoringInfoMap">A map of <see cref="IDeliveryChannel"/> to information needed to monitor the execution of the operations on those channels.</param>
         public ProcessSendNotificationSagaOp(
             long notificationTrackingCodeId,
-            IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationOutcomeSpec>> channelToOperationOutcomeSpecsMap)
+            IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationMonitoringInfo>> channelToOperationsMonitoringInfoMap)
         {
-            new { channelToOperationOutcomeSpecsMap }.AsArg().Must().NotBeNullNorEmptyDictionaryNorContainAnyNullValues();
-            new { channelToOperationOutcomeSpecsMap.Values }.AsArg(Invariant($"{nameof(channelToOperationOutcomeSpecsMap)}.Values")).Must().Each().NotBeNullNorEmptyEnumerableNorContainAnyNulls();
-            var channelTrackingCodeIds = channelToOperationOutcomeSpecsMap.Values.Select(_ => _.Select(c => c.ChannelTrackingCodeId).ToList()).ToList();
-            new { channelTrackingCodeIds }.AsArg().Must().Each().ContainOnlyDistinctElementsWhenNotNull();
+            new { channelToOperationsMonitoringInfoMap }.AsArg().Must().NotBeNullNorEmptyDictionaryNorContainAnyNullValues();
+            var perChannelOperationsMonitoringInfo = channelToOperationsMonitoringInfoMap.Values;
+            new { perChannelOperationsMonitoringInfo }.AsArg().Must().Each().NotBeNullNorEmptyEnumerableNorContainAnyNulls();
+            var channelOperationTrackingCodeIds = channelToOperationsMonitoringInfoMap.Values.Select(_ => _.Select(c => c.ChannelOperationTrackingCodeId).ToList()).ToList();
+            new { channelOperationTrackingCodeIds }.AsArg().Must().Each().ContainOnlyDistinctElementsWhenNotNull();
 
             this.NotificationTrackingCodeId = notificationTrackingCodeId;
-            this.ChannelToOperationOutcomeSpecsMap = channelToOperationOutcomeSpecsMap;
+            this.ChannelToOperationsMonitoringInfoMap = channelToOperationsMonitoringInfoMap;
         }
 
         /// <summary>
@@ -47,8 +46,8 @@ namespace Naos.Notification.Domain
         public long NotificationTrackingCodeId { get; private set; }
 
         /// <summary>
-        /// Gets a map of <see cref="IDeliveryChannel"/> to the objects that specify whether the operations on that channel succeeded or failed.
+        /// Gets a map of <see cref="IDeliveryChannel"/> to information needed to monitor the execution of the operations on those channels.
         /// </summary>
-        public IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationOutcomeSpec>> ChannelToOperationOutcomeSpecsMap { get; private set; }
+        public IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationMonitoringInfo>> ChannelToOperationsMonitoringInfoMap { get; private set; }
     }
 }

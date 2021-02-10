@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EventExtensions.cs" company="Naos Project">
+// <copyright file="ResultExtensions.cs" company="Naos Project">
 //    Copyright (c) Naos Project 2019. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -15,9 +15,9 @@ namespace Naos.Notification.Domain
     using static System.FormattableString;
 
     /// <summary>
-    /// Extension methods on Events.
+    /// Extension methods on Result objects.
     /// </summary>
-    public static class EventExtensions
+    public static class ResultExtensions
     {
         /// <summary>
         /// Summarize a <see cref="GetAudienceResult"/> as a <see cref="GetAudienceOutcome" />.
@@ -219,40 +219,39 @@ namespace Naos.Notification.Domain
         }
 
         /// <summary>
-        /// Summarize a <see cref="AttemptedToSendNotificationEvent"/> as a <see cref="AttemptToSendNotificationOutcome" />.
+        /// Summarize a <see cref="AttemptToSendNotificationBaseEvent"/> as a <see cref="AttemptToSendNotificationOutcome" />.
         /// </summary>
-        /// <param name="event">The event.</param>
+        /// <param name="attemptToSendNotificationResult">The event.</param>
         /// <returns>
-        /// A <see cref="AttemptedToSendNotificationEvent"/> summarized in a <see cref="AttemptToSendNotificationOutcome"/>.
+        /// A <see cref="AttemptToSendNotificationBaseEvent"/> summarized in a <see cref="AttemptToSendNotificationOutcome"/>.
         /// </returns>
         public static AttemptToSendNotificationOutcome GetOutcome(
-            AttemptedToSendNotificationEvent @event)
+            this AttemptToSendNotificationResult attemptToSendNotificationResult)
         {
-            new { @event }.AsArg().Must().NotBeNull();
+            new { attemptToSendNotificationResult }.AsArg().Must().NotBeNull();
 
             AttemptToSendNotificationOutcome result;
 
-            if (@event.FailedChannels.Any())
+            var channelToOperationsOutcomeInfoMap = attemptToSendNotificationResult.ChannelToOperationsOutcomeInfoMap;
+
+            var anyOperationsFailed = channelToOperationsOutcomeInfoMap
+                .Values
+                .SelectMany(_ => _)
+                .Any(_ => _.Outcome == ChannelOperationOutcome.Failed);
+
+            if (anyOperationsFailed)
             {
-                if (@event.SucceededChannels.Any())
-                {
-                    if (@event.FailedChannels.Intersect(@event.SucceededChannels).Any())
-                    {
-                        result = AttemptToSendNotificationOutcome.MixedWithPartialChannelSends;
-                    }
-                    else
-                    {
-                        result = AttemptToSendNotificationOutcome.MixedWithFullChannelSends;
-                    }
-                }
-                else
-                {
-                    result = AttemptToSendNotificationOutcome.FailedOnAllChannels;
-                }
+                var anyChannelsSucceeded = channelToOperationsOutcomeInfoMap
+                    .Values
+                    .Any(_ => _.All(c => c.Outcome == ChannelOperationOutcome.Succeeded));
+
+                result = anyChannelsSucceeded
+                    ? AttemptToSendNotificationOutcome.SentOnSomePreparedChannels
+                    : AttemptToSendNotificationOutcome.CouldNotSendOnAnyPreparedChannel;
             }
             else
             {
-                result = AttemptToSendNotificationOutcome.SucceededOnAllChannels;
+                result = AttemptToSendNotificationOutcome.SentOnAllPreparedChannels;
             }
 
             return result;

@@ -14,27 +14,32 @@ namespace Naos.Notification.Domain
     using OBeautifulCode.Type;
 
     /// <summary>
-    /// Contains the information needed to put an operation into a channel-specific
-    /// Operation Stream (e.g. SendEmailOp) and monitor it for success/failure.
+    /// Contains information needed to put a channel-specific operation (e.g. SendEmailOp) into a stream
+    /// monitor it to determine whether it has been executed and if so, determine the outcome (i.e. success or failure).
     /// </summary>
+    /// <remarks>
+    /// The operation could be the only operation or one of many on the channel for the same notification.
+    /// Likewise, the notification might be sent on one or many channels.
+    /// This class is scoped to a single operation on a single channel.
+    /// </remarks>
     public partial class ChannelOperationInstruction : IModelViaCodeGen
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelOperationInstruction"/> class.
         /// </summary>
         /// <param name="operation">The channel operation.</param>
-        /// <param name="outcomeSpec">The channel operation outcome specification.</param>
+        /// <param name="monitoringInfo">The information needed to monitor the execution of the operation.</param>
         /// <param name="tags">OPTIONAL tags to use when putting the operation into the channel-specific Operation Stream.  DEFAULT is to specify no tags.</param>
         public ChannelOperationInstruction(
             IOperation operation,
-            ChannelOperationOutcomeSpec outcomeSpec,
+            ChannelOperationMonitoringInfo monitoringInfo,
             IReadOnlyDictionary<string, string> tags = null)
         {
             new { operation }.AsArg().Must().NotBeNull();
-            new { outcomeSpec }.AsArg().Must().NotBeNull();
+            new { monitoringInfo }.AsArg().Must().NotBeNull();
 
             this.Operation = operation;
-            this.OutcomeSpec = outcomeSpec;
+            this.MonitoringInfo = monitoringInfo;
             this.Tags = tags;
         }
 
@@ -44,9 +49,9 @@ namespace Naos.Notification.Domain
         public IOperation Operation { get; private set; }
 
         /// <summary>
-        /// Gets the channel operation outcome specification.
+        /// Gets the information needed to monitor the execution of the operation.
         /// </summary>
-        public ChannelOperationOutcomeSpec OutcomeSpec { get; private set; }
+        public ChannelOperationMonitoringInfo MonitoringInfo { get; private set; }
 
         /// <summary>
         /// Gets the tags to use when putting the operation into the channel-specific Operation Stream.
