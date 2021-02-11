@@ -292,6 +292,12 @@ namespace Naos.Notification.Domain.Test
                                  A.Dummy<long>()));
 
             AutoFixtureBackedDummyFactory.AddDummyCreator(
+                () => new File(
+                                 A.Dummy<byte[]>(),
+                                 A.Dummy<string>(),
+                                 A.Dummy<FileFormat>()));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(
                 () => new AttemptToSendNotificationResult(
                                  A.Dummy<IReadOnlyDictionary<IDeliveryChannel, IReadOnlyCollection<ChannelOperationOutcomeInfo>>>()));
 

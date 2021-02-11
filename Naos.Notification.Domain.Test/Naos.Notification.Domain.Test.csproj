@@ -256,6 +256,10 @@
     <Compile Include="Events\AttemptToSendNotification\AttemptToSendNotificationEventBaseTest.designer.cs">
       <DependentUpon>AttemptToSendNotificationEventBaseTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Classes\Other\FileTest.cs" />
+    <Compile Include="Models\Classes\Other\FileTest.designer.cs">
+      <DependentUpon>FileTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Classes\Audience\EveryoneAudienceTest.cs" />
     <Compile Include="Models\Classes\Audience\EveryoneAudienceTest.designer.cs">
       <DependentUpon>EveryoneAudienceTest.cs</DependentUpon>
