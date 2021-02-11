@@ -67,7 +67,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
             // Write the request to the event stream
             var uploadFileToSlackRequestedEvent = new UploadFileToSlackRequestedEvent<long>(slackOperationTrackingCodeId, DateTime.UtcNow, uploadFileToSlackOp.UploadFileToSlackRequest);
 
-            var tags = await this.buildUploadFileToSlackRequestedEventTagsProtocol.ExecuteBuildTagsAsync(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, inheritableTags);
+            var tags = this.buildUploadFileToSlackRequestedEventTagsProtocol.ExecuteBuildTags(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, inheritableTags);
 
             await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
 
@@ -86,7 +86,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
                 uploadFileToSlackResponseEvent = new FailedToUploadFileToSlackEvent<long>(slackOperationTrackingCodeId, DateTime.UtcNow, uploadFileToSlackResponse);
             }
 
-            tags = await this.buildUploadFileToSlackResponseEventTagsProtocol.ExecuteBuildTagsAsync(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, inheritableTags);
+            tags = this.buildUploadFileToSlackResponseEventTagsProtocol.ExecuteBuildTags(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, inheritableTags);
 
             await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }

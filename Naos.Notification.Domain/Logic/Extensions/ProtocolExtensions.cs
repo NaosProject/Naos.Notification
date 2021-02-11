@@ -7,7 +7,6 @@
 namespace Naos.Notification.Domain
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     using Naos.Protocol.Domain;
 
@@ -31,7 +30,7 @@ namespace Naos.Notification.Domain
         /// <returns>
         /// The tags to use when putting the specified event into a stream.
         /// </returns>
-        public static async Task<IReadOnlyDictionary<string, string>> ExecuteBuildTagsAsync<TEvent>(
+        public static IReadOnlyDictionary<string, string> ExecuteBuildTags<TEvent>(
             this IBuildTagsProtocol<TEvent> protocol,
             long trackingCodeId,
             TEvent @event,
@@ -44,7 +43,7 @@ namespace Naos.Notification.Domain
             {
                 var buildTagsOperation = new BuildTagsOp<TEvent>(trackingCodeId, @event, inheritableTags);
 
-                result = await protocol.ExecuteAsync(buildTagsOperation);
+                result = protocol.Execute(buildTagsOperation);
             }
 
             return result;

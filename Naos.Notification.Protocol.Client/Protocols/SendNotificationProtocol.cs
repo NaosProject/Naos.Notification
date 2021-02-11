@@ -29,7 +29,7 @@ namespace Naos.Notification.Protocol.Client
         /// </summary>
         /// <param name="clientOperationStream">The client operation stream.</param>
         /// <param name="buildExecuteSendNotificationEventTagsProtocol">OPTIONAL protocol that executes a <see cref="BuildTagsOp{TEvent}"/>.  DEFAULT is null (no tags added when putting operation into stream).</param>
-        protected SendNotificationProtocol(
+        public SendNotificationProtocol(
             IWriteOnlyStream clientOperationStream,
             IBuildTagsProtocol<ExecuteOpRequestedEvent<long, SendNotificationOp>> buildExecuteSendNotificationEventTagsProtocol = null)
         {
@@ -51,7 +51,7 @@ namespace Naos.Notification.Protocol.Client
 
             var executeOperationRequestedEvent = new ExecuteOpRequestedEvent<long, SendNotificationOp>(notificationTrackingCodeId, operation, DateTime.UtcNow);
 
-            var tags = await this.buildExecuteSendNotificationEventTagsProtocol.ExecuteBuildTagsAsync(result.Id, executeOperationRequestedEvent);
+            var tags = this.buildExecuteSendNotificationEventTagsProtocol.ExecuteBuildTags(result.Id, executeOperationRequestedEvent);
 
             await this.clientOperationStream.PutWithIdAsync(notificationTrackingCodeId, executeOperationRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
 

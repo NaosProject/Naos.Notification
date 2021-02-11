@@ -24,7 +24,7 @@ namespace Naos.Notification.Protocol.Bot
     /// <summary>
     /// Executes a <see cref="SendNotificationOp"/>.
     /// </summary>
-    public abstract class HandleSendNotificationProtocol : HandleRecordAsyncSpecificProtocolBase<ExecuteOpRequestedEvent<long, SendNotificationOp>>
+    public class HandleSendNotificationProtocol : HandleRecordAsyncSpecificProtocolBase<ExecuteOpRequestedEvent<long, SendNotificationOp>>
     {
         private readonly IWriteOnlyStream eventStream;
 
@@ -65,7 +65,7 @@ namespace Naos.Notification.Protocol.Bot
         /// <param name="buildCouldNotGetOrUseDeliveryChannelConfigsEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="CouldNotGetOrUseDeliveryChannelConfigsEvent"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         /// <param name="buildPrepareToSendNotificationEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="PrepareToSendNotificationEventBase"/> into the Notification Event Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
         /// <param name="buildExecuteProcessSendNotificationSagaEventTagsProtocol">OPTIONAL protocol to builds the tags to use when putting the <see cref="ProcessSendNotificationSagaOp"/> into the Notification Saga Stream.  DEFAULT is to not add any tags; tags will be null.  Consider using <see cref="UseInheritableTagsProtocol{TEvent}"/> to just use the inheritable tags.</param>
-        protected HandleSendNotificationProtocol(
+        public HandleSendNotificationProtocol(
             IWriteOnlyStream eventStream,
             IWriteOnlyStream sagaStream,
             IGetAudienceProtocol getAudienceProtocol,
@@ -235,7 +235,7 @@ namespace Naos.Notification.Protocol.Bot
         {
             var @event = new SendNotificationRequestedEvent(trackingCodeId, DateTime.UtcNow, sendNotificationOp);
 
-            var tags = await this.buildSendNotificationRequestedEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
+            var tags = this.buildSendNotificationRequestedEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
             await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }
@@ -247,9 +247,9 @@ namespace Naos.Notification.Protocol.Bot
         {
             var @event = new CouldNotGetOrUseAudienceEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult);
 
-            var tags = await this.buildCouldNotGetOrUseAudienceEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
+            var tags = this.buildCouldNotGetOrUseAudienceEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
-            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
         private async Task PutCannotGetOrUseDeliveryChannelConfigsEventAsync(
@@ -260,9 +260,9 @@ namespace Naos.Notification.Protocol.Bot
         {
             var @event = new CouldNotGetOrUseDeliveryChannelConfigsEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult);
 
-            var tags = await this.buildCouldNotGetOrUseDeliveryChannelConfigsEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
+            var tags = this.buildCouldNotGetOrUseDeliveryChannelConfigsEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
-            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
         private async Task PutPrepareToSendNotificationEventAsync(
@@ -294,9 +294,9 @@ namespace Naos.Notification.Protocol.Bot
                     throw new NotSupportedException(Invariant($"This {nameof(PrepareToSendNotificationOutcome)} is not supported: {prepareToSendNotificationOutcome}"));
             }
 
-            var tags = await this.buildPrepareToSendNotificationEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
+            var tags = this.buildPrepareToSendNotificationEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
-            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
         private async Task PutSagaAsync(
@@ -312,7 +312,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var @event = new ExecuteOpRequestedEvent<long, ProcessSendNotificationSagaOp>(trackingCodeId, processSendNotificationSagaOp, DateTime.UtcNow);
 
-            var tags = await this.buildExecuteProcessSendNotificationSagaEventTagsProtocol.ExecuteBuildTagsAsync(trackingCodeId, @event, inheritableTags);
+            var tags = this.buildExecuteProcessSendNotificationSagaEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
             await this.sagaStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
         }

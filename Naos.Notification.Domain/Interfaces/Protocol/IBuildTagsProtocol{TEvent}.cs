@@ -14,7 +14,7 @@ namespace Naos.Notification.Domain
     /// Executes a <see cref="BuildTagsOp{TEvent}"/>.
     /// </summary>
     /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
-    public interface IBuildTagsProtocol<TEvent> : IAsyncReturningProtocol<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>>
+    public interface IBuildTagsProtocol<TEvent> : IReturningProtocol<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>>
         where TEvent : IEvent
     {
     }

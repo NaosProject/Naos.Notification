@@ -67,7 +67,7 @@ namespace Naos.Notification.Protocol.Email.Bot
             // Write the request to the event stream
             var sendEmailRequestedEvent = new SendEmailRequestedEvent<long>(emailTrackingCodeId, DateTime.UtcNow, sendEmailOp.SendEmailRequest);
 
-            var tags = await this.buildSendEmailRequestedEventTagsProtocol.ExecuteBuildTagsAsync(emailTrackingCodeId, sendEmailRequestedEvent, inheritableTags);
+            var tags = this.buildSendEmailRequestedEventTagsProtocol.ExecuteBuildTags(emailTrackingCodeId, sendEmailRequestedEvent, inheritableTags);
 
             await this.emailEventStream.PutWithIdAsync(emailTrackingCodeId, sendEmailRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
 
@@ -86,7 +86,7 @@ namespace Naos.Notification.Protocol.Email.Bot
                 emailResponseEventBase = new FailedToSendEmailEvent<long>(emailTrackingCodeId, DateTime.UtcNow, emailResponse);
             }
 
-            tags = await this.buildSendEmailResponseEventTagsProtocol.ExecuteBuildTagsAsync(emailTrackingCodeId, emailResponseEventBase, inheritableTags);
+            tags = this.buildSendEmailResponseEventTagsProtocol.ExecuteBuildTags(emailTrackingCodeId, emailResponseEventBase, inheritableTags);
 
             await this.emailEventStream.PutWithIdAsync(emailTrackingCodeId, emailResponseEventBase, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }

@@ -7,7 +7,6 @@
 namespace Naos.Notification.Domain
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     using Naos.Protocol.Domain;
 
@@ -20,18 +19,16 @@ namespace Naos.Notification.Domain
     /// This is useful when you an event to be tagged with the inheritable tags and do not want to augment that set.
     /// </remarks>
     /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
-    public class UseInheritableTagsProtocol<TEvent> : AsyncSpecificReturningProtocolBase<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>>, IBuildTagsProtocol<TEvent>
+    public class UseInheritableTagsProtocol<TEvent> : SyncSpecificReturningProtocolBase<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>>, IBuildTagsProtocol<TEvent>
         where TEvent : IEvent
     {
         /// <inheritdoc />
-        public override async Task<IReadOnlyDictionary<string, string>> ExecuteAsync(
+        public override IReadOnlyDictionary<string, string> Execute(
             BuildTagsOp<TEvent> operation)
         {
             new { operation }.AsArg().Must().NotBeNull();
 
-            var tags = operation.InheritableTags;
-
-            var result = await Task.FromResult(tags);
+            var result = operation.InheritableTags;
 
             return result;
         }

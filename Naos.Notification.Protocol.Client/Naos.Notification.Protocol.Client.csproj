@@ -25,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Debug\Naos.Notification.Protocol.Client.xml</DocumentationFile>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,8 +39,8 @@
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Naos.Database.Domain, Version=1.1.292.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Naos.Database.Domain.1.1.292\lib\net462\Naos.Database.Domain.dll</HintPath>
+    <Reference Include="Naos.Database.Domain, Version=1.1.298.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Naos.Database.Domain.1.1.298\lib\net462\Naos.Database.Domain.dll</HintPath>
     </Reference>
     <Reference Include="Naos.Protocol.Domain, Version=1.0.91.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Naos.Protocol.Domain.1.0.91\lib\net462\Naos.Protocol.Domain.dll</HintPath>

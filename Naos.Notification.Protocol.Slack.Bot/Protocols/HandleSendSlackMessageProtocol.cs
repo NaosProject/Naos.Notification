@@ -67,7 +67,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
             // Write the request to the event stream
             var sendSlackMessageRequestedEvent = new SendSlackMessageRequestedEvent<long>(slackOperationTrackingCodeId, DateTime.UtcNow, sendSlackMessageOp.SendSlackMessageRequest);
 
-            var tags = await this.buildSendSlackMessageRequestedEventTagsProtocol.ExecuteBuildTagsAsync(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, inheritableTags);
+            var tags = this.buildSendSlackMessageRequestedEventTagsProtocol.ExecuteBuildTags(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, inheritableTags);
 
             await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
 
@@ -86,7 +86,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
                 sendSlackMessageResponseEvent = new FailedToSendSlackMessageEvent<long>(slackOperationTrackingCodeId, DateTime.UtcNow, sendSlackMessageResponse);
             }
 
-            tags = await this.buildSendSlackMessageResponseEventTagsProtocol.ExecuteBuildTagsAsync(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, inheritableTags);
+            tags = this.buildSendSlackMessageResponseEventTagsProtocol.ExecuteBuildTags(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, inheritableTags);
 
             await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
         }
