@@ -31,8 +31,6 @@ namespace Naos.Notification.Domain
             new { channelToPrepareToSendOnChannelResultMap }.AsArg().Must().NotBeNull().And().NotContainAnyKeyValuePairsWithNullValue();
             var prepareToSendOnChannelResult = channelToPrepareToSendOnChannelResultMap?.Values.ToList();
             new { prepareToSendOnChannelResult }.AsArg().Must().ContainOnlyDistinctElementsWhenNotNull();
-            var operations = channelToPrepareToSendOnChannelResultMap?.Values.SelectMany(_ => _.ChannelOperationInstructions.Select(c => c.Operation)).ToList();
-            new { operations }.AsArg().Must().ContainOnlyDistinctElementsWhenNotNull();
             new { cannotPrepareToSendOnChannelAction }.AsArg().Must().NotBeEqualTo(CannotPrepareToSendOnChannelAction.Unknown);
             new { channelsToSendOn }.AsArg().Must().NotBeNull().And().NotContainAnyNullElements().And().ContainOnlyDistinctElements();
 

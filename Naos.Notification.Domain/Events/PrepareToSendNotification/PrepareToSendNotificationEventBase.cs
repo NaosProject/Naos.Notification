@@ -35,11 +35,11 @@ namespace Naos.Notification.Domain
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
             var getAudienceOutcome = getAudienceResult.GetOutcome();
-            new { getAudienceOutcome }.AsArg().Must().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithNoFailuresReported).And().NotBeEqualTo(GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored);
+            new { getAudienceOutcome }.AsArg().Must().NotBeEqualTo(GetAudienceOutcome.CouldNotGetAudienceAndNoFailuresReported).And().NotBeEqualTo(GetAudienceOutcome.CouldNotGetAudienceWithSomeFailuresReported).And().NotBeEqualTo(GetAudienceOutcome.DespiteGettingAudienceFailuresPreventUsingIt);
 
             new { getDeliveryChannelConfigsResult }.AsArg().Must().NotBeNull();
             var getDeliveryChannelConfigsOutcome = getDeliveryChannelConfigsResult.GetOutcome();
-            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported).And().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored);
+            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.CouldNotGetDeliveryChannelConfigsAndNoFailuresReported).And().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.CouldNotGetDeliveryChannelConfigsWithSomeFailuresReported).And().NotBeEqualTo(GetDeliveryChannelConfigsOutcome.DespiteGettingDeliveryChannelConfigsFailuresPreventUsingThem);
 
             new { prepareToSendNotificationResult }.AsArg().Must().NotBeNull();
 

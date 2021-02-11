@@ -9,6 +9,7 @@
         <dependency id="OBeautifulCode.AutoFakeItEasy" version ="1.0.126" />
         <dependency id="Naos.CodeAnalysis.Recipes.SuppressBecause" version="1.0.6" />
         <dependency id="Naos.Protocol.Recipes.DummyFactory" version="1.0.63" />
+        <dependency id="OBeautifulCode.Type.Recipes.DummyFactory" version="1.0.76" />
     </dependencies>
   </metadata>
   <files>

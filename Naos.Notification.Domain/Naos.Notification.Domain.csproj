@@ -90,27 +90,148 @@
     <Compile Include=".recipes\OBeautifulCode.Type\ToStringReadableOptions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\ToStringXmlDocOptions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\TypeExtensions.cs" />
+    <Compile Include="Events\AttemptToSendNotification\AttemptToSendNotificationEventBase.designer.cs">
+      <DependentUpon>AttemptToSendNotificationEventBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="Events\AttemptToSendNotification\CouldNotSendOnAnyPreparedChannelEvent.cs" />
+    <Compile Include="Events\AttemptToSendNotification\CouldNotSendOnAnyPreparedChannelEvent.designer.cs">
+      <DependentUpon>CouldNotSendOnAnyPreparedChannelEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\AttemptToSendNotification\SentOnAllPreparedChannelsEvent.designer.cs">
+      <DependentUpon>SentOnAllPreparedChannelsEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Events\AttemptToSendNotification\SentOnSomePreparedChannelsEvent.cs" />
     <Compile Include="Events\AttemptToSendNotification\SentOnAllPreparedChannelsEvent.cs" />
+    <Compile Include="Events\AttemptToSendNotification\SentOnSomePreparedChannelsEvent.designer.cs">
+      <DependentUpon>SentOnSomePreparedChannelsEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\CouldNotGetOrUse\CouldNotGetOrUseAudienceEvent.designer.cs">
+      <DependentUpon>CouldNotGetOrUseAudienceEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\CouldNotGetOrUse\CouldNotGetOrUseDeliveryChannelConfigsEvent.designer.cs">
+      <DependentUpon>CouldNotGetOrUseDeliveryChannelConfigsEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\NotificationEventBase.designer.cs">
+      <DependentUpon>NotificationEventBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\PrepareToSendNotification\AudienceOptedOutOfAllChannelsEvent.designer.cs">
+      <DependentUpon>AudienceOptedOutOfAllChannelsEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\PrepareToSendNotification\CouldNotPrepareToSendOnAnyChannelEvent.designer.cs">
+      <DependentUpon>CouldNotPrepareToSendOnAnyChannelEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnAllChannelsEvent.designer.cs">
+      <DependentUpon>PreparedToSendOnAllChannelsEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnSomeChannelsEvent.cs" />
     <Compile Include="Events\PrepareToSendNotification\AudienceOptedOutOfAllChannelsEvent.cs" />
+    <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnSomeChannelsEvent.designer.cs">
+      <DependentUpon>PreparedToSendOnSomeChannelsEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Events\PrepareToSendNotification\PrepareToSendNotificationEventBase.cs" />
     <Compile Include="Events\AttemptToSendNotification\AttemptToSendNotificationEventBase.cs" />
+    <Compile Include="Events\PrepareToSendNotification\PrepareToSendNotificationEventBase.designer.cs">
+      <DependentUpon>PrepareToSendNotificationEventBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\SendNotificationRequestedEvent.designer.cs">
+      <DependentUpon>SendNotificationRequestedEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\Property\IDeclareAudience.cs" />
     <Compile Include="Interfaces\Protocol\ISendNotificationProtocol.cs" />
     <Compile Include="Logic\Extensions\ResultExtensions.cs" />
     <Compile Include="Logic\Extensions\ProtocolExtensions.cs" />
+    <Compile Include="Models\Classes\Audience\EveryoneAudience.cs" />
+    <Compile Include="Models\Classes\Audience\EveryoneAudience.designer.cs">
+      <DependentUpon>EveryoneAudience.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Audience\VoidAudience.cs" />
+    <Compile Include="Models\Classes\Audience\AudienceBase.designer.cs">
+      <DependentUpon>AudienceBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Audience\VoidAudience.designer.cs">
+      <DependentUpon>VoidAudience.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Delivery\DeliveryChannelBase.designer.cs">
+      <DependentUpon>DeliveryChannelBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Delivery\DeliveryChannelConfig.designer.cs">
+      <DependentUpon>DeliveryChannelConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Delivery\EmailDeliveryChannel.designer.cs">
+      <DependentUpon>EmailDeliveryChannel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Delivery\SlackDeliveryChannel.designer.cs">
+      <DependentUpon>SlackDeliveryChannel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Failure\ExceptionThrownFailure.designer.cs">
+      <DependentUpon>ExceptionThrownFailure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Failure\FailureBase.designer.cs">
+      <DependentUpon>FailureBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\AudienceVoidNotification.designer.cs">
+      <DependentUpon>AudienceVoidNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\VoidNotification.cs" />
+    <Compile Include="Models\Classes\Notification\AudienceVoidNotification.cs" />
     <Compile Include="Models\Classes\Notification\AudienceSpecifiedNotificationBase.cs" />
+    <Compile Include="Models\Classes\Notification\AudienceSpecifiedNotificationBase.designer.cs">
+      <DependentUpon>AudienceSpecifiedNotificationBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\NotificationBase.designer.cs">
+      <DependentUpon>NotificationBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\NotificationTrackingCode.designer.cs">
+      <DependentUpon>NotificationTrackingCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\VoidNotification.designer.cs">
+      <DependentUpon>VoidNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Classes\Result\AttemptToSendNotificationResult.cs" />
+    <Compile Include="Models\Classes\Result\AttemptToSendNotificationResult.designer.cs">
+      <DependentUpon>AttemptToSendNotificationResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Result\GetAudienceResult.designer.cs">
+      <DependentUpon>GetAudienceResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Result\GetDeliveryChannelConfigsResult.designer.cs">
+      <DependentUpon>GetDeliveryChannelConfigsResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Classes\Result\PrepareToSendNotificationResult.cs" />
+    <Compile Include="Models\Classes\Result\PrepareToSendNotificationResult.designer.cs">
+      <DependentUpon>PrepareToSendNotificationResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Result\PrepareToSendOnChannelResult.designer.cs">
+      <DependentUpon>PrepareToSendOnChannelResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Saga\ChannelOperationInstruction.designer.cs">
+      <DependentUpon>ChannelOperationInstruction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Saga\ChannelOperationMonitoringInfo.designer.cs">
+      <DependentUpon>ChannelOperationMonitoringInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Classes\Saga\ChannelOperationOutcomeInfo.cs" />
+    <Compile Include="Models\Classes\Saga\ChannelOperationOutcomeInfo.designer.cs">
+      <DependentUpon>ChannelOperationOutcomeInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Enums\Outcome\AttemptToSendNotificationOutcome.cs" />
     <Compile Include="Models\Enums\Outcome\PrepareToSendNotificationOutcome.cs" />
     <Compile Include="Models\Enums\Outcome\PrepareToSendOnChannelOutcome.cs" />
     <Compile Include="Models\Enums\Outcome\GetDeliveryChannelConfigsOutcome.cs" />
     <Compile Include="Models\Enums\Outcome\GetAudienceOutcome.cs" />
     <Compile Include="Models\Enums\Outcome\ChannelOperationOutcome.cs" />
+    <Compile Include="Operations\Consumer\BuildTagsOp{TEvent}.designer.cs">
+      <DependentUpon>BuildTagsOp{TEvent}.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Consumer\GetAudienceOp.designer.cs">
+      <DependentUpon>GetAudienceOp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Consumer\GetDeliveryChannelConfigsOp.designer.cs">
+      <DependentUpon>GetDeliveryChannelConfigsOp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Consumer\PrepareToSendOnChannelOp.designer.cs">
+      <DependentUpon>PrepareToSendOnChannelOp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Operations\Framework\ProcessSendNotificationSagaOp.cs" />
     <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnAllChannelsEvent.cs" />
     <Compile Include="Events\PrepareToSendNotification\CouldNotPrepareToSendOnAnyChannelEvent.cs" />
@@ -148,7 +269,13 @@
     <Compile Include="Operations\Consumer\PrepareToSendOnChannelOp.cs" />
     <Compile Include="Operations\Consumer\GetDeliveryChannelConfigsOp.cs" />
     <Compile Include="Operations\Consumer\GetAudienceOp.cs" />
+    <Compile Include="Operations\Framework\ProcessSendNotificationSagaOp.designer.cs">
+      <DependentUpon>ProcessSendNotificationSagaOp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Operations\Framework\SendNotificationOp.cs" />
+    <Compile Include="Operations\Framework\SendNotificationOp.designer.cs">
+      <DependentUpon>SendNotificationOp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Properties\ProjectInfo.cs" />

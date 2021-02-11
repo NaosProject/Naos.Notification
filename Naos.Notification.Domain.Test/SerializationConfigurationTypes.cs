@@ -7,16 +7,18 @@
 // </auto-generated>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Naos.Notification.Serialization.Bson;
-using Naos.Notification.Serialization.Json;
-using OBeautifulCode.Serialization.Bson;
-using OBeautifulCode.Serialization.Json;
-using System;
-using System.CodeDom.Compiler;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Naos.Notification.Domain.Test
 {
+    using System;
+    using System.CodeDom.Compiler;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Naos.Notification.Serialization.Bson;
+    using Naos.Notification.Serialization.Json;
+
+    using OBeautifulCode.Serialization.Bson;
+    using OBeautifulCode.Serialization.Json;
+
     [ExcludeFromCodeCoverage]
     [GeneratedCode("Naos.Build.Conventions.VisualStudioProjectTemplates.Domain.Test", "1.55.50")]
     public static class SerializationConfigurationTypes

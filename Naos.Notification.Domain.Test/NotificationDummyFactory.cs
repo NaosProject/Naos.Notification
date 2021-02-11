@@ -7,12 +7,22 @@
 // </auto-generated>
 // --------------------------------------------------------------------------------------------------------------------
 
-using FakeItEasy;
-using OBeautifulCode.AutoFakeItEasy;
-using System;
-
 namespace Naos.Notification.Domain.Test
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using FakeItEasy;
+
+    using Naos.Protocol.Domain;
+
+    using OBeautifulCode.AutoFakeItEasy;
+    using OBeautifulCode.Collection.Recipes;
+    using OBeautifulCode.Math.Recipes;
+    using OBeautifulCode.Representation.System;
+
+    using System;
+
     /// <summary>
     /// A Dummy Factory for types in <see cref="Naos.Notification.Domain"/>.
     /// </summary>
@@ -28,6 +38,427 @@ namespace Naos.Notification.Domain.Test
         public NotificationDummyFactory()
         {
             /* Add any overriding or custom registrations here. */
+
+            // enums
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(CannotPrepareToSendOnChannelAction.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(DeliveryChannelAction.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(FailureAction.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(PrepareToSendOnChannelFailureAction.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(AttemptToSendNotificationOutcome.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(ChannelOperationOutcome.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(GetAudienceOutcome.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(GetDeliveryChannelConfigsOutcome.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(PrepareToSendNotificationOutcome.Unknown);
+            AutoFixtureBackedDummyFactory.ConstrainDummyToExclude(PrepareToSendOnChannelOutcome.Unknown);
+
+            // interfaces
+            AutoFixtureBackedDummyFactory.AddDummyCreator<IOperation>(A.Dummy<OperationBase>);// remove when moved to Protocol Dummy Factory
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IAudience>();
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IDeliveryChannel>();
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<IFailure>();
+            AutoFixtureBackedDummyFactory.UseRandomInterfaceImplementationForDummy<INotification>();
+
+            // events
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CouldNotSendOnAnyPreparedChannelEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                A.Dummy<AttemptToSendNotificationResult>().Whose(_ => _.GetOutcome() == AttemptToSendNotificationOutcome.CouldNotSendOnAnyPreparedChannel)));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new SentOnAllPreparedChannelsEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                A.Dummy<AttemptToSendNotificationResult>().Whose(_ => _.GetOutcome() == AttemptToSendNotificationOutcome.SentOnAllPreparedChannels)));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new SentOnSomePreparedChannelsEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                A.Dummy<AttemptToSendNotificationResult>().Whose(_ => _.GetOutcome() == AttemptToSendNotificationOutcome.SentOnSomePreparedChannels)));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CouldNotGetOrUseAudienceEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                A.Dummy<GetAudienceResult>().Whose(_=> (_.GetOutcome() != GetAudienceOutcome.GotAudienceWithNoFailuresReported) && (_.GetOutcome() != GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored))));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CouldNotGetOrUseDeliveryChannelConfigsEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                GetPassingAudienceResult(),
+                A.Dummy<GetDeliveryChannelConfigsResult>().Whose(_ => (_.GetOutcome() != GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported) && (_.GetOutcome() != GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored))));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new AudienceOptedOutOfAllChannelsEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                GetPassingAudienceResult(),
+                GetPassingDeliveryChannelConfigsResult(),
+                A.Dummy<PrepareToSendNotificationResult>().Whose(_ => (_.GetOutcome() == PrepareToSendNotificationOutcome.AudienceOptedOutOfAllChannels))));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new CouldNotPrepareToSendOnAnyChannelEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                GetPassingAudienceResult(),
+                GetPassingDeliveryChannelConfigsResult(),
+                A.Dummy<PrepareToSendNotificationResult>().Whose(_ => (_.GetOutcome() == PrepareToSendNotificationOutcome.CouldNotPrepareToSendOnAnyChannelDespiteAttemptingAll) || (_.GetOutcome() == PrepareToSendNotificationOutcome.CouldNotPrepareToSendOnAnyChannelBecauseOneForcedAllToBeDiscarded))));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new PreparedToSendOnAllChannelsEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                GetPassingAudienceResult(),
+                GetPassingDeliveryChannelConfigsResult(),
+                A.Dummy<PrepareToSendNotificationResult>().Whose(_ => (_.GetOutcome() == PrepareToSendNotificationOutcome.PreparedToSendOnAllChannels))));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new PreparedToSendOnSomeChannelsEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                GetPassingAudienceResult(),
+                GetPassingDeliveryChannelConfigsResult(),
+                A.Dummy<PrepareToSendNotificationResult>().Whose(_ => (_.GetOutcome() == PrepareToSendNotificationOutcome.PreparedToSendOnSomeChannels))));
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() => new SendNotificationRequestedEvent(
+                A.Dummy<long>(),
+                A.Dummy<UtcDateTime>(),
+                A.Dummy<SendNotificationOp>()));
+
+            // model classes
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() =>
+            {
+                var channelToOperationsOutcomeInfoMap = new Dictionary<IDeliveryChannel, IReadOnlyCollection<ChannelOperationOutcomeInfo>>();
+
+                var randomIndex = ThreadSafeRandom.Next(1, 4);
+
+                var randomChannels = new IDeliveryChannel[] { new SlackDeliveryChannel(), new EmailDeliveryChannel() }.RandomizeElements().ToArray();
+
+                if (randomIndex == 1)
+                {
+                    // SentOnAllPreparedChannels
+                    randomChannels = randomChannels.Take(ThreadSafeRandom.Next(1, randomChannels.Length + 1)).ToArray();
+
+                    foreach (var randomChannel in randomChannels)
+                    {
+                        channelToOperationsOutcomeInfoMap.Add(
+                            randomChannel,
+                            Some.ReadOnlyDummies<ChannelOperationOutcomeInfo>().Whose(_=> _.All(o => o.Outcome == ChannelOperationOutcome.Succeeded)).ToList());
+                    }
+                }
+                else if (randomIndex == 2)
+                {
+                    // SentOnSomePreparedChannels
+                    channelToOperationsOutcomeInfoMap.Add(
+                        randomChannels[0],
+                        Some.ReadOnlyDummies<ChannelOperationOutcomeInfo>().Whose(_=> _.Select(o => o.Outcome).Distinct().Count() > 1).ToList());
+
+                    channelToOperationsOutcomeInfoMap.Add(
+                        randomChannels[1],
+                        Some.ReadOnlyDummies<ChannelOperationOutcomeInfo>().Whose(_ => _.All(o => o.Outcome == ChannelOperationOutcome.Succeeded)).ToList());
+                }
+                else
+                {
+                    // CouldNotSendOnAnyPreparedChannel
+                    channelToOperationsOutcomeInfoMap.Add(
+                        randomChannels[0],
+                        Some.ReadOnlyDummies<ChannelOperationOutcomeInfo>().Whose(_ => _.Select(o => o.Outcome).Distinct().Count() > 1).ToList());
+
+                    channelToOperationsOutcomeInfoMap.Add(
+                        randomChannels[1],
+                        Some.ReadOnlyDummies<ChannelOperationOutcomeInfo>().Whose(_ => _.All(o => o.Outcome == ChannelOperationOutcome.Failed)).ToList());
+                }
+
+
+                var result = new AttemptToSendNotificationResult(channelToOperationsOutcomeInfoMap);
+
+                return result;
+            });
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() =>
+            {
+                var randomIndex = ThreadSafeRandom.Next(1, 6);
+
+                GetAudienceResult result;
+
+                if (randomIndex == 1)
+                {
+                    // GotAudienceWithNoFailuresReported
+                    result = new GetAudienceResult(A.Dummy<IAudience>(), null, A.Dummy<FailureAction>());
+                }
+                else if (randomIndex == 2)
+                {
+                    // GotAudienceWithReportedFailuresIgnored
+                    result = new GetAudienceResult(A.Dummy<IAudience>(), Some.ReadOnlyDummies<IFailure>().ToList(), FailureAction.IgnoreAndProceedIfPossibleOtherwiseStop);
+                }
+                else if (randomIndex == 3)
+                {
+                    // CouldNotGetAudienceAndNoFailuresReported
+                    if (ThreadSafeRandom.Next(2) == 0)
+                    {
+                        result = new GetAudienceResult(null, null, A.Dummy<FailureAction>());
+                    }
+                    else
+                    {
+                        result = new GetAudienceResult(null, new IFailure[0], A.Dummy<FailureAction>());
+                    }
+                }
+                else if (randomIndex == 4)
+                {
+                    // CouldNotGetAudienceWithSomeFailuresReported
+                    result = new GetAudienceResult(null, Some.ReadOnlyDummies<IFailure>().ToList(), A.Dummy<FailureAction>());
+                }
+                else
+                {
+                    // DespiteGettingAudienceFailuresPreventUsingIt
+                    result = new GetAudienceResult(A.Dummy<IAudience>(), Some.ReadOnlyDummies<IFailure>().ToList(), FailureAction.Stop);
+                }
+
+                return result;
+            });
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() =>
+            {
+                var randomChannels = new IDeliveryChannel[] { new SlackDeliveryChannel(), new EmailDeliveryChannel() };
+
+                randomChannels = randomChannels.RandomizeElements().Take(ThreadSafeRandom.Next(1, randomChannels.Length + 1)).ToArray();
+
+                var deliveryChannelConfigs = randomChannels.Select(_ => new DeliveryChannelConfig(_, A.Dummy<DeliveryChannelAction>())).ToList();
+
+                var randomIndex = ThreadSafeRandom.Next(1, 6);
+
+                GetDeliveryChannelConfigsResult result;
+
+                if (randomIndex == 1)
+                {
+                    // GotDeliveryChannelConfigsWithNoFailuresReported
+                    result = new GetDeliveryChannelConfigsResult(
+                        deliveryChannelConfigs,
+                        null,
+                        A.Dummy<FailureAction>());
+                }
+                else if (randomIndex == 2)
+                {
+                    // GotDeliveryChannelConfigsWithReportedFailuresIgnored
+                    result = new GetDeliveryChannelConfigsResult(
+                        deliveryChannelConfigs,
+                        Some.ReadOnlyDummies<IFailure>().ToList(),
+                        FailureAction.IgnoreAndProceedIfPossibleOtherwiseStop);
+                }
+                else if (randomIndex == 3)
+                {
+                    // CouldNotGetDeliveryChannelConfigsAndNoFailuresReported
+                    result = new GetDeliveryChannelConfigsResult(null, null, A.Dummy<FailureAction>());
+                }
+                else if (randomIndex == 4)
+                {
+                    // CouldNotGetDeliveryChannelConfigsWithSomeFailuresReported
+                    result = new GetDeliveryChannelConfigsResult(null, Some.ReadOnlyDummies<IFailure>().ToList(), A.Dummy<FailureAction>());
+                }
+                else
+                {
+                    // DespiteGettingDeliveryChannelConfigsFailuresPreventUsingThem
+                    result = new GetDeliveryChannelConfigsResult(
+                        deliveryChannelConfigs,
+                        Some.ReadOnlyDummies<IFailure>().ToList(),
+                        FailureAction.Stop);
+                }
+
+                return result;
+            });
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() =>
+            {
+                var randomChannels = new IDeliveryChannel[] { new SlackDeliveryChannel(), new EmailDeliveryChannel() }.RandomizeElements().ToArray();
+
+                var randomIndex = ThreadSafeRandom.Next(1, 6);
+
+                PrepareToSendNotificationResult result;
+
+                if (randomIndex == 1)
+                {
+                    // AudienceOptedOutOfAllChannels
+                    result = new PrepareToSendNotificationResult(
+                        new Dictionary<IDeliveryChannel, PrepareToSendOnChannelResult>(),
+                        A.Dummy<CannotPrepareToSendOnChannelAction>(),
+                        new IDeliveryChannel[0]);
+                }
+                else if (randomIndex == 2)
+                {
+                    // PreparedToSendOnAllChannels
+                    var channelToPrepareToSendOnChannelResultMap = new Dictionary<IDeliveryChannel, PrepareToSendOnChannelResult>();
+
+                    foreach (var randomChannel in randomChannels)
+                    {
+                        channelToPrepareToSendOnChannelResultMap.Add(
+                            randomChannel,
+                            new PrepareToSendOnChannelResult(GetChannelOperationInstructions(), null, A.Dummy<PrepareToSendOnChannelFailureAction>()));
+                    }
+
+                    result = new PrepareToSendNotificationResult(
+                        channelToPrepareToSendOnChannelResultMap,
+                        A.Dummy<CannotPrepareToSendOnChannelAction>(),
+                        randomChannels);
+                }
+                else if (randomIndex == 3)
+                {
+                    // PreparedToSendOnSomeChannels
+                    result = new PrepareToSendNotificationResult(
+                        new Dictionary<IDeliveryChannel, PrepareToSendOnChannelResult>
+                        {
+                            {
+                                randomChannels[0],
+                                new PrepareToSendOnChannelResult(
+                                    GetChannelOperationInstructions(),
+                                    Some.ReadOnlyDummies<IFailure>().ToList(),
+                                    PrepareToSendOnChannelFailureAction.IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel)
+                            },
+                            {
+                                randomChannels[1],
+                                new PrepareToSendOnChannelResult(
+                                    null,
+                                    null,
+                                    PrepareToSendOnChannelFailureAction.IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel)
+                            },
+                        },
+                        CannotPrepareToSendOnChannelAction.ContinueAndAttemptPreparingToSendOnNextChannel,
+                        new IDeliveryChannel[] { randomChannels[0] });
+                }
+                else if (randomIndex == 4)
+                {
+                    // CouldNotPrepareToSendOnAnyChannelDespiteAttemptingAll
+                    result = new PrepareToSendNotificationResult(
+                        new Dictionary<IDeliveryChannel, PrepareToSendOnChannelResult>
+                        {
+                            {
+                                new SlackDeliveryChannel(),
+                                new PrepareToSendOnChannelResult(
+                                    null,
+                                    null,
+                                    PrepareToSendOnChannelFailureAction.IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel)
+                            },
+                            {
+                                new EmailDeliveryChannel(),
+                                new PrepareToSendOnChannelResult(
+                                    GetChannelOperationInstructions(),
+                                    Some.ReadOnlyDummies<IFailure>().ToList(),
+                                    PrepareToSendOnChannelFailureAction.DoNotSendOnChannel)
+                            },
+                        },
+                        CannotPrepareToSendOnChannelAction.ContinueAndAttemptPreparingToSendOnNextChannel,
+                        new IDeliveryChannel[0]);
+                }
+                else
+                {
+                    // CouldNotPrepareToSendOnAnyChannelBecauseOneForcedAllToBeDiscarded
+                    result = new PrepareToSendNotificationResult(
+                        new Dictionary<IDeliveryChannel, PrepareToSendOnChannelResult>
+                        {
+                            {
+                                randomChannels[0],
+                                new PrepareToSendOnChannelResult(
+                                    GetChannelOperationInstructions(),
+                                    Some.ReadOnlyDummies<IFailure>().ToList(),
+                                    PrepareToSendOnChannelFailureAction.DoNotSendOnChannel)
+                            },
+                        },
+                        CannotPrepareToSendOnChannelAction.StopAndNotDoNotSendOnAnyChannel,
+                        new IDeliveryChannel[0]);
+                }
+
+                return result;
+            });
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() =>
+            {
+                var randomIndex = ThreadSafeRandom.Next(1, 6);
+
+                PrepareToSendOnChannelResult result;
+
+                if (randomIndex == 1)
+                {
+                    // PreparedToSendOnChannelWithNoFailuresReported
+                    result = new PrepareToSendOnChannelResult(
+                        GetChannelOperationInstructions(),
+                        null,
+                        A.Dummy<PrepareToSendOnChannelFailureAction>());
+                }
+                else if (randomIndex == 2)
+                {
+                    // PreparedToSendOnChannelWithReportedFailuresIgnored
+                    result = new PrepareToSendOnChannelResult(
+                        GetChannelOperationInstructions(),
+                        Some.ReadOnlyDummies<IFailure>().ToList(),
+                        PrepareToSendOnChannelFailureAction.IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel);
+
+                }
+                else if (randomIndex == 3)
+                {
+                    // CouldNotPrepareToSendOnChannelAndNoFailuresReported
+                    if (ThreadSafeRandom.Next(2) == 0)
+                    {
+                        result = new PrepareToSendOnChannelResult(
+                            null,
+                            null,
+                            PrepareToSendOnChannelFailureAction.IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel);
+                    }
+                    else
+                    {
+                        result = new PrepareToSendOnChannelResult(
+                            new ChannelOperationInstruction[0],
+                            new IFailure[0],
+                            PrepareToSendOnChannelFailureAction.IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel);
+                    }
+
+                }
+                else if (randomIndex == 4)
+                {
+                    // CouldNotPrepareToSendOnChannelWithSomeFailuresReported
+                    result = new PrepareToSendOnChannelResult(
+                        null,
+                        Some.ReadOnlyDummies<IFailure>().ToList(),
+                        PrepareToSendOnChannelFailureAction.IgnoreAndProceedIfPossibleOtherwiseDoNotSendOnChannel);
+
+                }
+                else
+                {
+                    // DespitePreparingToSendOnChannelFailuresPreventUsingIt
+                    result = new PrepareToSendOnChannelResult(
+                        GetChannelOperationInstructions(),
+                        Some.ReadOnlyDummies<IFailure>().ToList(),
+                        PrepareToSendOnChannelFailureAction.DoNotSendOnChannel);
+                }
+
+                return result;
+            });
+
+            AutoFixtureBackedDummyFactory.AddDummyCreator(() =>
+            {
+                var succeededEventType = A.Dummy<TypeRepresentation>();
+
+                var failedEventType = A.Dummy<TypeRepresentation>().ThatIsNot(succeededEventType);
+
+                var result = new ChannelOperationMonitoringInfo(A.Dummy<long>(), succeededEventType, failedEventType);
+
+                return result;
+            });
+        }
+
+        private static IReadOnlyList<ChannelOperationInstruction> GetChannelOperationInstructions()
+        {
+            var result = Some.ReadOnlyDummies<ChannelOperationInstruction>()
+                .Whose(_ => (_.Select(c => c.Operation).Distinct().Count() == _.Count()) &&
+                            (_.Select(c => c.MonitoringInfo.ChannelOperationTrackingCodeId).Distinct().Count() == _.Count()))
+                .ToList();
+
+            return result;
+        }
+
+        private static GetAudienceResult GetPassingAudienceResult()
+        {
+            var result = A.Dummy<GetAudienceResult>().Whose(_ => (_.GetOutcome() == GetAudienceOutcome.GotAudienceWithNoFailuresReported) || (_.GetOutcome() == GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored));
+
+            return result;
+        }
+
+        private static GetDeliveryChannelConfigsResult GetPassingDeliveryChannelConfigsResult()
+        {
+            var result = A.Dummy<GetDeliveryChannelConfigsResult>().Whose(_ => (_.GetOutcome() == GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported) || (_.GetOutcome() == GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored));
+
+            return result;
         }
     }
 }

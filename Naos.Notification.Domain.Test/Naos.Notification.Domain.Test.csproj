@@ -85,8 +85,8 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OBeautifulCode.AutoFakeItEasy, Version=1.0.130.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OBeautifulCode.AutoFakeItEasy.1.0.130\lib\net462\OBeautifulCode.AutoFakeItEasy.dll</HintPath>
+    <Reference Include="OBeautifulCode.AutoFakeItEasy, Version=1.0.132.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OBeautifulCode.AutoFakeItEasy.1.0.132\lib\net462\OBeautifulCode.AutoFakeItEasy.dll</HintPath>
     </Reference>
     <Reference Include="OBeautifulCode.Compression, Version=1.0.19.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OBeautifulCode.Compression.1.0.19\lib\net462\OBeautifulCode.Compression.dll</HintPath>
@@ -251,11 +251,166 @@
     <Compile Include=".recipes\OBeautifulCode.Type\TypeDummyFactory.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\TypeDummyFactory.designer.cs" />
     <Compile Include=".recipes\OBeautifulCode.Type\TypeExtensions.cs" />
+    <Compile Include="Events\AttemptToSendNotification\AttemptToSendNotificationEventBaseTest.cs" />
+    <Compile Include="Events\AttemptToSendNotification\AttemptToSendNotificationEventBaseTest.designer.cs">
+      <DependentUpon>AttemptToSendNotificationEventBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Audience\EveryoneAudienceTest.cs" />
+    <Compile Include="Models\Classes\Audience\EveryoneAudienceTest.designer.cs">
+      <DependentUpon>EveryoneAudienceTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Result\AttemptToSendNotificationResultTest.cs" />
+    <Compile Include="Models\Classes\Result\AttemptToSendNotificationResultTest.designer.cs">
+      <DependentUpon>AttemptToSendNotificationResultTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Audience\AudienceBaseTest.cs" />
+    <Compile Include="Models\Classes\Audience\AudienceBaseTest.designer.cs">
+      <DependentUpon>AudienceBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\PrepareToSendNotification\AudienceOptedOutOfAllChannelsEventTest.cs" />
+    <Compile Include="Events\PrepareToSendNotification\AudienceOptedOutOfAllChannelsEventTest.designer.cs">
+      <DependentUpon>AudienceOptedOutOfAllChannelsEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\AudienceSpecifiedNotificationBaseTest.cs" />
+    <Compile Include="Models\Classes\Notification\AudienceSpecifiedNotificationBaseTest.designer.cs">
+      <DependentUpon>AudienceSpecifiedNotificationBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\AudienceVoidNotificationTest.cs" />
+    <Compile Include="Models\Classes\Notification\AudienceVoidNotificationTest.designer.cs">
+      <DependentUpon>AudienceVoidNotificationTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Consumer\BuildTagsOp{TEvent}Test.cs" />
+    <Compile Include="Operations\Consumer\BuildTagsOp{TEvent}Test.designer.cs">
+      <DependentUpon>BuildTagsOp{TEvent}Test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Saga\ChannelOperationInstructionTest.cs" />
+    <Compile Include="Models\Classes\Saga\ChannelOperationInstructionTest.designer.cs">
+      <DependentUpon>ChannelOperationInstructionTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Saga\ChannelOperationMonitoringInfoTest.cs" />
+    <Compile Include="Models\Classes\Saga\ChannelOperationMonitoringInfoTest.designer.cs">
+      <DependentUpon>ChannelOperationMonitoringInfoTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Saga\ChannelOperationOutcomeInfoTest.cs" />
+    <Compile Include="Models\Classes\Saga\ChannelOperationOutcomeInfoTest.designer.cs">
+      <DependentUpon>ChannelOperationOutcomeInfoTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConsoleAbstraction.cs" />
+    <Compile Include="Events\CouldNotGetOrUse\CouldNotGetOrUseAudienceEventTest.cs" />
+    <Compile Include="Events\CouldNotGetOrUse\CouldNotGetOrUseAudienceEventTest.designer.cs">
+      <DependentUpon>CouldNotGetOrUseAudienceEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\CouldNotGetOrUse\CouldNotGetOrUseDeliveryChannelConfigsEventTest.cs" />
+    <Compile Include="Events\CouldNotGetOrUse\CouldNotGetOrUseDeliveryChannelConfigsEventTest.designer.cs">
+      <DependentUpon>CouldNotGetOrUseDeliveryChannelConfigsEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\PrepareToSendNotification\CouldNotPrepareToSendOnAnyChannelEventTest.cs" />
+    <Compile Include="Events\PrepareToSendNotification\CouldNotPrepareToSendOnAnyChannelEventTest.designer.cs">
+      <DependentUpon>CouldNotPrepareToSendOnAnyChannelEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\AttemptToSendNotification\CouldNotSendOnAnyPreparedChannelEventTest.cs" />
+    <Compile Include="Events\AttemptToSendNotification\CouldNotSendOnAnyPreparedChannelEventTest.designer.cs">
+      <DependentUpon>CouldNotSendOnAnyPreparedChannelEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Delivery\DeliveryChannelBaseTest.cs" />
+    <Compile Include="Models\Classes\Delivery\DeliveryChannelBaseTest.designer.cs">
+      <DependentUpon>DeliveryChannelBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Delivery\DeliveryChannelConfigTest.cs" />
+    <Compile Include="Models\Classes\Delivery\DeliveryChannelConfigTest.designer.cs">
+      <DependentUpon>DeliveryChannelConfigTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Delivery\EmailDeliveryChannelTest.cs" />
+    <Compile Include="Models\Classes\Delivery\EmailDeliveryChannelTest.designer.cs">
+      <DependentUpon>EmailDeliveryChannelTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Failure\ExceptionThrownFailureTest.cs" />
+    <Compile Include="Models\Classes\Failure\ExceptionThrownFailureTest.designer.cs">
+      <DependentUpon>ExceptionThrownFailureTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Failure\FailureBaseTest.cs" />
+    <Compile Include="Models\Classes\Failure\FailureBaseTest.designer.cs">
+      <DependentUpon>FailureBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Consumer\GetAudienceOpTest.cs" />
+    <Compile Include="Operations\Consumer\GetAudienceOpTest.designer.cs">
+      <DependentUpon>GetAudienceOpTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Result\GetAudienceResultTest.cs" />
+    <Compile Include="Models\Classes\Result\GetAudienceResultTest.designer.cs">
+      <DependentUpon>GetAudienceResultTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Consumer\GetDeliveryChannelConfigsOpTest.cs" />
+    <Compile Include="Operations\Consumer\GetDeliveryChannelConfigsOpTest.designer.cs">
+      <DependentUpon>GetDeliveryChannelConfigsOpTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Result\GetDeliveryChannelConfigsResultTest.cs" />
+    <Compile Include="Models\Classes\Result\GetDeliveryChannelConfigsResultTest.designer.cs">
+      <DependentUpon>GetDeliveryChannelConfigsResultTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\NotificationBaseTest.cs" />
+    <Compile Include="Models\Classes\Notification\NotificationBaseTest.designer.cs">
+      <DependentUpon>NotificationBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationDummyFactoryTest.designer.cs">
+      <DependentUpon>NotificationDummyFactoryTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\NotificationEventBaseTest.cs" />
+    <Compile Include="Events\NotificationEventBaseTest.designer.cs">
+      <DependentUpon>NotificationEventBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\NotificationTrackingCodeTest.cs" />
+    <Compile Include="Models\Classes\Notification\NotificationTrackingCodeTest.designer.cs">
+      <DependentUpon>NotificationTrackingCodeTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnAllChannelsEventTest.cs" />
+    <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnAllChannelsEventTest.designer.cs">
+      <DependentUpon>PreparedToSendOnAllChannelsEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnSomeChannelsEventTest.cs" />
+    <Compile Include="Events\PrepareToSendNotification\PreparedToSendOnSomeChannelsEventTest.designer.cs">
+      <DependentUpon>PreparedToSendOnSomeChannelsEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\PrepareToSendNotification\PrepareToSendNotificationEventBaseTest.cs" />
+    <Compile Include="Events\PrepareToSendNotification\PrepareToSendNotificationEventBaseTest.designer.cs">
+      <DependentUpon>PrepareToSendNotificationEventBaseTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Result\PrepareToSendNotificationResultTest.cs" />
+    <Compile Include="Models\Classes\Result\PrepareToSendNotificationResultTest.designer.cs">
+      <DependentUpon>PrepareToSendNotificationResultTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Consumer\PrepareToSendOnChannelOpTest.cs" />
+    <Compile Include="Operations\Consumer\PrepareToSendOnChannelOpTest.designer.cs">
+      <DependentUpon>PrepareToSendOnChannelOpTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Result\PrepareToSendOnChannelResultTest.cs" />
+    <Compile Include="Models\Classes\Result\PrepareToSendOnChannelResultTest.designer.cs">
+      <DependentUpon>PrepareToSendOnChannelResultTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Framework\ProcessSendNotificationSagaOpTest.cs" />
+    <Compile Include="Operations\Framework\ProcessSendNotificationSagaOpTest.designer.cs">
+      <DependentUpon>ProcessSendNotificationSagaOpTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Properties\ProjectInfo.cs" />
+    <Compile Include="Operations\Framework\SendNotificationOpTest.cs" />
+    <Compile Include="Operations\Framework\SendNotificationOpTest.designer.cs">
+      <DependentUpon>SendNotificationOpTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\SendNotificationRequestedEventTest.cs" />
+    <Compile Include="Events\SendNotificationRequestedEventTest.designer.cs">
+      <DependentUpon>SendNotificationRequestedEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\AttemptToSendNotification\SentOnAllPreparedChannelsEventTest.cs" />
+    <Compile Include="Events\AttemptToSendNotification\SentOnAllPreparedChannelsEventTest.designer.cs">
+      <DependentUpon>SentOnAllPreparedChannelsEventTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\AttemptToSendNotification\SentOnSomePreparedChannelsEventTest.cs" />
+    <Compile Include="Events\AttemptToSendNotification\SentOnSomePreparedChannelsEventTest.designer.cs">
+      <DependentUpon>SentOnSomePreparedChannelsEventTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="SerializationConfigurationTypes.cs" />
     <Compile Include="NotificationDummyFactory.cs" />
     <Compile Include="NotificationDummyFactory.designer.cs">
@@ -263,6 +418,18 @@
     </Compile>
     <Compile Include="NotificationDummyFactoryTest.cs" />
     <AdditionalFiles Include=".analyzers\stylecop.json" />
+    <Compile Include="Models\Classes\Delivery\SlackDeliveryChannelTest.cs" />
+    <Compile Include="Models\Classes\Delivery\SlackDeliveryChannelTest.designer.cs">
+      <DependentUpon>SlackDeliveryChannelTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Audience\VoidAudienceTest.cs" />
+    <Compile Include="Models\Classes\Audience\VoidAudienceTest.designer.cs">
+      <DependentUpon>VoidAudienceTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Classes\Notification\VoidNotificationTest.cs" />
+    <Compile Include="Models\Classes\Notification\VoidNotificationTest.designer.cs">
+      <DependentUpon>VoidNotificationTest.cs</DependentUpon>
+    </Compile>
     <None Include=".analyzers\test.ruleset" />
     <None Include="DummyFactory.recipe-nuspec" />
     <None Include="packages.config" />
@@ -289,6 +456,7 @@
   <ItemGroup>
     <Content Include=".analyzers\dictionary.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
