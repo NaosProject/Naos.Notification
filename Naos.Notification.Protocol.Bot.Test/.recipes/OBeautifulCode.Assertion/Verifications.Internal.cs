@@ -774,6 +774,48 @@ namespace OBeautifulCode.Assertion.Recipes
             NotBeEqualToInternalInternal(assertionTracker, verification, verifiableItem, NotBeEqualToWhenNotNullExceptionMessageSuffix);
         }
 
+        private static void BeEqualToAnyOfInternal(
+            AssertionTracker assertionTracker,
+            Verification verification,
+            VerifiableItem verifiableItem)
+        {
+            BeEqualToAnyOfInternalInternal(assertionTracker, verification, verifiableItem, BeEqualToAnyOfExceptionMessageSuffix);
+        }
+
+        private static void NotBeEqualToAnyOfInternal(
+            AssertionTracker assertionTracker,
+            Verification verification,
+            VerifiableItem verifiableItem)
+        {
+            NotBeEqualToAnyOfInternalInternal(assertionTracker, verification, verifiableItem, NotBeEqualToAnyOfExceptionMessageSuffix);
+        }
+
+        private static void BeEqualToAnyOfWhenNotNullInternal(
+            AssertionTracker assertionTracker,
+            Verification verification,
+            VerifiableItem verifiableItem)
+        {
+            if (ReferenceEquals(verifiableItem.ItemValue, null))
+            {
+                return;
+            }
+
+            BeEqualToAnyOfInternalInternal(assertionTracker, verification, verifiableItem, BeEqualToAnyOfWhenNotNullExceptionMessageSuffix);
+        }
+
+        private static void NotBeEqualToAnyOfWhenNotNullInternal(
+            AssertionTracker assertionTracker,
+            Verification verification,
+            VerifiableItem verifiableItem)
+        {
+            if (ReferenceEquals(verifiableItem.ItemValue, null))
+            {
+                return;
+            }
+
+            NotBeEqualToAnyOfInternalInternal(assertionTracker, verification, verifiableItem, NotBeEqualToAnyOfWhenNotNullExceptionMessageSuffix);
+        }
+
         private static void BeInRangeInternal(
             AssertionTracker assertionTracker,
             Verification verification,
@@ -1428,6 +1470,78 @@ namespace OBeautifulCode.Assertion.Recipes
                 var methodologyInfo = string.Format(CultureInfo.InvariantCulture, UsingIsEqualToMethodology, verifiableItem.ItemType.ToStringReadable());
 
                 var exceptionMessage = BuildVerificationFailedExceptionMessage(assertionTracker, verification, verifiableItem, exceptionMessageSuffix, methodologyInfo: methodologyInfo);
+
+                var argumentExceptionKind = verifiableItem.ItemIsElementInEnumerable
+                    ? ArgumentExceptionKind.ArgumentException
+                    : ArgumentExceptionKind.ArgumentOutOfRangeException;
+
+                var exception = BuildException(assertionTracker, verification, exceptionMessage, argumentExceptionKind);
+
+                throw exception;
+            }
+        }
+
+        private static void BeEqualToAnyOfInternalInternal(
+            AssertionTracker assertionTracker,
+            Verification verification,
+            VerifiableItem verifiableItem,
+            string exceptionMessageSuffix)
+        {
+            var comparisonValues = (IEnumerable)verification.VerificationParameters[0].Value;
+
+            var shouldThrow = true;
+
+            foreach (var comparisonValue in comparisonValues)
+            {
+                if (AreEqual(verifiableItem.ItemType, verifiableItem.ItemValue, comparisonValue))
+                {
+                    shouldThrow = false;
+
+                    break;
+                }
+            }
+
+            if (shouldThrow)
+            {
+                var methodologyInfo = string.Format(CultureInfo.InvariantCulture, UsingIsEqualToMethodology, verifiableItem.ItemType.ToStringReadable());
+
+                var exceptionMessage = BuildVerificationFailedExceptionMessage(assertionTracker, verification, verifiableItem, exceptionMessageSuffix, Include.FailingValue, methodologyInfo: methodologyInfo);
+
+                var argumentExceptionKind = verifiableItem.ItemIsElementInEnumerable
+                    ? ArgumentExceptionKind.ArgumentException
+                    : ArgumentExceptionKind.ArgumentOutOfRangeException;
+
+                var exception = BuildException(assertionTracker, verification, exceptionMessage, argumentExceptionKind);
+
+                throw exception;
+            }
+        }
+
+        private static void NotBeEqualToAnyOfInternalInternal(
+            AssertionTracker assertionTracker,
+            Verification verification,
+            VerifiableItem verifiableItem,
+            string exceptionMessageSuffix)
+        {
+            var comparisonValues = (IEnumerable)verification.VerificationParameters[0].Value;
+
+            var shouldThrow = false;
+
+            foreach (var comparisonValue in comparisonValues)
+            {
+                if (AreEqual(verifiableItem.ItemType, verifiableItem.ItemValue, comparisonValue))
+                {
+                    shouldThrow = true;
+
+                    break;
+                }
+            }
+
+            if (shouldThrow)
+            {
+                var methodologyInfo = string.Format(CultureInfo.InvariantCulture, UsingIsEqualToMethodology, verifiableItem.ItemType.ToStringReadable());
+
+                var exceptionMessage = BuildVerificationFailedExceptionMessage(assertionTracker, verification, verifiableItem, exceptionMessageSuffix, Include.FailingValue, methodologyInfo: methodologyInfo);
 
                 var argumentExceptionKind = verifiableItem.ItemIsElementInEnumerable
                     ? ArgumentExceptionKind.ArgumentException

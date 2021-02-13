@@ -29,6 +29,45 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static CouldNotGetOrUseDeliveryChannelConfigsEventTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<CouldNotGetOrUseDeliveryChannelConfigsEvent>
+                    {
+                        Name = "constructor should throw ArgumentOutOfRangeException when parameter 'getAudienceResult' GetOutcome() is not any of GetAudienceOutcome.[GotAudienceWithNoFailuresReported|GotAudienceWithReportedFailuresIgnored]",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<CouldNotGetOrUseDeliveryChannelConfigsEvent>();
+
+                            var result = new CouldNotGetOrUseDeliveryChannelConfigsEvent(
+                                                 referenceObject.Id,
+                                                 referenceObject.TimestampUtc,
+                                                 A.Dummy<GetAudienceResult>().Whose(_ => (_.GetOutcome() != GetAudienceOutcome.GotAudienceWithNoFailuresReported) && (_.GetOutcome() != GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored)),
+                                                 referenceObject.GetDeliveryChannelConfigsResult);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentOutOfRangeException),
+                        ExpectedExceptionMessageContains = new[] { "getAudienceOutcome" },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<CouldNotGetOrUseDeliveryChannelConfigsEvent>
+                    {
+                        Name = "constructor should throw ArgumentOutOfRangeException when parameter 'getDeliveryChannelConfigsResult' GetOutcome() is not any of GetDeliveryChannelConfigsOutcome.[CouldNotGetDeliveryChannelConfigsAndNoFailuresReported|CouldNotGetDeliveryChannelConfigsWithSomeFailuresReported|DespiteGettingDeliveryChannelConfigsFailuresPreventUsingThem]",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<CouldNotGetOrUseDeliveryChannelConfigsEvent>();
+
+                            var result = new CouldNotGetOrUseDeliveryChannelConfigsEvent(
+                                                 referenceObject.Id,
+                                                 referenceObject.TimestampUtc,
+                                                 referenceObject.GetAudienceResult,
+                                                 A.Dummy<GetDeliveryChannelConfigsResult>().Whose(_ => !new[] { GetDeliveryChannelConfigsOutcome.CouldNotGetDeliveryChannelConfigsAndNoFailuresReported, GetDeliveryChannelConfigsOutcome.CouldNotGetDeliveryChannelConfigsWithSomeFailuresReported, GetDeliveryChannelConfigsOutcome.DespiteGettingDeliveryChannelConfigsFailuresPreventUsingThem }.Contains(_.GetOutcome())));
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentOutOfRangeException),
+                        ExpectedExceptionMessageContains = new[] { "getDeliveryChannelConfigsOutcome" },
+                    });
         }
     }
 }

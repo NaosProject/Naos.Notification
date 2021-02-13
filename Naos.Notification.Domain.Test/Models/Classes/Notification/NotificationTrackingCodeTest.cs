@@ -29,6 +29,27 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static NotificationTrackingCodeTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .AddScenario(ConstructorArgumentValidationTestScenario<NotificationTrackingCode>.ConstructorCannotThrowScenario);
+
+            StringRepresentationTestScenarios
+                .AddScenario(() =>
+                    new StringRepresentationTestScenario<NotificationTrackingCode>
+                    {
+                        Name = "ToString() gets friendly string representation",
+                        SystemUnderTestExpectedStringRepresentationFunc = () =>
+                        {
+                            var systemUnderTest = A.Dummy<NotificationTrackingCode>();
+
+                            var result = new SystemUnderTestExpectedStringRepresentation<NotificationTrackingCode>
+                            {
+                                SystemUnderTest = systemUnderTest,
+                                ExpectedStringRepresentation = Invariant($"{systemUnderTest.Id}"),
+                            };
+
+                            return result;
+                        },
+                    });
         }
     }
 }

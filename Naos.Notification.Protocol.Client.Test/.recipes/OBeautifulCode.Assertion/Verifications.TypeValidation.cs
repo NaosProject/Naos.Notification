@@ -179,6 +179,14 @@ namespace OBeautifulCode.Assertion.Recipes
             },
         };
 
+        private static readonly IReadOnlyCollection<TypeValidation> EqualsAnyOfTypeValidations = new[]
+        {
+            new TypeValidation
+            {
+                Handler = ThrowIfTypeIsNotEqualToAllVerificationParameterEnumerableElementTypes,
+            },
+        };
+
         private static readonly IReadOnlyCollection<TypeValidation> AlwaysThrowTypeValidations = new[]
         {
             new TypeValidation
@@ -346,6 +354,26 @@ namespace OBeautifulCode.Assertion.Recipes
                 if (verificationParameter.ParameterType != elementType)
                 {
                     ThrowVerificationParameterUnexpectedType(verification.Name, verificationParameter.ParameterType, verificationParameter.Name, elementType);
+                }
+            }
+        }
+
+        private static void ThrowIfTypeIsNotEqualToAllVerificationParameterEnumerableElementTypes(
+            Verification verification,
+            VerifiableItem verifiableItem,
+            TypeValidation typeValidation)
+        {
+            var verifiableItemType = verifiableItem.ItemType;
+
+            foreach (var verificationParameter in verification.VerificationParameters)
+            {
+                var elementType = verificationParameter.ParameterType.GetClosedEnumerableElementType();
+
+                if (verifiableItemType != elementType)
+                {
+                    var expectedType = verificationParameter.ParameterType.GetGenericTypeDefinition().MakeGenericType(verifiableItemType);
+
+                    ThrowVerificationParameterUnexpectedType(verification.Name, verificationParameter.ParameterType, verificationParameter.Name, expectedType);
                 }
             }
         }

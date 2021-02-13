@@ -29,6 +29,67 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static AudienceOptedOutOfAllChannelsEventTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<AudienceOptedOutOfAllChannelsEvent>
+                    {
+                        Name = "constructor should throw ArgumentOutOfRangeException when parameter 'getAudienceResult' GetOutcome() is not any of GetAudienceOutcome.[GotAudienceWithNoFailuresReported|GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored]",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<AudienceOptedOutOfAllChannelsEvent>();
+
+                            var result = new AudienceOptedOutOfAllChannelsEvent(
+                                referenceObject.Id,
+                                referenceObject.TimestampUtc,
+                                A.Dummy<GetAudienceResult>().Whose(_ => (_.GetOutcome() != GetAudienceOutcome.GotAudienceWithNoFailuresReported) && (_.GetOutcome() != GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored)),
+                                referenceObject.GetDeliveryChannelConfigsResult,
+                                referenceObject.PrepareToSendNotificationResult);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentOutOfRangeException),
+                        ExpectedExceptionMessageContains = new[] { "getAudienceOutcome", },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<AudienceOptedOutOfAllChannelsEvent>
+                    {
+                        Name = "constructor should throw ArgumentOutOfRangeException when parameter 'getDeliveryChannelConfigsResult' GetOutcome() is not any of GetDeliveryChannelConfigsOutcome.[GotDeliveryChannelConfigsWithNoFailuresReported|GetAudienceOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored]",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<AudienceOptedOutOfAllChannelsEvent>();
+
+                            var result = new AudienceOptedOutOfAllChannelsEvent(
+                                referenceObject.Id,
+                                referenceObject.TimestampUtc,
+                                referenceObject.GetAudienceResult,
+                                A.Dummy<GetDeliveryChannelConfigsResult>().Whose(_ => (_.GetOutcome() != GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported) && (_.GetOutcome() != GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored)),
+                                referenceObject.PrepareToSendNotificationResult);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentOutOfRangeException),
+                        ExpectedExceptionMessageContains = new[] { "getDeliveryChannelConfigsOutcome", },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<AudienceOptedOutOfAllChannelsEvent>
+                    {
+                        Name = "constructor should throw ArgumentOutOfRangeException when parameter 'prepareToSendNotificationResult' GetOutcome() is is not PrepareToSendNotificationOutcome.AudienceOptedOutOfAllChannels",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<AudienceOptedOutOfAllChannelsEvent>();
+
+                            var result = new AudienceOptedOutOfAllChannelsEvent(
+                                referenceObject.Id,
+                                referenceObject.TimestampUtc,
+                                referenceObject.GetAudienceResult,
+                                referenceObject.GetDeliveryChannelConfigsResult,
+                                A.Dummy<PrepareToSendNotificationResult>().Whose(_ => _.GetOutcome() != PrepareToSendNotificationOutcome.AudienceOptedOutOfAllChannels));
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentOutOfRangeException),
+                        ExpectedExceptionMessageContains = new[] { "prepareToSendNotificationOutcome" },
+                    });
         }
     }
 }

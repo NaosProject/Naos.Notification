@@ -29,6 +29,24 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static DeliveryChannelConfigTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<DeliveryChannelConfig>
+                    {
+                        Name = "constructor should throw ArgumentOutOfRangeException when parameter 'action' is DeliveryChannelAction.Unknown",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<DeliveryChannelConfig>();
+
+                            var result = new DeliveryChannelConfig(
+                                referenceObject.Channel,
+                                DeliveryChannelAction.Unknown);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentOutOfRangeException),
+                        ExpectedExceptionMessageContains = new[] { "action", "Unknown" },
+                    });
         }
     }
 }

@@ -29,6 +29,78 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static AttemptToSendNotificationResultTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<AttemptToSendNotificationResult>
+                    {
+                        Name = "constructor should throw ArgumentException when parameter 'channelToOperationsOutcomeInfoMap' contains a value that is empty",
+                        ConstructionFunc = () =>
+                        {
+                            var channelToOperationsOutcomeInfoMap =
+                                new Dictionary<IDeliveryChannel, IReadOnlyCollection<ChannelOperationOutcomeInfo>>
+                                {
+                                    {  new SlackDeliveryChannel(), new ChannelOperationOutcomeInfo[0] },
+                                };
+
+                            var result = new AttemptToSendNotificationResult(
+                                channelToOperationsOutcomeInfoMap);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentException),
+                        ExpectedExceptionMessageContains = new[] { "perChannelOperationsOutcomeInfo", "empty enumerable", },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<AttemptToSendNotificationResult>
+                    {
+                        Name = "constructor should throw ArgumentException when parameter 'channelToOperationsOutcomeInfoMap' contains a value that contains a null value",
+                        ConstructionFunc = () =>
+                        {
+                            var channelToOperationsOutcomeInfoMap =
+                                new Dictionary<IDeliveryChannel, IReadOnlyCollection<ChannelOperationOutcomeInfo>>
+                                {
+                                    {  new SlackDeliveryChannel(), new ChannelOperationOutcomeInfo[] { A.Dummy<ChannelOperationOutcomeInfo>(), null } },
+                                };
+
+                            var result = new AttemptToSendNotificationResult(
+                                channelToOperationsOutcomeInfoMap);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentException),
+                        ExpectedExceptionMessageContains = new[] { "perChannelOperationsOutcomeInfo", "null element", },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<AttemptToSendNotificationResult>
+                    {
+                        Name = "constructor should throw ArgumentException when parameter 'channelToOperationsOutcomeInfoMap' contains a value having duplicate tracking code ids",
+                        ConstructionFunc = () =>
+                        {
+                            var channelOperationOutcomeInfo = A.Dummy<ChannelOperationOutcomeInfo>();
+
+                            var channelOperationOutcomeInfo2 = A.Dummy<ChannelOperationOutcomeInfo>().DeepCloneWithChannelOperationTrackingCodeId(channelOperationOutcomeInfo.ChannelOperationTrackingCodeId);
+
+                            var channelToOperationsOutcomeInfoMap =
+                                new Dictionary<IDeliveryChannel, IReadOnlyCollection<ChannelOperationOutcomeInfo>>
+                                {
+                                    {
+                                        new SlackDeliveryChannel(),
+                                        new[]
+                                        {
+                                            channelOperationOutcomeInfo,
+                                            channelOperationOutcomeInfo2,
+                                        }
+                                    },
+                                };
+
+                            var result = new AttemptToSendNotificationResult(
+                                channelToOperationsOutcomeInfoMap);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentException),
+                        ExpectedExceptionMessageContains = new[] { "perChannelOperationTrackingCodeIds", "two or more elements that are equal", },
+                    });
         }
     }
 }

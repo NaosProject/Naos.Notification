@@ -29,6 +29,25 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static CouldNotGetOrUseAudienceEventTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<CouldNotGetOrUseAudienceEvent>
+                    {
+                        Name = "constructor should throw ArgumentOutOfRangeException when parameter 'getAudienceResult' GetOutcome() is not any of GetAudienceOutcome.[CouldNotGetAudienceAndNoFailuresReported|CouldNotGetAudienceWithSomeFailuresReported|DespiteGettingAudienceFailuresPreventUsingIt]",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<CouldNotGetOrUseAudienceEvent>();
+
+                            var result = new CouldNotGetOrUseAudienceEvent(
+                                referenceObject.Id,
+                                referenceObject.TimestampUtc,
+                                A.Dummy<GetAudienceResult>().Whose(_ => !new[] { GetAudienceOutcome.CouldNotGetAudienceAndNoFailuresReported, GetAudienceOutcome.CouldNotGetAudienceWithSomeFailuresReported, GetAudienceOutcome.DespiteGettingAudienceFailuresPreventUsingIt }.Contains(_.GetOutcome())));
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentOutOfRangeException),
+                        ExpectedExceptionMessageContains = new[] { "getAudienceOutcome" },
+                    });
         }
     }
 }

@@ -1621,6 +1621,212 @@ namespace OBeautifulCode.Assertion.Recipes
         }
 
         /// <summary>
+        /// Verifies that the subject is equal to any of the specified values.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparison values.</typeparam>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="comparisonValues">The value to compare the subject value to.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker BeEqualToAnyOf<T>(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            IReadOnlyCollection<T> comparisonValues,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            if (comparisonValues == null)
+            {
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, VerificationParameterIsNullErrorMessage, nameof(BeEqualToAnyOf), nameof(comparisonValues));
+
+                WorkflowExtensions.ThrowImproperUseOfFramework(errorMessage);
+            }
+
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = BeEqualToAnyOfInternal,
+                Name = nameof(BeEqualToAnyOf),
+                VerificationParameters = new[]
+                {
+                    new VerificationParameter
+                    {
+                        Name = nameof(comparisonValues),
+                        Value = comparisonValues,
+                        ParameterType = typeof(IReadOnlyCollection<T>),
+                        ValueToStringFunc = () => comparisonValues.BuildReadOnlyCollectionVerificationParameterToString(BuildReadOnlyCollectionVerificationParameterToStringMaxItems),
+                    },
+                },
+                TypeValidations = EqualsAnyOfTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the subject is not equal to any of the specified values.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparison values.</typeparam>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="comparisonValues">The values to compare the subject value to.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker NotBeEqualToAnyOf<T>(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            IReadOnlyCollection<T> comparisonValues,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            if (comparisonValues == null)
+            {
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, VerificationParameterIsNullErrorMessage, nameof(NotBeEqualToAnyOf), nameof(comparisonValues));
+
+                WorkflowExtensions.ThrowImproperUseOfFramework(errorMessage);
+            }
+
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = NotBeEqualToAnyOfInternal,
+                Name = nameof(NotBeEqualToAnyOf),
+                VerificationParameters = new[]
+                {
+                    new VerificationParameter
+                    {
+                        Name = nameof(comparisonValues),
+                        Value = comparisonValues,
+                        ParameterType = typeof(IReadOnlyCollection<T>),
+                        ValueToStringFunc = () => comparisonValues.BuildReadOnlyCollectionVerificationParameterToString(BuildReadOnlyCollectionVerificationParameterToStringMaxItems),
+                    },
+                },
+                TypeValidations = EqualsAnyOfTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the subject is equal to any of the specified values, when not null.
+        /// If null, no exception is thrown.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparison values.</typeparam>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="comparisonValues">The values to compare the subject value to.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker BeEqualToAnyOfWhenNotNull<T>(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            IReadOnlyCollection<T> comparisonValues,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            if (comparisonValues == null)
+            {
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, VerificationParameterIsNullErrorMessage, nameof(BeEqualToAnyOfWhenNotNull), nameof(comparisonValues));
+
+                WorkflowExtensions.ThrowImproperUseOfFramework(errorMessage);
+            }
+
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = BeEqualToAnyOfWhenNotNullInternal,
+                Name = nameof(BeEqualToAnyOfWhenNotNull),
+                VerificationParameters = new[]
+                {
+                    new VerificationParameter
+                    {
+                        Name = nameof(comparisonValues),
+                        Value = comparisonValues,
+                        ParameterType = typeof(IReadOnlyCollection<T>),
+                        ValueToStringFunc = () => comparisonValues.BuildReadOnlyCollectionVerificationParameterToString(BuildReadOnlyCollectionVerificationParameterToStringMaxItems),
+                    },
+                },
+                TypeValidations = EqualsAnyOfTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Verifies that the subject is not equal to any of the specified values, when not null.
+        /// If null, no exception is thrown.
+        /// </summary>
+        /// <typeparam name="T">The type of the comparison values.</typeparam>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="comparisonValues">The values to compare the subject value to.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker NotBeEqualToAnyOfWhenNotNull<T>(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            IReadOnlyCollection<T> comparisonValues,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            if (comparisonValues == null)
+            {
+                var errorMessage = string.Format(CultureInfo.InvariantCulture, VerificationParameterIsNullErrorMessage, nameof(NotBeEqualToAnyOfWhenNotNull), nameof(comparisonValues));
+
+                WorkflowExtensions.ThrowImproperUseOfFramework(errorMessage);
+            }
+
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = NotBeEqualToAnyOfWhenNotNullInternal,
+                Name = nameof(NotBeEqualToAnyOfWhenNotNull),
+                VerificationParameters = new[]
+                {
+                    new VerificationParameter
+                    {
+                        Name = nameof(comparisonValues),
+                        Value = comparisonValues,
+                        ParameterType = typeof(IReadOnlyCollection<T>),
+                        ValueToStringFunc = () => comparisonValues.BuildReadOnlyCollectionVerificationParameterToString(BuildReadOnlyCollectionVerificationParameterToStringMaxItems),
+                    },
+                },
+                TypeValidations = EqualsAnyOfTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
         /// Verifies that the IComparable or IComparable{T} subject is within a specified range.
         /// </summary>
         /// <typeparam name="T">The type of the comparison values.</typeparam>
@@ -2021,6 +2227,7 @@ namespace OBeautifulCode.Assertion.Recipes
                             else
                             {
                                 var otherAllowedCharactersToString = otherAllowedCharacters.Select(_ => Invariant($"'{_}'")).ToArray();
+
                                 result = Invariant($"[{string.Join(", ", otherAllowedCharactersToString)}]");
                             }
 
@@ -2085,6 +2292,7 @@ namespace OBeautifulCode.Assertion.Recipes
                             else
                             {
                                 var otherAllowedCharactersToString = otherAllowedCharacters.Select(_ => Invariant($"'{_}'")).ToArray();
+
                                 result = Invariant($"[{string.Join(", ", otherAllowedCharactersToString)}]");
                             }
 
@@ -2184,6 +2392,8 @@ namespace OBeautifulCode.Assertion.Recipes
                         Name = nameof(regex),
                         Value = regex,
                         ParameterType = typeof(Regex),
+
+                        // ReSharper disable once PossibleNullReferenceException
                         ValueToStringFunc = regex.ToString,
                     },
                 },
@@ -2234,6 +2444,8 @@ namespace OBeautifulCode.Assertion.Recipes
                         Name = nameof(regex),
                         Value = regex,
                         ParameterType = typeof(Regex),
+
+                        // ReSharper disable once PossibleNullReferenceException
                         ValueToStringFunc = regex.ToString,
                     },
                 },
@@ -3027,37 +3239,6 @@ namespace OBeautifulCode.Assertion.Recipes
         }
 
         /// <summary>
-        /// Always throws.
-        /// </summary>
-        /// <param name="assertionTracker">The assertion tracker.</param>
-        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
-        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
-        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
-        /// <returns>
-        /// The assertion tracker.
-        /// </returns>
-        public static AssertionTracker BeOfTypeThatDoesNotExist(
-            [ValidatedNotNull] this AssertionTracker assertionTracker,
-            string because = null,
-            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
-            IDictionary data = null)
-        {
-            var verification = new Verification
-            {
-                Because = because,
-                ApplyBecause = applyBecause,
-                Handler = null,
-                Name = nameof(BeOfTypeThatDoesNotExist),
-                TypeValidations = AlwaysThrowTypeValidations,
-                Data = data,
-            };
-
-            assertionTracker.ExecuteVerification(verification);
-
-            return assertionTracker;
-        }
-
-        /// <summary>
         /// Verifies that the string subject is in valid email format.
         /// </summary>
         /// <param name="assertionTracker">The assertion tracker.</param>
@@ -3174,6 +3355,37 @@ namespace OBeautifulCode.Assertion.Recipes
                 Handler = BeUtcDateTimeWhenNotNullInternal,
                 Name = nameof(BeUtcDateTimeWhenNotNull),
                 TypeValidations = MustBeNullableDateTimeTypeValidations,
+                Data = data,
+            };
+
+            assertionTracker.ExecuteVerification(verification);
+
+            return assertionTracker;
+        }
+
+        /// <summary>
+        /// Always throws.
+        /// </summary>
+        /// <param name="assertionTracker">The assertion tracker.</param>
+        /// <param name="because">Optional rationale for the verification, used in the exception message if the subject fails this verification.  The default is use the framework-generated exception message as-is.</param>
+        /// <param name="applyBecause">Optional value that determines how to apply the <paramref name="because"/>, when specified.  The default is to prefix the framework-generated exception message with <paramref name="because"/>.</param>
+        /// <param name="data">Optional collection of key/value pairs that provide additional user-defined information that is added to the exception's <see cref="Exception.Data"/> property, if thrown.  The default is no user-defined information.</param>
+        /// <returns>
+        /// The assertion tracker.
+        /// </returns>
+        public static AssertionTracker BeOfTypeThatDoesNotExist(
+            [ValidatedNotNull] this AssertionTracker assertionTracker,
+            string because = null,
+            ApplyBecause applyBecause = ApplyBecause.PrefixedToDefaultMessage,
+            IDictionary data = null)
+        {
+            var verification = new Verification
+            {
+                Because = because,
+                ApplyBecause = applyBecause,
+                Handler = null,
+                Name = nameof(BeOfTypeThatDoesNotExist),
+                TypeValidations = AlwaysThrowTypeValidations,
                 Data = data,
             };
 

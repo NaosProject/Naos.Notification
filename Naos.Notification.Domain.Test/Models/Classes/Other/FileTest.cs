@@ -29,6 +29,44 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static FileTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .RemoveAllScenarios()
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<File>
+                    {
+                        Name = "constructor should throw ArgumentNullException when parameter 'bytes' is null scenario",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<File>();
+
+                            var result = new File(
+                                                 null,
+                                                 referenceObject.FileName,
+                                                 referenceObject.FileFormat);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentNullException),
+                        ExpectedExceptionMessageContains = new[] { "bytes", },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<File>
+                    {
+                        Name = "constructor should throw ArgumentException when parameter 'bytes' is an empty enumerable scenario",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<File>();
+
+                            var result = new File(
+                                                 new byte[0],
+                                                 referenceObject.FileName,
+                                                 referenceObject.FileFormat);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentException),
+                        ExpectedExceptionMessageContains = new[] { "bytes", "is an empty enumerable", },
+                    });
         }
     }
 }

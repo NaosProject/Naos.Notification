@@ -29,6 +29,44 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static ChannelOperationInstructionTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .RemoveAllScenarios()
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<ChannelOperationInstruction>
+                    {
+                        Name = "constructor should throw ArgumentNullException when parameter 'operation' is null scenario",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<ChannelOperationInstruction>();
+
+                            var result = new ChannelOperationInstruction(
+                                                 null,
+                                                 referenceObject.MonitoringInfo,
+                                                 referenceObject.Tags);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentNullException),
+                        ExpectedExceptionMessageContains = new[] { "operation", },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<ChannelOperationInstruction>
+                    {
+                        Name = "constructor should throw ArgumentNullException when parameter 'monitoringInfo' is null scenario",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<ChannelOperationInstruction>();
+
+                            var result = new ChannelOperationInstruction(
+                                                 referenceObject.Operation,
+                                                 null,
+                                                 referenceObject.Tags);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentNullException),
+                        ExpectedExceptionMessageContains = new[] { "monitoringInfo", },
+                    });
         }
     }
 }

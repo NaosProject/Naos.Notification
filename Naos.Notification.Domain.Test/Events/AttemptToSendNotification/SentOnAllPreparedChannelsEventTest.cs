@@ -29,6 +29,25 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static SentOnAllPreparedChannelsEventTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<SentOnAllPreparedChannelsEvent>
+                    {
+                        Name = "constructor should throw ArgumentOutOfRangeException when parameter 'attemptToSendNotificationResult' GetOutcome() is not AttemptToSendNotificationOutcome.SentOnAllPreparedChannels",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<SentOnAllPreparedChannelsEvent>();
+
+                            var result = new SentOnAllPreparedChannelsEvent(
+                                referenceObject.Id,
+                                referenceObject.TimestampUtc,
+                                A.Dummy<AttemptToSendNotificationResult>().ThatIs(_ => _.GetOutcome() != AttemptToSendNotificationOutcome.SentOnAllPreparedChannels));
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentOutOfRangeException),
+                        ExpectedExceptionMessageContains = new[] { "attemptToSendNotificationOutcome", "SentOnAllPreparedChannels" },
+                    });
         }
     }
 }

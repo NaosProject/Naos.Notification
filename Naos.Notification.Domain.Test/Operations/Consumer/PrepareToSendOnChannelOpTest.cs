@@ -29,6 +29,65 @@ namespace Naos.Notification.Domain.Test
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = ObcSuppressBecause.CA1810_InitializeReferenceTypeStaticFieldsInline_FieldsDeclaredInCodeGeneratedPartialTestClass)]
         static PrepareToSendOnChannelOpTest()
         {
+            ConstructorArgumentValidationTestScenarios
+                .RemoveAllScenarios()
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<PrepareToSendOnChannelOp>
+                    {
+                        Name = "constructor should throw ArgumentNullException when parameter 'notification' is null scenario",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<PrepareToSendOnChannelOp>();
+
+                            var result = new PrepareToSendOnChannelOp(
+                                                 null,
+                                                 referenceObject.Audience,
+                                                 referenceObject.DeliveryChannel,
+                                                 referenceObject.InheritableTags);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentNullException),
+                        ExpectedExceptionMessageContains = new[] { "notification", },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<PrepareToSendOnChannelOp>
+                    {
+                        Name = "constructor should throw ArgumentNullException when parameter 'audience' is null scenario",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<PrepareToSendOnChannelOp>();
+
+                            var result = new PrepareToSendOnChannelOp(
+                                                 referenceObject.Notification,
+                                                 null,
+                                                 referenceObject.DeliveryChannel,
+                                                 referenceObject.InheritableTags);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentNullException),
+                        ExpectedExceptionMessageContains = new[] { "audience", },
+                    })
+                .AddScenario(() =>
+                    new ConstructorArgumentValidationTestScenario<PrepareToSendOnChannelOp>
+                    {
+                        Name = "constructor should throw ArgumentNullException when parameter 'deliveryChannel' is null scenario",
+                        ConstructionFunc = () =>
+                        {
+                            var referenceObject = A.Dummy<PrepareToSendOnChannelOp>();
+
+                            var result = new PrepareToSendOnChannelOp(
+                                                 referenceObject.Notification,
+                                                 referenceObject.Audience,
+                                                 null,
+                                                 referenceObject.InheritableTags);
+
+                            return result;
+                        },
+                        ExpectedExceptionType = typeof(ArgumentNullException),
+                        ExpectedExceptionMessageContains = new[] { "deliveryChannel", },
+                    });
         }
     }
 }
