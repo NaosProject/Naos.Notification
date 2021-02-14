@@ -57,7 +57,7 @@ namespace Naos.Notification.Protocol.Bot.Test
             SlackChannelId = "SLACK_CHANNEL_ID_HERE",
         };
 
-        [Fact]
+        [Fact(Skip = "For local testing only.")]
         public static async Task Send_a_notification()
         {
             var streams = await BuildStreamsAsync(StreamRootDirectoryPath);
