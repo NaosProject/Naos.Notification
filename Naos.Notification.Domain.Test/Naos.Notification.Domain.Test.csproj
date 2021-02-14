@@ -399,7 +399,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />
-    <Compile Include="Properties\ProjectInfo.cs" />
     <Compile Include="Operations\Framework\SendNotificationOpTest.cs" />
     <Compile Include="Operations\Framework\SendNotificationOpTest.designer.cs">
       <DependentUpon>SendNotificationOpTest.cs</DependentUpon>
@@ -416,13 +415,13 @@
     <Compile Include="Events\AttemptToSendNotification\SentOnSomePreparedChannelsEventTest.designer.cs">
       <DependentUpon>SentOnSomePreparedChannelsEventTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\ProjectInfo.cs" />
     <Compile Include="SerializationConfigurationTypes.cs" />
     <Compile Include="NotificationDummyFactory.cs" />
     <Compile Include="NotificationDummyFactory.designer.cs">
       <DependentUpon>NotificationDummyFactory.cs</DependentUpon>
     </Compile>
     <Compile Include="NotificationDummyFactoryTest.cs" />
-    <AdditionalFiles Include=".analyzers\stylecop.json" />
     <Compile Include="Models\Classes\Delivery\SlackDeliveryChannelTest.cs" />
     <Compile Include="Models\Classes\Delivery\SlackDeliveryChannelTest.designer.cs">
       <DependentUpon>SlackDeliveryChannelTest.cs</DependentUpon>
@@ -435,6 +434,7 @@
     <Compile Include="Models\Classes\Notification\VoidNotificationTest.designer.cs">
       <DependentUpon>VoidNotificationTest.cs</DependentUpon>
     </Compile>
+    <AdditionalFiles Include=".analyzers\stylecop.json" />
     <None Include=".analyzers\test.ruleset" />
     <None Include="DummyFactory.recipe-nuspec" />
     <None Include="packages.config" />
@@ -461,7 +461,6 @@
   <ItemGroup>
     <Content Include=".analyzers\dictionary.xml" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -469,8 +468,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
     <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
-    <Error Condition="!Exists('..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets'))" />
+    <Error Condition="!Exists('..\packages\Naos.Build.Analyzers.1.55.51\build\Naos.Build.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Naos.Build.Analyzers.1.55.51\build\Naos.Build.Analyzers.targets'))" />
   </Target>
   <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
-  <Import Project="..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets" Condition="Exists('..\packages\Naos.Build.Analyzers.1.55.50\build\Naos.Build.Analyzers.targets')" />
+  <Import Project="..\packages\Naos.Build.Analyzers.1.55.51\build\Naos.Build.Analyzers.targets" Condition="Exists('..\packages\Naos.Build.Analyzers.1.55.51\build\Naos.Build.Analyzers.targets')" />
 </Project>
