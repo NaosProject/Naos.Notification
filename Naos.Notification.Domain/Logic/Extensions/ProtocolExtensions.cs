@@ -31,7 +31,7 @@ namespace Naos.Notification.Domain
         /// The tags to use when putting the specified event into a stream.
         /// </returns>
         public static IReadOnlyDictionary<string, string> ExecuteBuildTags<TEvent>(
-            this IBuildTagsProtocol<TEvent> protocol,
+            this IReturningProtocol<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>> protocol,
             long trackingCodeId,
             TEvent @event,
             IReadOnlyDictionary<string, string> inheritableTags = null)

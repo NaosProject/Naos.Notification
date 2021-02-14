@@ -10,18 +10,18 @@
 namespace Naos.Notification.Domain.Test
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using FakeItEasy;
 
+    using Naos.CodeAnalysis.Recipes;
     using Naos.Protocol.Domain;
 
     using OBeautifulCode.AutoFakeItEasy;
     using OBeautifulCode.Collection.Recipes;
     using OBeautifulCode.Math.Recipes;
     using OBeautifulCode.Representation.System;
-
-    using System;
 
     /// <summary>
     /// A Dummy Factory for types in <see cref="Naos.Notification.Domain"/>.
@@ -35,6 +35,7 @@ namespace Naos.Notification.Domain.Test
 #endif
     class NotificationDummyFactory : DefaultNotificationDummyFactory
     {
+        [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode", Justification = NaosSuppressBecause.CA1505_AvoidUnmaintainableCode_DisagreeWithAssessment)]
         public NotificationDummyFactory()
         {
             /* Add any overriding or custom registrations here. */

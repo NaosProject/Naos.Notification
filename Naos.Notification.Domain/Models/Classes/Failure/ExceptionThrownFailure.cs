@@ -7,6 +7,9 @@
 namespace Naos.Notification.Domain
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+
+    using Naos.CodeAnalysis.Recipes;
 
     using OBeautifulCode.Assertion.Recipes;
     using OBeautifulCode.Type;
@@ -21,6 +24,7 @@ namespace Naos.Notification.Domain
         /// Initializes a new instance of the <see cref="ExceptionThrownFailure"/> class.
         /// </summary>
         /// <param name="exceptionToString">The <see cref="Exception.ToString"/> of the <see cref="Exception"/> that was thrown.</param>
+        [SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = NaosSuppressBecause.CA1720_IdentifiersShouldNotContainTypeNames_TypeNameAddsClarityToIdentifierAndAlternativesDegradeClarity)]
         public ExceptionThrownFailure(
             string exceptionToString)
         {
