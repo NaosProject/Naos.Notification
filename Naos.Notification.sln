@@ -23,6 +23,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Notification.Protocol.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naos.Notification.Protocol.Email.Bot", "Naos.Notification.Protocol.Email.Bot\Naos.Notification.Protocol.Email.Bot.csproj", "{E1F86DEA-4D31-47BA-BB44-C600FBB3779F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D19C7CA8-EAD2-4010-8904-151D6F9A8565}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+		RepoConfig.state = RepoConfig.state
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
