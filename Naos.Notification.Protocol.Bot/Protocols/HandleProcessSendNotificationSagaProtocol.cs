@@ -57,7 +57,9 @@ namespace Naos.Notification.Protocol.Bot
             new { operation }.AsArg().Must().NotBeNull();
 
             // Pull some info out of the operation.
-            var processSendNotificationSagaOp = operation.RecordToHandle.Payload.Operation;
+            var executeOpRequestedEvent = operation.RecordToHandle.Payload;
+
+            var processSendNotificationSagaOp = executeOpRequestedEvent.Operation;
 
             var inheritableTags = operation.RecordToHandle.Metadata.Tags?.ToDictionary(_ => _.Key, _ => _.Value) ?? new Dictionary<string, string>();
 
@@ -111,7 +113,7 @@ namespace Naos.Notification.Protocol.Bot
                         else
                         {
                             // Neither succeeded nor failed, cancel the run and let this handler try again in the future.
-                            throw new SelfCancelRunningExecutionException(Invariant($"Neither the success nor failure event exists for the {channel} channel."));
+                            throw new SelfCancelRunningExecutionException(Invariant($"Notification '{executeOpRequestedEvent.Id}' is being sent on the '{channel.GetType().ToStringReadable()}' channel via channel-operation '{operationMonitoringInfo.ChannelOperationTrackingCodeId}', however the events that indicate whether the operation succeeded ('{operationMonitoringInfo.SucceededEventType}') or failed ('{operationMonitoringInfo.FailedEventType}') do not exist in the channel event stream.  Is the operation still executing?  Cancelling the handling of this Saga operation."));
                         }
                     }
 
