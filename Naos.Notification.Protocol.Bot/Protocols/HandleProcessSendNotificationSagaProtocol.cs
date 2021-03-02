@@ -59,7 +59,7 @@ namespace Naos.Notification.Protocol.Bot
             // Pull some info out of the operation.
             var processSendNotificationSagaOp = operation.RecordToHandle.Payload.Operation;
 
-            var inheritableTags = operation.RecordToHandle.Metadata.Tags?.ToDictionary(_ => _.Key, _ => _.Value);
+            var inheritableTags = operation.RecordToHandle.Metadata.Tags?.ToDictionary(_ => _.Key, _ => _.Value) ?? new Dictionary<string, string>();
 
             // Poll for failure event
             var channels = processSendNotificationSagaOp.ChannelToOperationsMonitoringInfoMap.Keys;
