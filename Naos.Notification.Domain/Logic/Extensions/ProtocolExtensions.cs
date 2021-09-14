@@ -7,8 +7,7 @@
 namespace Naos.Notification.Domain
 {
     using System.Collections.Generic;
-
-    using Naos.Protocol.Domain;
+    using OBeautifulCode.Type;
 
     /// <summary>
     /// Extension methods on protocols.
@@ -30,14 +29,14 @@ namespace Naos.Notification.Domain
         /// <returns>
         /// The tags to use when putting the specified event into a stream.
         /// </returns>
-        public static IReadOnlyDictionary<string, string> ExecuteBuildTags<TEvent>(
-            this IReturningProtocol<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>> protocol,
+        public static IReadOnlyCollection<NamedValue<string>> ExecuteBuildTags<TEvent>(
+            this ISyncReturningProtocol<BuildTagsOp<TEvent>, IReadOnlyCollection<NamedValue<string>>> protocol,
             long trackingCodeId,
             TEvent @event,
-            IReadOnlyDictionary<string, string> inheritableTags = null)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags = null)
             where TEvent : IEvent
         {
-            IReadOnlyDictionary<string, string> result = null;
+            IReadOnlyCollection<NamedValue<string>> result = null;
 
             if (protocol != null)
             {

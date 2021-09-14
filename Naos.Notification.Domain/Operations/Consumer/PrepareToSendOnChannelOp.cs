@@ -8,8 +8,6 @@ namespace Naos.Notification.Domain
 {
     using System.Collections.Generic;
 
-    using Naos.Protocol.Domain;
-
     using OBeautifulCode.Assertion.Recipes;
     using OBeautifulCode.Type;
 
@@ -30,7 +28,7 @@ namespace Naos.Notification.Domain
             INotification notification,
             IAudience audience,
             IDeliveryChannel deliveryChannel,
-            IReadOnlyDictionary<string, string> inheritableTags = null)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags = null)
         {
             new { notification }.AsArg().Must().NotBeNull();
             new { audience }.AsArg().Must().NotBeNull();
@@ -60,6 +58,6 @@ namespace Naos.Notification.Domain
         /// <summary>
         /// Gets the tags that can be inherited from a prior step in the workflow.
         /// </summary>
-        public IReadOnlyDictionary<string, string> InheritableTags { get; private set; }
+        public IReadOnlyCollection<NamedValue<string>> InheritableTags { get; private set; }
     }
 }

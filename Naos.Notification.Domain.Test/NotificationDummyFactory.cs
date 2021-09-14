@@ -16,7 +16,7 @@ namespace Naos.Notification.Domain.Test
     using FakeItEasy;
 
     using Naos.CodeAnalysis.Recipes;
-    using Naos.Protocol.Domain;
+    using OBeautifulCode.Type;
 
     using OBeautifulCode.AutoFakeItEasy;
     using OBeautifulCode.Collection.Recipes;

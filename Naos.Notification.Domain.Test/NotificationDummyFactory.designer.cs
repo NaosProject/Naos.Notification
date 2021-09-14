@@ -16,7 +16,7 @@ namespace Naos.Notification.Domain.Test
     using global::FakeItEasy;
 
     using global::Naos.Notification.Domain;
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Type;
 
     using global::OBeautifulCode.AutoFakeItEasy;
     using global::OBeautifulCode.Math.Recipes;
@@ -329,7 +329,7 @@ namespace Naos.Notification.Domain.Test
                 () => new ChannelOperationInstruction(
                                  A.Dummy<IOperation>(),
                                  A.Dummy<ChannelOperationMonitoringInfo>(),
-                                 A.Dummy<IReadOnlyDictionary<string, string>>()));
+                                 null));
 
             AutoFixtureBackedDummyFactory.AddDummyCreator(
                 () => new ChannelOperationMonitoringInfo(
@@ -347,7 +347,7 @@ namespace Naos.Notification.Domain.Test
                 () => new BuildTagsOp<AudienceOptedOutOfAllChannelsEvent>(
                                  A.Dummy<long>(),
                                  A.Dummy<AudienceOptedOutOfAllChannelsEvent>(),
-                                 A.Dummy<IReadOnlyDictionary<string, string>>()));
+                                 null));
 
             AutoFixtureBackedDummyFactory.AddDummyCreator(
                 () => new GetAudienceOp(
@@ -363,7 +363,7 @@ namespace Naos.Notification.Domain.Test
                                  A.Dummy<INotification>(),
                                  A.Dummy<IAudience>(),
                                  A.Dummy<IDeliveryChannel>(),
-                                 A.Dummy<IReadOnlyDictionary<string, string>>()));
+                                 null));
 
             AutoFixtureBackedDummyFactory.AddDummyCreator(
                 () => new ProcessSendNotificationSagaOp(

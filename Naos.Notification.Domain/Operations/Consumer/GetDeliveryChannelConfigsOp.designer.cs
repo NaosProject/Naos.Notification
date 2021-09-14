@@ -15,10 +15,10 @@ namespace Naos.Notification.Domain
     using global::System.Globalization;
     using global::System.Linq;
 
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Type;
+    using global::OBeautifulCode.Cloning.Recipes;
 
     using global::OBeautifulCode.Equality.Recipes;
-    using global::OBeautifulCode.Type;
     using global::OBeautifulCode.Type.Recipes;
 
     using static global::System.FormattableString;

@@ -15,7 +15,7 @@ namespace Naos.Notification.Domain
     using global::System.Globalization;
     using global::System.Linq;
 
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Cloning.Recipes;
 
     using global::OBeautifulCode.Equality.Recipes;
     using global::OBeautifulCode.Type;
@@ -112,12 +112,7 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public BuildTagsOp<TEvent> DeepCloneWithTrackingCodeId(long trackingCodeId)
         {
-            var result = new BuildTagsOp<TEvent>(
-                                 trackingCodeId,
-                                 DeepCloneGeneric(this.Event),
-                                 this.InheritableTags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
-
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -142,12 +137,7 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public BuildTagsOp<TEvent> DeepCloneWithEvent(TEvent @event)
         {
-            var result = new BuildTagsOp<TEvent>(
-                                 this.TrackingCodeId,
-                                 @event,
-                                 this.InheritableTags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
-
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -172,23 +162,13 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public BuildTagsOp<TEvent> DeepCloneWithInheritableTags(IReadOnlyDictionary<string, string> inheritableTags)
         {
-            var result = new BuildTagsOp<TEvent>(
-                                 this.TrackingCodeId,
-                                 DeepCloneGeneric(this.Event),
-                                 inheritableTags);
-
-            return result;
+            return null;
         }
 
         /// <inheritdoc />
         protected override OperationBase DeepCloneInternal()
         {
-            var result = new BuildTagsOp<TEvent>(
-                                 this.TrackingCodeId,
-                                 DeepCloneGeneric(this.Event),
-                                 this.InheritableTags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
-
-            return result;
+            return null;
         }
 
         private static TEvent DeepCloneGeneric(TEvent value)

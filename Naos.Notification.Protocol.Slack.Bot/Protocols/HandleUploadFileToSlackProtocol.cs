@@ -8,13 +8,11 @@ namespace Naos.Notification.Protocol.Slack.Bot
 {
     using System;
     using System.Threading.Tasks;
-
     using Naos.Database.Domain;
     using Naos.Notification.Domain;
-    using Naos.Protocol.Domain;
     using Naos.Slack.Domain;
-
     using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Type;
 
     /// <summary>
     /// Executes a <see cref="UploadFileToSlackOp"/>.

@@ -9,10 +9,9 @@ namespace Naos.Notification.Domain
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Naos.Protocol.Domain;
-
     using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Cloning.Recipes;
+    using OBeautifulCode.Type;
 
     /// <summary>
     /// Executes a <see cref="BuildTagsOp{TEvent}" /> and returns the <see cref="BuildTagsOp{TEvent}.InheritableTags"/>.
@@ -21,17 +20,17 @@ namespace Naos.Notification.Domain
     /// This is useful when you an event to be tagged with the inheritable tags and do not want to augment that set.
     /// </remarks>
     /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
-    public class AddToInheritableTagsProtocol<TEvent> : SyncSpecificReturningProtocolBase<BuildTagsOp<TEvent>, IReadOnlyDictionary<string, string>>, IBuildTagsProtocol<TEvent>
+    public class AddToInheritableTagsProtocol<TEvent> : SyncSpecificReturningProtocolBase<BuildTagsOp<TEvent>, IReadOnlyCollection<NamedValue<string>>>, IBuildTagsProtocol<TEvent>
         where TEvent : IEvent
     {
-        private readonly Func<TEvent, IReadOnlyCollection<KeyValuePair<string, string>>> getTagsToAdd;
+        private readonly Func<TEvent, IReadOnlyCollection<NamedValue<string>>> getTagsToAdd;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddToInheritableTagsProtocol{TEvent}"/> class.
         /// </summary>
         /// <param name="getTagsToAdd">A func taking <typeparamref name="TEvent"/> and returning a set of tags to add to the inheritable tags.</param>
         public AddToInheritableTagsProtocol(
-            Func<TEvent, IReadOnlyCollection<KeyValuePair<string, string>>> getTagsToAdd)
+            Func<TEvent, IReadOnlyCollection<NamedValue<string>>> getTagsToAdd)
         {
             new { getTagsToAdd }.AsArg().Must().NotBeNull();
 
@@ -39,18 +38,18 @@ namespace Naos.Notification.Domain
         }
 
         /// <inheritdoc />
-        public override IReadOnlyDictionary<string, string> Execute(
+        public override IReadOnlyCollection<NamedValue<string>> Execute(
             BuildTagsOp<TEvent> operation)
         {
             new { operation }.AsArg().Must().NotBeNull();
 
-            var result = operation.InheritableTags?.ToDictionary(_ => _.Key, _ => _.Value) ?? new Dictionary<string, string>();
+            var result = (operation.InheritableTags?.DeepClone() ?? new List<NamedValue<string>>()).ToList();
 
             var tagsToAdd = this.getTagsToAdd(operation.Event);
 
             foreach (var tagToAdd in tagsToAdd)
             {
-                result.Add(tagToAdd.Key, tagToAdd.Value);
+                result.Add(new NamedValue<string>(tagToAdd.Name, tagToAdd.Value));
             }
 
             return result;

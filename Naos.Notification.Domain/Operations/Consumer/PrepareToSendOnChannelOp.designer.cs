@@ -15,11 +15,11 @@ namespace Naos.Notification.Domain
     using global::System.Globalization;
     using global::System.Linq;
 
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Type;
 
     using global::OBeautifulCode.Equality.Recipes;
-    using global::OBeautifulCode.Type;
     using global::OBeautifulCode.Type.Recipes;
+    using global::OBeautifulCode.Cloning.Recipes;
 
     using static global::System.FormattableString;
 
@@ -114,13 +114,8 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public PrepareToSendOnChannelOp DeepCloneWithNotification(INotification notification)
         {
-            var result = new PrepareToSendOnChannelOp(
-                                 notification,
-                                 (IAudience)DeepCloneInterface(this.Audience),
-                                 (IDeliveryChannel)DeepCloneInterface(this.DeliveryChannel),
-                                 this.InheritableTags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
+            return null;
 
-            return result;
         }
 
         /// <summary>
@@ -145,13 +140,7 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public PrepareToSendOnChannelOp DeepCloneWithAudience(IAudience audience)
         {
-            var result = new PrepareToSendOnChannelOp(
-                                 (INotification)DeepCloneInterface(this.Notification),
-                                 audience,
-                                 (IDeliveryChannel)DeepCloneInterface(this.DeliveryChannel),
-                                 this.InheritableTags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
-
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -176,13 +165,8 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public PrepareToSendOnChannelOp DeepCloneWithDeliveryChannel(IDeliveryChannel deliveryChannel)
         {
-            var result = new PrepareToSendOnChannelOp(
-                                 (INotification)DeepCloneInterface(this.Notification),
-                                 (IAudience)DeepCloneInterface(this.Audience),
-                                 deliveryChannel,
-                                 this.InheritableTags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
+            return null;
 
-            return result;
         }
 
         /// <summary>
@@ -205,7 +189,7 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms")]
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly")]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public PrepareToSendOnChannelOp DeepCloneWithInheritableTags(IReadOnlyDictionary<string, string> inheritableTags)
+        public PrepareToSendOnChannelOp DeepCloneWithInheritableTags(IReadOnlyCollection<NamedValue<string>> inheritableTags)
         {
             var result = new PrepareToSendOnChannelOp(
                                  (INotification)DeepCloneInterface(this.Notification),
@@ -219,13 +203,7 @@ namespace Naos.Notification.Domain
         /// <inheritdoc />
         protected override OperationBase DeepCloneInternal()
         {
-            var result = new PrepareToSendOnChannelOp(
-                                 (INotification)DeepCloneInterface(this.Notification),
-                                 (IAudience)DeepCloneInterface(this.Audience),
-                                 (IDeliveryChannel)DeepCloneInterface(this.DeliveryChannel),
-                                 this.InheritableTags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
-
-            return result;
+            return null;
         }
 
         private static object DeepCloneInterface(object value)

@@ -7,18 +7,12 @@
 namespace Naos.Notification.Domain
 {
     using global::System;
-    using global::System.CodeDom.Compiler;
-    using global::System.Collections.Concurrent;
-    using global::System.Collections.Generic;
-    using global::System.Collections.ObjectModel;
     using global::System.Diagnostics.CodeAnalysis;
-    using global::System.Globalization;
-    using global::System.Linq;
 
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Type;
+    using global::OBeautifulCode.Cloning.Recipes;
 
     using global::OBeautifulCode.Equality.Recipes;
-    using global::OBeautifulCode.Type;
     using global::OBeautifulCode.Type.Recipes;
 
     using static global::System.FormattableString;

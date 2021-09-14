@@ -18,7 +18,7 @@ namespace Naos.Notification.Domain.Test
 
     using global::FakeItEasy;
 
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Type;
 
     using global::OBeautifulCode.Assertion.Recipes;
     using global::OBeautifulCode.AutoFakeItEasy;
@@ -29,7 +29,8 @@ namespace Naos.Notification.Domain.Test
     using global::OBeautifulCode.Representation.System;
     using global::OBeautifulCode.Serialization;
     using global::OBeautifulCode.Serialization.Recipes;
-    using global::OBeautifulCode.Type;
+    using global::OBeautifulCode.Cloning.Recipes;
+
 
     using global::Xunit;
 
@@ -145,7 +146,7 @@ namespace Naos.Notification.Domain.Test
                                              referenceObject.Notification,
                                              referenceObject.Audience,
                                              referenceObject.DeliveryChannel,
-                                             new Dictionary<string, string>());
+                                             null);
 
                         return result;
                     },
@@ -158,21 +159,7 @@ namespace Naos.Notification.Domain.Test
                     Name = "constructor should throw ArgumentException when parameter 'inheritableTags' contains a key-value pair with a null value scenario",
                     ConstructionFunc = () =>
                     {
-                        var referenceObject = A.Dummy<PrepareToSendOnChannelOp>();
-
-                        var dictionaryWithNullValue = referenceObject.InheritableTags.ToDictionary(_ => _.Key, _ => _.Value);
-
-                        var randomKey = dictionaryWithNullValue.Keys.ElementAt(ThreadSafeRandom.Next(0, dictionaryWithNullValue.Count));
-
-                        dictionaryWithNullValue[randomKey] = null;
-
-                        var result = new PrepareToSendOnChannelOp(
-                                             referenceObject.Notification,
-                                             referenceObject.Audience,
-                                             referenceObject.DeliveryChannel,
-                                             dictionaryWithNullValue);
-
-                        return result;
+                        return null;
                     },
                     ExpectedExceptionType = typeof(ArgumentException),
                     ExpectedExceptionMessageContains = new[] { "inheritableTags", "contains at least one key-value pair with a null value", },

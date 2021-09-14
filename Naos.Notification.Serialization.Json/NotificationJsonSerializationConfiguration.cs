@@ -9,7 +9,6 @@ namespace Naos.Notification.Serialization.Json
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Naos.Protocol.Serialization.Json;
     using OBeautifulCode.Serialization.Json;
     using OBeautifulCode.Type;
     using OBeautifulCode.Type.Recipes;
@@ -22,13 +21,6 @@ namespace Naos.Notification.Serialization.Json
             new[]
             {
                 Naos.Notification.Domain.ProjectInfo.Namespace,
-            };
-
-        /// <inheritdoc />
-        protected override IReadOnlyCollection<JsonSerializationConfigurationType> DependentJsonSerializationConfigurationTypes =>
-            new[]
-            {
-                typeof(ProtocolJsonSerializationConfiguration).ToJsonSerializationConfigurationType(),
             };
 
         /// <inheritdoc />

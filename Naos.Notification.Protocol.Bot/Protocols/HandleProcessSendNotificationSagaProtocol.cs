@@ -10,14 +10,12 @@ namespace Naos.Notification.Protocol.Bot
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
     using Naos.Database.Domain;
     using Naos.Notification.Domain;
-    using Naos.Protocol.Domain;
-
     using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Cloning.Recipes;
+    using OBeautifulCode.Type;
     using OBeautifulCode.Type.Recipes;
-
     using static System.FormattableString;
 
     /// <summary>
@@ -61,7 +59,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var processSendNotificationSagaOp = executeOpRequestedEvent.Operation;
 
-            var inheritableTags = operation.RecordToHandle.Metadata.Tags?.ToDictionary(_ => _.Key, _ => _.Value) ?? new Dictionary<string, string>();
+            var inheritableTags = (operation.RecordToHandle.Metadata.Tags?.DeepClone() ?? new List<NamedValue<string>>()).ToList();
 
             // Poll for failure event
             var channels = processSendNotificationSagaOp.ChannelToOperationsMonitoringInfoMap.Keys;
@@ -151,16 +149,16 @@ namespace Naos.Notification.Protocol.Bot
         }
 
         private static void AddMissingTags(
-            Dictionary<string, string> tagsToAddTo,
-            IReadOnlyDictionary<string, string> tagsToMergeIn)
+            ICollection<NamedValue<string>> tagsToAddTo,
+            IReadOnlyCollection<NamedValue<string>> tagsToMergeIn)
         {
             if (tagsToMergeIn != null)
             {
-                foreach (var key in tagsToMergeIn.Keys)
+                foreach (var tagToMergeIn in tagsToMergeIn)
                 {
-                    if (!tagsToAddTo.ContainsKey(key))
+                    if (!tagsToAddTo.Contains(tagToMergeIn))
                     {
-                        tagsToAddTo.Add(key, tagsToMergeIn[key]);
+                        tagsToAddTo.Add(tagToMergeIn);
                     }
                 }
             }

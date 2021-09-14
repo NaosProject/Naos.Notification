@@ -18,7 +18,7 @@ namespace Naos.Notification.Domain.Test
 
     using global::FakeItEasy;
 
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Type;
 
     using global::OBeautifulCode.Assertion.Recipes;
     using global::OBeautifulCode.AutoFakeItEasy;
@@ -29,7 +29,8 @@ namespace Naos.Notification.Domain.Test
     using global::OBeautifulCode.Representation.System;
     using global::OBeautifulCode.Serialization;
     using global::OBeautifulCode.Serialization.Recipes;
-    using global::OBeautifulCode.Type;
+    using global::OBeautifulCode.Cloning.Recipes;
+
 
     using global::Xunit;
 
@@ -122,7 +123,7 @@ namespace Naos.Notification.Domain.Test
                         var result = new ChannelOperationInstruction(
                                              referenceObject.Operation,
                                              referenceObject.MonitoringInfo,
-                                             new Dictionary<string, string>());
+                                             new List<NamedValue<string>>());
 
                         return result;
                     },
@@ -135,20 +136,7 @@ namespace Naos.Notification.Domain.Test
                     Name = "constructor should throw ArgumentException when parameter 'tags' contains a key-value pair with a null value scenario",
                     ConstructionFunc = () =>
                     {
-                        var referenceObject = A.Dummy<ChannelOperationInstruction>();
-
-                        var dictionaryWithNullValue = referenceObject.Tags.ToDictionary(_ => _.Key, _ => _.Value);
-
-                        var randomKey = dictionaryWithNullValue.Keys.ElementAt(ThreadSafeRandom.Next(0, dictionaryWithNullValue.Count));
-
-                        dictionaryWithNullValue[randomKey] = null;
-
-                        var result = new ChannelOperationInstruction(
-                                             referenceObject.Operation,
-                                             referenceObject.MonitoringInfo,
-                                             dictionaryWithNullValue);
-
-                        return result;
+                        return null;
                     },
                     ExpectedExceptionType = typeof(ArgumentException),
                     ExpectedExceptionMessageContains = new[] { "tags", "contains at least one key-value pair with a null value", },

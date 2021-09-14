@@ -8,8 +8,6 @@ namespace Naos.Notification.Domain
 {
     using System.Collections.Generic;
 
-    using Naos.Protocol.Domain;
-
     using OBeautifulCode.Assertion.Recipes;
     using OBeautifulCode.Type;
 
@@ -18,7 +16,7 @@ namespace Naos.Notification.Domain
     /// </summary>
     /// <typeparam name="TEvent">The type of event to build the tags for.</typeparam>
     // ReSharper disable once RedundantExtendsListEntry
-    public partial class BuildTagsOp<TEvent> : ReturningOperationBase<IReadOnlyDictionary<string, string>>, IModelViaCodeGen
+    public partial class BuildTagsOp<TEvent> : ReturningOperationBase<IReadOnlyCollection<NamedValue<string>>>, IModelViaCodeGen
         where TEvent : IEvent
     {
         /// <summary>
@@ -30,7 +28,7 @@ namespace Naos.Notification.Domain
         public BuildTagsOp(
             long trackingCodeId,
             TEvent @event,
-            IReadOnlyDictionary<string, string> inheritableTags = null)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags = null)
         {
             new { @event }.AsArg().Must().NotBeNull();
 
@@ -52,6 +50,6 @@ namespace Naos.Notification.Domain
         /// <summary>
         /// Gets the tags that can be inherited from a prior step in the workflow.
         /// </summary>
-        public IReadOnlyDictionary<string, string> InheritableTags { get; private set; }
+        public IReadOnlyCollection<NamedValue<string>> InheritableTags { get; private set; }
     }
 }

@@ -10,15 +10,12 @@ namespace Naos.Notification.Protocol.Bot
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
     using Naos.Database.Domain;
     using Naos.Notification.Domain;
-    using Naos.Protocol.Domain;
-
     using OBeautifulCode.Assertion.Recipes;
     using OBeautifulCode.Reflection.Recipes;
+    using OBeautifulCode.Type;
     using OBeautifulCode.Type.Recipes;
-
     using static System.FormattableString;
 
     /// <summary>
@@ -231,7 +228,7 @@ namespace Naos.Notification.Protocol.Bot
         private async Task PutSendNotificationRequestedEventAsync(
             SendNotificationOp sendNotificationOp,
             long trackingCodeId,
-            IReadOnlyDictionary<string, string> inheritableTags)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags)
         {
             var @event = new SendNotificationRequestedEvent(trackingCodeId, DateTime.UtcNow, sendNotificationOp);
 
@@ -243,7 +240,7 @@ namespace Naos.Notification.Protocol.Bot
         private async Task PutCannotGetOrUseAudienceEventAsync(
             GetAudienceResult getAudienceResult,
             long trackingCodeId,
-            IReadOnlyDictionary<string, string> inheritableTags)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags)
         {
             var @event = new CouldNotGetOrUseAudienceEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult);
 
@@ -256,7 +253,7 @@ namespace Naos.Notification.Protocol.Bot
             GetAudienceResult getAudienceResult,
             GetDeliveryChannelConfigsResult getDeliveryChannelConfigsResult,
             long trackingCodeId,
-            IReadOnlyDictionary<string, string> inheritableTags)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags)
         {
             var @event = new CouldNotGetOrUseDeliveryChannelConfigsEvent(trackingCodeId, DateTime.UtcNow, getAudienceResult, getDeliveryChannelConfigsResult);
 
@@ -271,7 +268,7 @@ namespace Naos.Notification.Protocol.Bot
             GetDeliveryChannelConfigsResult getDeliveryChannelConfigsResult,
             PrepareToSendNotificationResult prepareToSendNotificationResult,
             long trackingCodeId,
-            IReadOnlyDictionary<string, string> inheritableTags)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags)
         {
             PrepareToSendNotificationEventBase @event;
 
@@ -302,7 +299,7 @@ namespace Naos.Notification.Protocol.Bot
         private async Task PutSagaAsync(
             long trackingCodeId,
             IReadOnlyDictionary<IDeliveryChannel, IReadOnlyList<ChannelOperationInstruction>> channelToOperationInstructionsMap,
-            IReadOnlyDictionary<string, string> inheritableTags)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags)
         {
             var channelToOperationsMonitoringInfoMap = channelToOperationInstructionsMap.ToDictionary(
                 _ => _.Key,
@@ -386,7 +383,7 @@ namespace Naos.Notification.Protocol.Bot
             INotification notification,
             IAudience audience,
             IDeliveryChannel channel,
-            IReadOnlyDictionary<string, string> inheritableTags)
+            IReadOnlyCollection<NamedValue<string>> inheritableTags)
         {
             PrepareToSendOnChannelResult result;
 

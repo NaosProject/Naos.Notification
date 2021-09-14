@@ -18,7 +18,7 @@ namespace Naos.Notification.Domain.Test
 
     using global::FakeItEasy;
 
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Type;
 
     using global::OBeautifulCode.Assertion.Recipes;
     using global::OBeautifulCode.AutoFakeItEasy;
@@ -29,7 +29,8 @@ namespace Naos.Notification.Domain.Test
     using global::OBeautifulCode.Representation.System;
     using global::OBeautifulCode.Serialization;
     using global::OBeautifulCode.Serialization.Recipes;
-    using global::OBeautifulCode.Type;
+    using global::OBeautifulCode.Cloning.Recipes;
+
 
     using global::Xunit;
 

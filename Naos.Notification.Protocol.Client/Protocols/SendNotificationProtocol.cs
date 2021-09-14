@@ -8,12 +8,10 @@ namespace Naos.Notification.Protocol.Client
 {
     using System;
     using System.Threading.Tasks;
-
     using Naos.Database.Domain;
     using Naos.Notification.Domain;
-    using Naos.Protocol.Domain;
-
     using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Type;
 
     /// <summary>
     /// Executes a <see cref="SendNotificationOp"/>.

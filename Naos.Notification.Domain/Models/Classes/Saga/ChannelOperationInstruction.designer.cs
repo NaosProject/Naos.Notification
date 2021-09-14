@@ -15,11 +15,11 @@ namespace Naos.Notification.Domain
     using global::System.Globalization;
     using global::System.Linq;
 
-    using global::Naos.Protocol.Domain;
 
     using global::OBeautifulCode.Equality.Recipes;
     using global::OBeautifulCode.Type;
     using global::OBeautifulCode.Type.Recipes;
+    using global::OBeautifulCode.Cloning.Recipes;
 
     using static global::System.FormattableString;
 
@@ -93,12 +93,7 @@ namespace Naos.Notification.Domain
         /// <inheritdoc />
         public ChannelOperationInstruction DeepClone()
         {
-            var result = new ChannelOperationInstruction(
-                                 (IOperation)DeepCloneInterface(this.Operation),
-                                 this.MonitoringInfo?.DeepClone(),
-                                 this.Tags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
-
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -123,12 +118,8 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public ChannelOperationInstruction DeepCloneWithOperation(IOperation operation)
         {
-            var result = new ChannelOperationInstruction(
-                                 operation,
-                                 this.MonitoringInfo?.DeepClone(),
-                                 this.Tags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
+            return null;
 
-            return result;
         }
 
         /// <summary>
@@ -153,12 +144,8 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public ChannelOperationInstruction DeepCloneWithMonitoringInfo(ChannelOperationMonitoringInfo monitoringInfo)
         {
-            var result = new ChannelOperationInstruction(
-                                 (IOperation)DeepCloneInterface(this.Operation),
-                                 monitoringInfo,
-                                 this.Tags?.ToDictionary(k => k.Key?.DeepClone(), v => v.Value?.DeepClone()));
+            return null;
 
-            return result;
         }
 
         /// <summary>
@@ -181,7 +168,7 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms")]
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly")]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public ChannelOperationInstruction DeepCloneWithTags(IReadOnlyDictionary<string, string> tags)
+        public ChannelOperationInstruction DeepCloneWithTags(IReadOnlyCollection<NamedValue<string>> tags)
         {
             var result = new ChannelOperationInstruction(
                                  (IOperation)DeepCloneInterface(this.Operation),

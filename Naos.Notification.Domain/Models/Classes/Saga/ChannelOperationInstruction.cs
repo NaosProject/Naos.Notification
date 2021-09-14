@@ -8,8 +8,6 @@ namespace Naos.Notification.Domain
 {
     using System.Collections.Generic;
 
-    using Naos.Protocol.Domain;
-
     using OBeautifulCode.Assertion.Recipes;
     using OBeautifulCode.Type;
 
@@ -22,7 +20,7 @@ namespace Naos.Notification.Domain
     /// Likewise, the notification might be sent on one or many channels.
     /// This class is scoped to a single operation on a single channel.
     /// </remarks>
-    public partial class ChannelOperationInstruction : IModelViaCodeGen
+    public partial class ChannelOperationInstruction : IHaveTags, IModelViaCodeGen
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelOperationInstruction"/> class.
@@ -33,7 +31,7 @@ namespace Naos.Notification.Domain
         public ChannelOperationInstruction(
             IOperation operation,
             ChannelOperationMonitoringInfo monitoringInfo,
-            IReadOnlyDictionary<string, string> tags = null)
+            IReadOnlyCollection<NamedValue<string>> tags = null)
         {
             new { operation }.AsArg().Must().NotBeNull();
             new { monitoringInfo }.AsArg().Must().NotBeNull();
@@ -56,6 +54,6 @@ namespace Naos.Notification.Domain
         /// <summary>
         /// Gets the tags to use when putting the operation into the channel-specific Operation Stream.
         /// </summary>
-        public IReadOnlyDictionary<string, string> Tags { get; private set; }
+        public IReadOnlyCollection<NamedValue<string>> Tags { get; private set; }
     }
 }

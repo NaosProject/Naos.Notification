@@ -18,7 +18,7 @@ namespace Naos.Notification.Domain.Test
 
     using global::FakeItEasy;
 
-    using global::Naos.Protocol.Domain;
+    using global::OBeautifulCode.Type;
 
     using global::OBeautifulCode.Assertion.Recipes;
     using global::OBeautifulCode.AutoFakeItEasy;
@@ -29,7 +29,8 @@ namespace Naos.Notification.Domain.Test
     using global::OBeautifulCode.Representation.System;
     using global::OBeautifulCode.Serialization;
     using global::OBeautifulCode.Serialization.Recipes;
-    using global::OBeautifulCode.Type;
+    using global::OBeautifulCode.Cloning.Recipes;
+
 
     using global::Xunit;
 
@@ -104,7 +105,7 @@ namespace Naos.Notification.Domain.Test
                         var result = new BuildTagsOp<AudienceOptedOutOfAllChannelsEvent>(
                                              referenceObject.TrackingCodeId,
                                              referenceObject.Event,
-                                             new Dictionary<string, string>());
+                                             new List<NamedValue<string>>());
 
                         return result;
                     },
@@ -117,20 +118,7 @@ namespace Naos.Notification.Domain.Test
                     Name = "constructor should throw ArgumentException when parameter 'inheritableTags' contains a key-value pair with a null value scenario",
                     ConstructionFunc = () =>
                     {
-                        var referenceObject = A.Dummy<BuildTagsOp<AudienceOptedOutOfAllChannelsEvent>>();
-
-                        var dictionaryWithNullValue = referenceObject.InheritableTags.ToDictionary(_ => _.Key, _ => _.Value);
-
-                        var randomKey = dictionaryWithNullValue.Keys.ElementAt(ThreadSafeRandom.Next(0, dictionaryWithNullValue.Count));
-
-                        dictionaryWithNullValue[randomKey] = null;
-
-                        var result = new BuildTagsOp<AudienceOptedOutOfAllChannelsEvent>(
-                                             referenceObject.TrackingCodeId,
-                                             referenceObject.Event,
-                                             dictionaryWithNullValue);
-
-                        return result;
+                        return null;
                     },
                     ExpectedExceptionType = typeof(ArgumentException),
                     ExpectedExceptionMessageContains = new[] { "inheritableTags", "contains at least one key-value pair with a null value", },
@@ -1324,10 +1312,10 @@ namespace Naos.Notification.Domain.Test
                 foreach (var scenario in scenarios)
                 {
                     // Arrange
-                    ReturningOperationBase<IReadOnlyDictionary<string, string>> systemUnderTest = null;
+                    ReturningOperationBase<IReadOnlyCollection<NamedValue<string>>> systemUnderTest = null;
 
                     // Act
-                    var actual = scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyDictionary<string, string>>)systemUnderTest);
+                    var actual = scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyCollection<NamedValue<string>>>)systemUnderTest);
 
                     // Assert
                     actual.AsTest().Must().BeFalse(because: scenario.Id);
@@ -1355,7 +1343,7 @@ namespace Naos.Notification.Domain.Test
                 foreach (var scenario in scenarios)
                 {
                     // Arrange, Act
-                    var actual = scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyDictionary<string, string>>)scenario.ReferenceObject);
+                    var actual = scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyCollection<NamedValue<string>>>)scenario.ReferenceObject);
 
                     // Assert
                     actual.AsTest().Must().BeTrue(because: scenario.Id);
@@ -1383,7 +1371,7 @@ namespace Naos.Notification.Domain.Test
                 foreach (var scenario in scenarios)
                 {
                     // Arrange, Act
-                    var actuals = scenario.ObjectsThatDeriveFromScenarioTypeButAreNotOfTheSameTypeAsReferenceObject.Select(_ => scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyDictionary<string, string>>)_)).ToList();
+                    var actuals = scenario.ObjectsThatDeriveFromScenarioTypeButAreNotOfTheSameTypeAsReferenceObject.Select(_ => scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyCollection<NamedValue<string>>>)_)).ToList();
 
                     // Assert
                     actuals.AsTest().Must().Each().BeFalse(because: scenario.Id);
@@ -1411,7 +1399,7 @@ namespace Naos.Notification.Domain.Test
                 foreach (var scenario in scenarios)
                 {
                     // Arrange, Act
-                    var actuals = scenario.ObjectsThatAreNotEqualToReferenceObject.Select(_ => scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyDictionary<string, string>>)_)).ToList();
+                    var actuals = scenario.ObjectsThatAreNotEqualToReferenceObject.Select(_ => scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyCollection<NamedValue<string>>>)_)).ToList();
 
                     // Assert
                     actuals.AsTest().Must().Each().BeFalse(because: scenario.Id);
@@ -1439,7 +1427,7 @@ namespace Naos.Notification.Domain.Test
                 foreach (var scenario in scenarios)
                 {
                     // Arrange, Act
-                    var actuals = scenario.ObjectsThatAreEqualToButNotTheSameAsReferenceObject.Select(_ => scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyDictionary<string, string>>)_)).ToList();
+                    var actuals = scenario.ObjectsThatAreEqualToButNotTheSameAsReferenceObject.Select(_ => scenario.ReferenceObject.Equals((ReturningOperationBase<IReadOnlyCollection<NamedValue<string>>>)_)).ToList();
 
                     // Assert
                     actuals.AsTest().Must().Each().BeTrue(because: scenario.Id);

@@ -11,7 +11,6 @@ namespace Naos.Notification.Protocol.Bot.Test
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-
     using Naos.Database.Domain;
     using Naos.Database.Protocol.FileSystem;
     using Naos.Database.Serialization.Json;
@@ -23,18 +22,17 @@ namespace Naos.Notification.Protocol.Bot.Test
     using Naos.Notification.Protocol.Email.Bot;
     using Naos.Notification.Protocol.Slack.Bot;
     using Naos.Notification.Serialization.Json;
-    using Naos.Protocol.Domain;
     using Naos.Slack.Domain;
     using Naos.Slack.Protocol.Client;
     using Naos.Slack.Serialization.Json;
-
     using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Cloning.Recipes;
     using OBeautifulCode.Reflection.Recipes;
     using OBeautifulCode.Representation.System;
     using OBeautifulCode.Serialization;
     using OBeautifulCode.Serialization.Json;
+    using OBeautifulCode.Type;
     using OBeautifulCode.Type.Recipes;
-
     using Xunit;
 
     public static class IntegrationTest
@@ -357,9 +355,9 @@ namespace Naos.Notification.Protocol.Bot.Test
 
                     var emailContent = new EmailContent(notification.ScenarioBeingTested, "Here is the body for scenario: " + notification.ScenarioBeingTested);
 
-                    var tags = operation.InheritableTags.ToDictionary(_ => _.Key, _ => _.Value);
-                    tags.Add("recipient-email-address", emailParticipants.To.First().Address);
-                    tags.Add("sender-email-address", emailParticipants.From.Address);
+                    var tags = (operation.InheritableTags.DeepClone() ?? new List<NamedValue<string>>()).ToList();
+                    tags.Add(new NamedValue<string>("recipient-email-address", emailParticipants.To.First().Address));
+                    tags.Add(new NamedValue<string>("sender-email-address", emailParticipants.From.Address));
 
                     channelOperationInstructions = new[]
                     {
@@ -378,8 +376,8 @@ namespace Naos.Notification.Protocol.Bot.Test
 
                     var uploadFileTrackingCodeId = await this.streams.SlackOperationStream.GetNextUniqueLongAsync();
 
-                    var tags = operation.InheritableTags.ToDictionary(_ => _.Key, _ => _.Value);
-                    tags.Add("slack-channel-id", audience.SlackChannelId);
+                    var tags = (operation.InheritableTags.DeepClone() ?? new List<NamedValue<string>>()).ToList();
+                    tags.Add(new NamedValue<string>("slack-channel-id", audience.SlackChannelId));
 
                     var fileBytes = AssemblyHelper.ReadEmbeddedResourceAsBytes("test-file-png");
 
@@ -422,7 +420,7 @@ namespace Naos.Notification.Protocol.Bot.Test
 
         private class BuildExecuteSendNotificationEventTagsProtocol : IBuildTagsProtocol<ExecuteOpRequestedEvent<long, SendNotificationOp>>
         {
-            public IReadOnlyDictionary<string, string> Execute(
+            public IReadOnlyCollection<NamedValue<string>> Execute(
                 BuildTagsOp<ExecuteOpRequestedEvent<long, SendNotificationOp>> operation)
             {
                 new { operation }.AsArg().Must().NotBeNull();
@@ -431,15 +429,15 @@ namespace Naos.Notification.Protocol.Bot.Test
                 new { operation.Event.Operation }.AsArg().Must().NotBeNull();
                 new { operation.Event.Operation.Notification }.AsArg().Must().NotBeNull().And().BeOfType<IntegrationTestNotification>();
 
-                var result = new Dictionary<string, string>()
-                {
-                    { "notification-type", operation.Event.Operation.Notification.GetType().ToStringReadable() },
-                    { "random-data", "random-" + Guid.NewGuid() },
-                };
+                var result = new List<NamedValue<string>>
+                             {
+                                 new NamedValue<string>("notification-type", operation.Event.Operation.Notification.GetType().ToStringReadable()),
+                                 new NamedValue<string>("random-data", "random-" + Guid.NewGuid()),
+                             };
 
                 if (operation.Event.Operation.Notification is IntegrationTestNotification notification)
                 {
-                    result.Add("scenario", notification.ScenarioBeingTested);
+                    result.Add(new NamedValue<string>("scenario", notification.ScenarioBeingTested));
                 }
 
                 return result;

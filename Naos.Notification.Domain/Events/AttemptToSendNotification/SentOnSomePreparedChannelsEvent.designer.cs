@@ -15,8 +15,6 @@ namespace Naos.Notification.Domain
     using global::System.Globalization;
     using global::System.Linq;
 
-    using global::Naos.Protocol.Domain;
-
     using global::OBeautifulCode.Equality.Recipes;
     using global::OBeautifulCode.Type;
     using global::OBeautifulCode.Type.Recipes;
@@ -106,7 +104,7 @@ namespace Naos.Notification.Domain
         [SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms")]
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly")]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public override EventBaseBase DeepCloneWithTimestampUtc(DateTime timestampUtc)
+        public override EventBase DeepCloneWithTimestampUtc(DateTime timestampUtc)
         {
             var result = new SentOnSomePreparedChannelsEvent(
                                  this.Id,
@@ -169,7 +167,7 @@ namespace Naos.Notification.Domain
         }
 
         /// <inheritdoc />
-        protected override EventBaseBase DeepCloneInternal()
+        protected override EventBase DeepCloneInternal()
         {
             var result = new SentOnSomePreparedChannelsEvent(
                                  this.Id,
