@@ -33,11 +33,11 @@ namespace Naos.Notification.Domain
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
             var getAudienceOutcome = getAudienceResult.GetOutcome();
-            new { getAudienceOutcome }.AsArg().Must().BeEqualToAnyOf(new[] { GetAudienceOutcome.GotAudienceWithNoFailuresReported, GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored });
+            new { getAudienceOutcome }.AsArg().Must().BeElementIn(new[] { GetAudienceOutcome.GotAudienceWithNoFailuresReported, GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored });
 
             new { getDeliveryChannelConfigsResult }.AsArg().Must().NotBeNull();
             var getDeliveryChannelConfigsOutcome = getDeliveryChannelConfigsResult.GetOutcome();
-            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().BeEqualToAnyOf(new[] { GetDeliveryChannelConfigsOutcome.CouldNotGetDeliveryChannelConfigsAndNoFailuresReported, GetDeliveryChannelConfigsOutcome.CouldNotGetDeliveryChannelConfigsWithSomeFailuresReported, GetDeliveryChannelConfigsOutcome.DespiteGettingDeliveryChannelConfigsFailuresPreventUsingThem });
+            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().BeElementIn(new[] { GetDeliveryChannelConfigsOutcome.CouldNotGetDeliveryChannelConfigsAndNoFailuresReported, GetDeliveryChannelConfigsOutcome.CouldNotGetDeliveryChannelConfigsWithSomeFailuresReported, GetDeliveryChannelConfigsOutcome.DespiteGettingDeliveryChannelConfigsFailuresPreventUsingThem });
 
             this.GetAudienceResult = getAudienceResult;
             this.GetDeliveryChannelConfigsResult = getDeliveryChannelConfigsResult;

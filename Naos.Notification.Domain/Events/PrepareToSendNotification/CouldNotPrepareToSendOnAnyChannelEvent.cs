@@ -34,7 +34,7 @@ namespace Naos.Notification.Domain
             : base(id, timestampUtc, getAudienceResult, getDeliveryChannelConfigsResult, prepareToSendNotificationResult)
         {
             var prepareToSendNotificationOutcome = prepareToSendNotificationResult.GetOutcome();
-            new { prepareToSendNotificationOutcome }.AsArg().Must().BeEqualToAnyOf(new[] { PrepareToSendNotificationOutcome.CouldNotPrepareToSendOnAnyChannelBecauseOneForcedAllToBeDiscarded, PrepareToSendNotificationOutcome.CouldNotPrepareToSendOnAnyChannelDespiteAttemptingAll });
+            new { prepareToSendNotificationOutcome }.AsArg().Must().BeElementIn(new[] { PrepareToSendNotificationOutcome.CouldNotPrepareToSendOnAnyChannelBecauseOneForcedAllToBeDiscarded, PrepareToSendNotificationOutcome.CouldNotPrepareToSendOnAnyChannelDespiteAttemptingAll });
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Naos.Notification.Domain
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
             var getAudienceOutcome = getAudienceResult.GetOutcome();
-            new { getAudienceOutcome }.AsArg().Must().BeEqualToAnyOf(new[] { GetAudienceOutcome.CouldNotGetAudienceAndNoFailuresReported, GetAudienceOutcome.CouldNotGetAudienceWithSomeFailuresReported, GetAudienceOutcome.DespiteGettingAudienceFailuresPreventUsingIt });
+            new { getAudienceOutcome }.AsArg().Must().BeElementIn(new[] { GetAudienceOutcome.CouldNotGetAudienceAndNoFailuresReported, GetAudienceOutcome.CouldNotGetAudienceWithSomeFailuresReported, GetAudienceOutcome.DespiteGettingAudienceFailuresPreventUsingIt });
 
             this.GetAudienceResult = getAudienceResult;
         }

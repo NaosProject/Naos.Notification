@@ -35,11 +35,11 @@ namespace Naos.Notification.Domain
         {
             new { getAudienceResult }.AsArg().Must().NotBeNull();
             var getAudienceOutcome = getAudienceResult.GetOutcome();
-            new { getAudienceOutcome }.AsArg().Must().BeEqualToAnyOf(new[] { GetAudienceOutcome.GotAudienceWithNoFailuresReported, GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored });
+            new { getAudienceOutcome }.AsArg().Must().BeElementIn(new[] { GetAudienceOutcome.GotAudienceWithNoFailuresReported, GetAudienceOutcome.GotAudienceWithReportedFailuresIgnored });
 
             new { getDeliveryChannelConfigsResult }.AsArg().Must().NotBeNull();
             var getDeliveryChannelConfigsOutcome = getDeliveryChannelConfigsResult.GetOutcome();
-            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().BeEqualToAnyOf(new[] { GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported, GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored });
+            new { getDeliveryChannelConfigsOutcome }.AsArg().Must().BeElementIn(new[] { GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithNoFailuresReported, GetDeliveryChannelConfigsOutcome.GotDeliveryChannelConfigsWithReportedFailuresIgnored });
 
             new { prepareToSendNotificationResult }.AsArg().Must().NotBeNull();
 
