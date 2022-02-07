@@ -85,7 +85,7 @@ namespace Naos.Notification.Protocol.Bot
                     var failureEventMetadata = await eventStream.GetLatestRecordMetadataByIdAsync(
                         operationMonitoringInfo.ChannelOperationTrackingCodeId,
                         operationMonitoringInfo.FailedEventType,
-                        existingRecordNotEncounteredStrategy: ExistingRecordNotEncounteredStrategy.ReturnDefault);
+                        recordNotFoundStrategy: RecordNotFoundStrategy.ReturnDefault);
 
                     if (failureEventMetadata != null)
                     {
@@ -99,7 +99,7 @@ namespace Naos.Notification.Protocol.Bot
                         var successEventMetadata = await eventStream.GetLatestRecordMetadataByIdAsync(
                             operationMonitoringInfo.ChannelOperationTrackingCodeId,
                             operationMonitoringInfo.SucceededEventType,
-                            existingRecordNotEncounteredStrategy: ExistingRecordNotEncounteredStrategy.ReturnDefault);
+                            recordNotFoundStrategy: RecordNotFoundStrategy.ReturnDefault);
 
                         if (successEventMetadata != null)
                         {
@@ -145,7 +145,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var tags = this.buildAttemptToSendNotificationEventTagsProtocol.ExecuteBuildTags(notificationTrackingCodeId, attemptToSendNotificationEvent, inheritableTags);
 
-            await this.notificationEventStream.PutWithIdAsync(notificationTrackingCodeId, attemptToSendNotificationEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
+            await this.notificationEventStream.PutWithIdAsync(notificationTrackingCodeId, attemptToSendNotificationEvent, tags, ExistingRecordStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
         private static void AddMissingTags(

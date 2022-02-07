@@ -234,7 +234,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var tags = this.buildSendNotificationRequestedEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
-            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordStrategy.DoNotWriteIfFoundById);
         }
 
         private async Task PutCannotGetOrUseAudienceEventAsync(
@@ -246,7 +246,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var tags = this.buildCouldNotGetOrUseAudienceEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
-            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
+            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
         private async Task PutCannotGetOrUseDeliveryChannelConfigsEventAsync(
@@ -259,7 +259,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var tags = this.buildCouldNotGetOrUseDeliveryChannelConfigsEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
-            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
+            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
         private async Task PutPrepareToSendNotificationEventAsync(
@@ -293,7 +293,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var tags = this.buildPrepareToSendNotificationEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
-            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
+            await this.eventStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordStrategy.DoNotWriteIfFoundByIdAndType);
         }
 
         private async Task PutSagaAsync(
@@ -311,7 +311,7 @@ namespace Naos.Notification.Protocol.Bot
 
             var tags = this.buildExecuteProcessSendNotificationSagaEventTagsProtocol.ExecuteBuildTags(trackingCodeId, @event, inheritableTags);
 
-            await this.sagaStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+            await this.sagaStream.PutWithIdAsync(trackingCodeId, @event, tags, ExistingRecordStrategy.DoNotWriteIfFoundById);
         }
 
         private async Task PutChannelOperationsAsync(
@@ -332,7 +332,7 @@ namespace Naos.Notification.Protocol.Bot
 
                 var executeOpRequestedEvent = executeOpRequestedEventType.Construct(channelOperationTrackingCodeId, operation, DateTime.UtcNow, null);
 
-                await channelOperationStream.PutWithIdAsync(channelOperationTrackingCodeId, executeOpRequestedEvent, channelOperationInstruction.Tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+                await channelOperationStream.PutWithIdAsync(channelOperationTrackingCodeId, executeOpRequestedEvent, channelOperationInstruction.Tags, ExistingRecordStrategy.DoNotWriteIfFoundById);
             }
         }
 

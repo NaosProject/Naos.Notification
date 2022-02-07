@@ -67,7 +67,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
 
             var tags = this.buildSendSlackMessageRequestedEventTagsProtocol.ExecuteBuildTags(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, inheritableTags);
 
-            await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+            await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, sendSlackMessageRequestedEvent, tags, ExistingRecordStrategy.DoNotWriteIfFoundById);
 
             // Execute the operation
             var sendSlackMessageResponse = await this.sendSlackMessageProtocol.ExecuteAsync(sendSlackMessageOp);
@@ -86,7 +86,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
 
             tags = this.buildSendSlackMessageResponseEventTagsProtocol.ExecuteBuildTags(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, inheritableTags);
 
-            await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
+            await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, sendSlackMessageResponseEvent, tags, ExistingRecordStrategy.DoNotWriteIfFoundByIdAndType);
         }
     }
 }

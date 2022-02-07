@@ -67,7 +67,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
 
             var tags = this.buildUploadFileToSlackRequestedEventTagsProtocol.ExecuteBuildTags(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, inheritableTags);
 
-            await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+            await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, uploadFileToSlackRequestedEvent, tags, ExistingRecordStrategy.DoNotWriteIfFoundById);
 
             // Execute the operation
             var uploadFileToSlackResponse = await this.uploadFileToSlackProtocol.ExecuteAsync(uploadFileToSlackOp);
@@ -86,7 +86,7 @@ namespace Naos.Notification.Protocol.Slack.Bot
 
             tags = this.buildUploadFileToSlackResponseEventTagsProtocol.ExecuteBuildTags(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, inheritableTags);
 
-            await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundByIdAndType);
+            await this.slackEventStream.PutWithIdAsync(slackOperationTrackingCodeId, uploadFileToSlackResponseEvent, tags, ExistingRecordStrategy.DoNotWriteIfFoundByIdAndType);
         }
     }
 }

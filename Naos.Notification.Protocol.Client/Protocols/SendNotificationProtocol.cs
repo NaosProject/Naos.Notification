@@ -51,7 +51,7 @@ namespace Naos.Notification.Protocol.Client
 
             var tags = this.buildExecuteSendNotificationEventTagsProtocol.ExecuteBuildTags(result.Id, executeOperationRequestedEvent);
 
-            await this.clientOperationStream.PutWithIdAsync(notificationTrackingCodeId, executeOperationRequestedEvent, tags, ExistingRecordEncounteredStrategy.DoNotWriteIfFoundById);
+            await this.clientOperationStream.PutWithIdAsync(notificationTrackingCodeId, executeOperationRequestedEvent, tags, ExistingRecordStrategy.DoNotWriteIfFoundById);
 
             return result;
         }
