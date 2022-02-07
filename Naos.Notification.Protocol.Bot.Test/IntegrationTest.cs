@@ -58,7 +58,7 @@ namespace Naos.Notification.Protocol.Bot.Test
         [Fact(Skip = "For local testing only.")]
         public static async Task Send_a_notification()
         {
-            var streams = await BuildStreamsAsync(StreamRootDirectoryPath);
+            var streams = BuildStreamsAsync(StreamRootDirectoryPath);
 
             var trackingCode = await SendNotificationUsingClientAsync(streams);
 
@@ -148,28 +148,28 @@ namespace Naos.Notification.Protocol.Bot.Test
             }
         }
 
-        private static async Task<Streams> BuildStreamsAsync(
+        private static Streams BuildStreamsAsync(
             string streamRootDirectoryPath)
         {
             var serializerRepresentation = new SerializerRepresentation(SerializationKind.Json, typeof(IntegrationTestJsonSerializationConfiguration).ToRepresentation());
             var serializerFactory = new JsonSerializerFactory();
-            var resourceLocatorProtocols = new SingleResourceLocatorProtocol(new FileSystemDatabaseLocator(streamRootDirectoryPath));
+            var resourceLocatorProtocols = new SingleResourceLocatorProtocols(new FileSystemDatabaseLocator(streamRootDirectoryPath));
 
-            var clientOperationStream = new FileReadWriteStream("client-operation", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
-            var notificationEventStream = new FileReadWriteStream("notification-event", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
-            var notificationSagaStream = new FileReadWriteStream("notification-saga", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
-            var emailOperationStream = new FileReadWriteStream("email-operation", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
-            var emailEventStream = new FileReadWriteStream("email-event", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
-            var slackOperationStream = new FileReadWriteStream("slack-operation", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
-            var slackEventStream = new FileReadWriteStream("slack-event", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
+            var clientOperationStream = new FileStandardStream("client-operation", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
+            var notificationEventStream = new FileStandardStream("notification-event", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
+            var notificationSagaStream = new FileStandardStream("notification-saga", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
+            var emailOperationStream = new FileStandardStream("email-operation", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
+            var emailEventStream = new FileStandardStream("email-event", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
+            var slackOperationStream = new FileStandardStream("slack-operation", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
+            var slackEventStream = new FileStandardStream("slack-event", serializerRepresentation, SerializationFormat.String, serializerFactory, resourceLocatorProtocols);
 
-            await clientOperationStream.ExecuteAsync(new CreateStreamOp(clientOperationStream.StreamRepresentation, ExistingStreamEncounteredStrategy.Skip));
-            await notificationEventStream.ExecuteAsync(new CreateStreamOp(notificationEventStream.StreamRepresentation, ExistingStreamEncounteredStrategy.Skip));
-            await notificationSagaStream.ExecuteAsync(new CreateStreamOp(notificationSagaStream.StreamRepresentation, ExistingStreamEncounteredStrategy.Skip));
-            await emailOperationStream.ExecuteAsync(new CreateStreamOp(emailOperationStream.StreamRepresentation, ExistingStreamEncounteredStrategy.Skip));
-            await emailEventStream.ExecuteAsync(new CreateStreamOp(emailEventStream.StreamRepresentation, ExistingStreamEncounteredStrategy.Skip));
-            await slackOperationStream.ExecuteAsync(new CreateStreamOp(slackOperationStream.StreamRepresentation, ExistingStreamEncounteredStrategy.Skip));
-            await slackEventStream.ExecuteAsync(new CreateStreamOp(slackEventStream.StreamRepresentation, ExistingStreamEncounteredStrategy.Skip));
+            clientOperationStream.Execute(new StandardCreateStreamOp(clientOperationStream.StreamRepresentation, ExistingStreamStrategy.Skip));
+            notificationEventStream.Execute(new StandardCreateStreamOp(notificationEventStream.StreamRepresentation, ExistingStreamStrategy.Skip));
+            notificationSagaStream.Execute(new StandardCreateStreamOp(notificationSagaStream.StreamRepresentation, ExistingStreamStrategy.Skip));
+            emailOperationStream.Execute(new StandardCreateStreamOp(emailOperationStream.StreamRepresentation, ExistingStreamStrategy.Skip));
+            emailEventStream.Execute(new StandardCreateStreamOp(emailEventStream.StreamRepresentation, ExistingStreamStrategy.Skip));
+            slackOperationStream.Execute(new StandardCreateStreamOp(slackOperationStream.StreamRepresentation, ExistingStreamStrategy.Skip));
+            slackEventStream.Execute(new StandardCreateStreamOp(slackEventStream.StreamRepresentation, ExistingStreamStrategy.Skip));
 
             var result = new Streams
             {
@@ -186,7 +186,7 @@ namespace Naos.Notification.Protocol.Bot.Test
         }
 
         private static async Task HandleUnhandledObjectOfTypeAsync<TObject>(
-            FileReadWriteStream stream,
+            FileStandardStream stream,
             string concern,
             HandleRecordAsyncSpecificProtocolBase<TObject> handler)
         {
@@ -202,15 +202,15 @@ namespace Naos.Notification.Protocol.Bot.Test
 
                     await handler.ExecuteAsync(handleRecordOp);
 
-                    stream.Execute(new CompleteRunningHandleRecordExecutionOp(recordToHandle.InternalRecordId, concern));
+                    stream.GetStreamRecordHandlingProtocols().Execute(new CompleteRunningHandleRecordOp(recordToHandle.InternalRecordId, concern));
                 }
                 catch (SelfCancelRunningExecutionException ex)
                 {
-                    stream.Execute(new SelfCancelRunningHandleRecordExecutionOp(recordToHandle.InternalRecordId, concern, ex.Details));
+                    stream.GetStreamRecordHandlingProtocols().Execute(new SelfCancelRunningHandleRecordOp(recordToHandle.InternalRecordId, concern, ex.Details));
                 }
                 catch (Exception ex)
                 {
-                    stream.Execute(new FailRunningHandleRecordExecutionOp(recordToHandle.InternalRecordId, concern, ex.ToString()));
+                    stream.GetStreamRecordHandlingProtocols().Execute(new FailRunningHandleRecordOp(recordToHandle.InternalRecordId, concern, ex.ToString()));
 
                     throw;
                 }
@@ -219,19 +219,19 @@ namespace Naos.Notification.Protocol.Bot.Test
 
         private class Streams
         {
-            public FileReadWriteStream ClientOperationStream { get; set; }
+            public FileStandardStream ClientOperationStream { get; set; }
 
-            public FileReadWriteStream NotificationEventStream { get; set; }
+            public FileStandardStream NotificationEventStream { get; set; }
 
-            public FileReadWriteStream NotificationSagaStream { get; set; }
+            public FileStandardStream NotificationSagaStream { get; set; }
 
-            public FileReadWriteStream EmailOperationStream { get; set; }
+            public FileStandardStream EmailOperationStream { get; set; }
 
-            public FileReadWriteStream EmailEventStream { get; set; }
+            public FileStandardStream EmailEventStream { get; set; }
 
-            public FileReadWriteStream SlackOperationStream { get; set; }
+            public FileStandardStream SlackOperationStream { get; set; }
 
-            public FileReadWriteStream SlackEventStream { get; set; }
+            public FileStandardStream SlackEventStream { get; set; }
         }
 
         private class IntegrationTestNotification : NotificationBase
