@@ -209,12 +209,6 @@ namespace Naos.Notification.Domain.Test
                 });
 
             AutoFixtureBackedDummyFactory.AddDummyCreator(
-                () => new File(
-                                 A.Dummy<byte[]>(),
-                                 A.Dummy<string>(),
-                                 A.Dummy<FileFormat>()));
-
-            AutoFixtureBackedDummyFactory.AddDummyCreator(
                 () => new GetAudienceOp(
                                  A.Dummy<INotification>()));
 

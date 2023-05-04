@@ -195,10 +195,6 @@
     <Compile Include="Models\Classes\Notification\VoidNotification.designer.cs">
       <DependentUpon>VoidNotification.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Classes\Other\File.cs" />
-    <Compile Include="Models\Classes\Other\File.designer.cs">
-      <DependentUpon>File.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\Classes\Result\AttemptToSendNotificationResult.cs" />
     <Compile Include="Models\Classes\Result\AttemptToSendNotificationResult.designer.cs">
       <DependentUpon>AttemptToSendNotificationResult.cs</DependentUpon>
@@ -226,7 +222,6 @@
     <Compile Include="Models\Classes\Saga\ChannelOperationOutcomeInfo.designer.cs">
       <DependentUpon>ChannelOperationOutcomeInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Enums\Other\FileFormat.cs" />
     <Compile Include="Models\Enums\Outcome\AttemptToSendNotificationOutcome.cs" />
     <Compile Include="Models\Enums\Outcome\PrepareToSendNotificationOutcome.cs" />
     <Compile Include="Models\Enums\Outcome\PrepareToSendOnChannelOutcome.cs" />
