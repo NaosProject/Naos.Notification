@@ -7,6 +7,7 @@
 namespace Naos.Notification.Protocol.Client
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Naos.Database.Domain;
@@ -50,8 +51,10 @@ namespace Naos.Notification.Protocol.Client
 
             var executeOperationRequestedEvent = new ExecuteOpRequestedEvent<long, SendNotificationOp>(notificationTrackingCodeId, operation, DateTime.UtcNow);
 
-            var tags = this.buildExecuteSendNotificationEventTagsProtocol
-                .ExecuteBuildTags(result.Id, executeOperationRequestedEvent)
+            var tags = this.buildExecuteSendNotificationEventTagsProtocol?.ExecuteBuildTags(result.Id, executeOperationRequestedEvent)
+                       ?? new List<NamedValue<string>>();
+
+            tags = tags
                 .Concat(operation.Tags ?? new NamedValue<string>[0])
                 .ToList();
 
